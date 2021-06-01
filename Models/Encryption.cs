@@ -9,7 +9,7 @@ namespace JokesPrj.Models
 {
     public class Encryption
     {
-        public static string GeneratePassword(int length) //length of salt    
+        public string GeneratePassword(int length) //length of salt    
         {
             const string allowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
             var randNum = new Random();
@@ -21,7 +21,7 @@ namespace JokesPrj.Models
             }
             return new string(chars);
         }
-        public static string EncodePassword(User user, string pass) //encrypt password    
+        public string EncodePassword(User user, string pass) //encrypt password    
         {
             byte[] bytes = Encoding.Unicode.GetBytes(pass);
             byte[] src = Encoding.Unicode.GetBytes(user.Salt);
@@ -33,7 +33,7 @@ namespace JokesPrj.Models
             //return Convert.ToBase64String(inArray);    
             return EncodePasswordMd5(Convert.ToBase64String(inArray));
         }
-        public static string EncodePasswordMd5(string pass) //Encrypt using MD5    
+        public string EncodePasswordMd5(string pass) //Encrypt using MD5    
         {
             Byte[] originalBytes;
             Byte[] encodedBytes;

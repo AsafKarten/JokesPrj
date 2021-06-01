@@ -31,6 +31,7 @@ namespace JokesPrj.DAL
                     {
                         //u = new User(Convert.ToString(reader["personal_id"]), Convert.ToString(reader["email"]));
                     }
+                    Globals.Encryption.EncodePassword(u, pass);
                     return u;
                 }
             }
