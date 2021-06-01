@@ -29,7 +29,7 @@ namespace JokesPrj.DAL
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        u = new User(Convert.ToString(reader["personal_id"]), Convert.ToString(reader["email"]));
+                        //u = new User(Convert.ToString(reader["personal_id"]), Convert.ToString(reader["email"]));
                     }
                     return u;
                 }
