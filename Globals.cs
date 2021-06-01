@@ -12,9 +12,9 @@ namespace JokesPrj
         static Globals()
         {
             //get connection string from Web.config;
-            var conStr = ConfigurationManager.ConnectionStrings["LocalDB"].ConnectionString;
-            //var conStr = ConfigurationManager.ConnectionStrings["LIVEDNSfromLocal"].ConnectionString;
-            //var conStr = ConfigurationManager.ConnectionStrings["LIVEDNSfromLivedns"].ConnectionString;
+            string conStr = ConfigurationManager.ConnectionStrings["LocalDB"].ConnectionString;
+            //string conStr = ConfigurationManager.ConnectionStrings["LIVEDNSfromLocal"].ConnectionString;
+            //string conStr = ConfigurationManager.ConnectionStrings["LIVEDNSfromLivedns"].ConnectionString;
             Globals.UserDAL = new UserDAL(conStr);
         }
         #endregion
@@ -29,6 +29,8 @@ namespace JokesPrj
 
         #region Models
         public static User User { get; set; }
+        public static Login Login { get; set; }
+        public static Encryption Encryption { get; set; }
         #endregion
     }
 }
