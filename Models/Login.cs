@@ -5,18 +5,28 @@ using System.Web;
 
 namespace JokesPrj.Models
 {
-    public class Login
+    public class Login : User
     {
-        string username;
         string pass;
-
-        public Login(string username, string pass)
+        public string Pass { get => pass; set => pass = value; }
+        public Login()
         {
-            this.Username = username;
-            this.Pass = pass;
+
         }
 
-        public string Username { get => username; set => username = value; }
-        public string Pass { get => pass; set => pass = value; }
+        public Login(int id_user, string salt) : base(id_user, salt)
+        {
+
+        }
+
+        public Login(string username, string pass,string salt) : base(username,salt)
+        {
+            Pass = pass;
+        }
+
+
+
+
+
     }
 }

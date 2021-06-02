@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
 
 namespace JokesPrj.Models
 {
@@ -28,20 +25,20 @@ namespace JokesPrj.Models
             byte[] dst = new byte[src.Length + bytes.Length];
             Buffer.BlockCopy(src, 0, dst, 0, src.Length);
             Buffer.BlockCopy(bytes, 0, dst, src.Length, bytes.Length);
-            HashAlgorithm algorithm = HashAlgorithm.Create("SHA1");
+            HashAlgorithm algorithm = HashAlgorithm.Create("SHA256");
             byte[] inArray = algorithm.ComputeHash(dst);
             //return Convert.ToBase64String(inArray);    
-            return EncodePasswordMd5(Convert.ToBase64String(inArray));
+            return EncodePasswordSha256(Convert.ToBase64String(inArray));
         }
-        public string EncodePasswordMd5(string pass) //Encrypt using MD5    
+        public string EncodePasswordSha256(string pass) //Encrypt using SHA256    
         {
             Byte[] originalBytes;
             Byte[] encodedBytes;
-            MD5 md5;
+            SHA256 sha256;
             //Instantiate MD5CryptoServiceProvider, get bytes for original password and compute hash (encoded password)    
-            md5 = new MD5CryptoServiceProvider();
+            sha256 = new SHA256CryptoServiceProvider();
             originalBytes = ASCIIEncoding.Default.GetBytes(pass);
-            encodedBytes = md5.ComputeHash(originalBytes);
+            encodedBytes = sha256.ComputeHash(originalBytes);
             //Convert encoded bytes back to a 'readable' string    
             return BitConverter.ToString(encodedBytes);
         }
