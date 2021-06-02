@@ -22,6 +22,7 @@ namespace JokesPrj
 
         #region Controllers
         public static UserController UserController { get; set; }
+        public static ImageController ImageController { get; set; }
         #endregion
 
         #region DAL
@@ -33,6 +34,7 @@ namespace JokesPrj
         public static Login Login { get; set; }
         public static Encryption Encryption { get; set; }
         public static Registration Registration { get; set; }
+        public static Image Image { get; set; }
         #endregion
     }
 }
