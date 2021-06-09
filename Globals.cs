@@ -16,7 +16,6 @@ namespace JokesPrj
             //string conStr = ConfigurationManager.ConnectionStrings["LIVEDNSfromLocal"].ConnectionString;
             //string conStr = ConfigurationManager.ConnectionStrings["LIVEDNSfromLivedns"].ConnectionString;
             Globals.UserDAL = new UserDAL(conStr);
-            Globals.Encryption = new Encryption();
         }
         #endregion
 
@@ -31,9 +30,6 @@ namespace JokesPrj
 
         #region Models
         public static User User { get; set; }
-        public static Login Login { get; set; }
-        public static Encryption Encryption { get; set; }
-        public static Registration Registration { get; set; }
         public static Image Image { get; set; }
         #endregion
     }

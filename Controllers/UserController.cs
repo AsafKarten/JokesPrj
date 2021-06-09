@@ -1,9 +1,6 @@
 ﻿using JokesPrj.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace JokesPrj.Controllers
@@ -13,15 +10,13 @@ namespace JokesPrj.Controllers
         //Get One User from users table.
         [HttpPost]
         [Route("api/user")]
-        public IHttpActionResult GetUserFromDB([FromBody] Login L)
+        public IHttpActionResult GetUserFromDB([FromBody] User user)
         {
             try
             {
-
-                User user = new Login();
-                user = Globals.UserDAL.GetUserSalt(L.Username, L.Pass);
+                user = Globals.UserDAL.GetUserHash(user);
                 if (user == null)
-                    return Content(HttpStatusCode.NotFound, $"User {L.Username} or pass is incorrect");
+                    return Content(HttpStatusCode.NotFound, $"User {user.Username} or pass is incorrect");
                 return Ok(user);
             }
             catch (Exception ex)
@@ -32,15 +27,16 @@ namespace JokesPrj.Controllers
 
         [HttpPost]
         [Route("api/add/user")]
-        public IHttpActionResult AddNewUser([FromBody] Registration user)
+        public IHttpActionResult AddNewUser([FromBody] User user)
         {
             try
             {
-                user = Globals.UserDAL.AddUser(user);
-                if (user != null)
-                    return Ok($"User created Successfully");
-                return Content(HttpStatusCode.NotFound, $"User {user.Username} is allready exist ");
-
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid data.");
+                }
+                Created(new Uri(Request.RequestUri.AbsoluteUri + user.Username), Globals.UserDAL.SaveNewUserToDB(user));
+                return Ok("User created successfully.");
             }
             catch (Exception ex)
             {

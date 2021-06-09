@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace JokesPrj.Models
+﻿namespace JokesPrj.Models
 {
     public class User
     {
@@ -11,7 +6,7 @@ namespace JokesPrj.Models
         string username;
         string email;
         string user_img;
-        string salt;
+        string hash;
 
         public User()
         {
@@ -26,25 +21,23 @@ namespace JokesPrj.Models
             Username = username;
         }
 
-        public User (int id_user, string salt)
+        public User (string username, string hash)
+        {
+            Username = username;
+            Hash = hash;
+        }
+
+        public User(string username, string email,string hash)
+        {
+            Username = username;
+            Email = email;
+            Hash = hash;
+        }
+        public User(int id_user, string username, string hash)
         {
             Id_user = id_user;
-            Salt = salt;
-        }
-
-        public User(string username, string email)
-        {
             Username = username;
-            Email = email;
-        }
-
-
-
-        public User(string username, string email,string salt)
-        {
-            Username = username;
-            Email = email;
-            Salt = salt;
+            Hash = hash;
         }
 
         public User(int id_user, string username, string email, string user_img)
@@ -59,6 +52,6 @@ namespace JokesPrj.Models
         public string Username { get => username; set => username = value; }
         public string Email { get => email; set => email = value; }
         public string User_img { get => user_img; set => user_img = value; }
-        public string Salt { get => salt; set => salt = value; }
+        public string Hash { get => hash; set => hash = value; }
     }
 }
