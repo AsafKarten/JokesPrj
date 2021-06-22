@@ -1,5 +1,6 @@
 ﻿using JokesPrj.Models;
 using System;
+using System.Data;
 using System.Data.SqlClient;
 
 
@@ -26,7 +27,7 @@ namespace JokesPrj.DAL
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["hash"]));
+                        u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["user_img"]));
                     }
                     return u;
                 }
@@ -44,11 +45,11 @@ namespace JokesPrj.DAL
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     con.Open();
-                    string query = $"Insert into JokesUsers (username,hash,email) VALUES (@username,@hash,@email)";
+                    string query = $"Insert into JokesUsers (username,phash,email) VALUES (@username,@phash,@email)";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@username", u.Username);
-                    cmd.Parameters.AddWithValue("@hash", u.Hash);
-                    cmd.Parameters.AddWithValue("@email", u.Email);
+                    cmd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = u.Username;
+                    cmd.Parameters.AddWithValue("@phash", SqlDbType.NVarChar).Value = u.Hash;
+                    cmd.Parameters.AddWithValue("@email", SqlDbType.NVarChar).Value = u.Email;
                     int res = cmd.ExecuteNonQuery();
                     return res;
                 }

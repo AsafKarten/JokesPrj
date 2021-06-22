@@ -33,20 +33,21 @@
             Email = email;
             Hash = hash;
         }
-        public User(int id_user, string username, string hash)
+        public User(int id_user, string username, string hash,string user_img)
         {
             Id_user = id_user;
             Username = username;
             Hash = hash;
-        }
-
-        public User(int id_user, string username, string email, string user_img)
-        {
-            Id_user = id_user;
-            Username = username;
-            Email = email;
             User_img = user_img;
         }
+
+        //public User(int id_user, string username, string email, string user_img)
+        //{
+        //    Id_user = id_user;
+        //    Username = username;
+        //    Email = email;
+        //    User_img = user_img;
+        //}
 
         public int Id_user { get => id_user; set => id_user = value; }
         public string Username { get => username; set => username = value; }

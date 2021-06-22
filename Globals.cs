@@ -7,15 +7,21 @@ namespace JokesPrj
 {
     public static class Globals
     {
+        static string conStr;
         //initializing data access layer with sql server before start the work between client side and backnd side.
         #region ctor
         static Globals()
         {
-            //get connection string from Web.config;
-            string conStr = ConfigurationManager.ConnectionStrings["LocalDB"].ConnectionString;
-            //string conStr = ConfigurationManager.ConnectionStrings["LIVEDNSfromLocal"].ConnectionString;
-            //string conStr = ConfigurationManager.ConnectionStrings["LIVEDNSfromLivedns"].ConnectionString;
-            Globals.UserDAL = new UserDAL(conStr);
+
+            bool localWebAPI = false;//before doing publish need to be false
+            bool sqlLocal = false;//before doing publish need to be false
+            if (localWebAPI && sqlLocal)
+                conStr = ConfigurationManager.ConnectionStrings["LocalDB"].ConnectionString;
+            else if (localWebAPI && !sqlLocal)
+                conStr = ConfigurationManager.ConnectionStrings["SQLLiveDNSfromLocalWebAPI"].ConnectionString;
+            else
+                conStr = ConfigurationManager.ConnectionStrings["LiveDNSfromLivednsWebAPI"].ConnectionString;
+            UserDAL = new UserDAL(conStr);
         }
         #endregion
 
