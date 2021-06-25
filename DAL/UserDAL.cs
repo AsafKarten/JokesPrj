@@ -26,9 +26,7 @@ namespace JokesPrj.DAL
                     cmd.Parameters.AddWithValue("@username", u.Username);
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
-                    {
                         u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["user_img"]));
-                    }
                     return u;
                 }
             }

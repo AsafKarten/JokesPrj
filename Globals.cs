@@ -12,9 +12,8 @@ namespace JokesPrj
         #region ctor
         static Globals()
         {
-
-            bool localWebAPI = false;//before doing publish need to be false
-            bool sqlLocal = false;//before doing publish need to be false
+            bool localWebAPI = true;//before doing publish need to be false
+            bool sqlLocal = true;//before doing publish need to be false
             if (localWebAPI && sqlLocal)
                 conStr = ConfigurationManager.ConnectionStrings["LocalDB"].ConnectionString;
             else if (localWebAPI && !sqlLocal)
@@ -28,15 +27,21 @@ namespace JokesPrj
         #region Controllers
         public static UserController UserController { get; set; }
         public static ImageController ImageController { get; set; }
+
+        public static JokesController JokesController { get; set; }
         #endregion
 
         #region DAL
         public static UserDAL UserDAL { get; set; }
+        public static JokeDAL JokeDAL { get; set; }
+
         #endregion
 
         #region Models
         public static User User { get; set; }
         public static Image Image { get; set; }
+
+        public static Joke Joke { get; set; }
         #endregion
     }
 }

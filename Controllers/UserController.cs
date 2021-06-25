@@ -1,5 +1,4 @@
-﻿
-using JokesPrj.Models;
+﻿using JokesPrj.Models;
 using System;
 using System.Net;
 using System.Web.Http;
