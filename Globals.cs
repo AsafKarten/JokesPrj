@@ -27,7 +27,6 @@ namespace JokesPrj
         #region Controllers
         public static UserController UserController { get; set; }
         public static ImageController ImageController { get; set; }
-
         public static JokesController JokesController { get; set; }
         #endregion
 
@@ -40,7 +39,6 @@ namespace JokesPrj
         #region Models
         public static User User { get; set; }
         public static Image Image { get; set; }
-
         public static Joke Joke { get; set; }
         #endregion
     }

@@ -21,19 +21,19 @@
             Username = username;
         }
 
-        public User (string username, string hash)
+        public User(string username, string hash)
         {
             Username = username;
             Hash = hash;
         }
 
-        public User(string username, string email,string hash)
+        public User(string username, string email, string hash)
         {
             Username = username;
             Email = email;
             Hash = hash;
         }
-        public User(int id_user, string username, string hash,string user_img)
+        public User(int id_user, string username, string hash, string user_img)
         {
             Id_user = id_user;
             Username = username;

@@ -1,6 +1,4 @@
-﻿
-
-namespace JokesPrj.Models
+﻿namespace JokesPrj.Models
 {
     public class Joke
     {
