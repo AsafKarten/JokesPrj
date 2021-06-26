@@ -21,6 +21,10 @@ namespace JokesPrj.Models
         {
             
         }
+        public Joke(string joke_title)
+        {
+            Joke_title = joke_title;
+        }
         public Joke(int id_user, string joke_title, string joke_body)
         {
             Id_user = id_user;

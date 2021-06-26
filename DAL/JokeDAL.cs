@@ -36,7 +36,7 @@ namespace JokesPrj.DAL
             }
         }
 
-        public List<Joke> GetJokes(string title)
+        public Joke GetJokes(Joke j)
         {
             try
             {
@@ -44,25 +44,13 @@ namespace JokesPrj.DAL
                 {
                     con.Open();
                     List<Joke> jokeList = new List<Joke>();
-                    Joke joke = null;
-                    string query = $"SELECT * FROM Jokes where joke_title=@joke_title";
+                    string query = $"SELECT * FROM Jokes WHERE joke_title= @joke_title";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@joke_title", title);
+                    cmd.Parameters.AddWithValue("@joke_title", j.Joke_title);
                     SqlDataReader reader = cmd.ExecuteReader();
-                    if (!reader.Read())
-                    {
-                        return null;
-                    }
                     while (reader.Read())
-                    {
-                        joke = new Joke(
-                            Convert.ToInt16(reader["id_user"]),
-                            Convert.ToString(reader["joke_title"]),
-                            Convert.ToString(reader["joke_body"])
-                            );
-                        jokeList.Add(joke);
-                    }
-                    return jokeList;
+                        j = new Joke(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["joke_title"]), Convert.ToString(reader["joke_body"]));
+                    return j;
                 }
             }
             catch (Exception ex)
@@ -70,6 +58,6 @@ namespace JokesPrj.DAL
                 throw new Exception(ex.Message);
             }
         }
+
     }
 }
-

@@ -32,7 +32,7 @@ namespace JokesPrj.Controllers
 
         [HttpPost]
         [Route("api/search/joke")]
-        public IHttpActionResult GetJoke([FromBody] string title)
+        public IHttpActionResult GetJoke([FromBody] Joke j)
         {
             try
             {
@@ -40,11 +40,11 @@ namespace JokesPrj.Controllers
                 {
                     return BadRequest("Invalid data.");
                 }
-                List<Joke> joke_list = Globals.JokeDAL.GetJokes(title);
-                Created(new Uri(Request.RequestUri.AbsoluteUri + title), joke_list);
-                if (joke_list != null)
+                Joke joke = Globals.JokeDAL.GetJokes(j);
+                Created(new Uri(Request.RequestUri.AbsoluteUri + j), joke);
+                if (joke != null)
                 {
-                    return Ok(joke_list);
+                    return Ok(joke);
                 }
                 throw new Exception("Jokes not found");
             }
