@@ -30,17 +30,23 @@ namespace JokesPrj.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("api/search/title")]
-        public IHttpActionResult GetJoke(string title)
+        [HttpPost]
+        [Route("api/search/joke")]
+        public IHttpActionResult GetJoke([FromBody] string title)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid data.");
+                }
                 List<Joke> joke_list = Globals.JokeDAL.GetJokes(title);
+                Created(new Uri(Request.RequestUri.AbsoluteUri + title), joke_list);
                 if (joke_list != null)
+                {
                     return Ok(joke_list);
-                else
-                    throw new Exception("No jokes found");
+                }
+                throw new Exception("Jokes not found");
             }
             catch (Exception ex)
             {
