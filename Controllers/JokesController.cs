@@ -40,11 +40,59 @@ namespace JokesPrj.Controllers
                 {
                     return BadRequest("Invalid data.");
                 }
-                Joke joke = Globals.JokeDAL.GetJokes(j);
+                Joke joke = Globals.JokeDAL.GetJoke(j);
                 Created(new Uri(Request.RequestUri.AbsoluteUri + j), joke);
                 if (joke != null)
                 {
                     return Ok(joke);
+                }
+                throw new Exception("Jokes not found");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/search/joke")]
+        public IHttpActionResult GetJokes([FromBody] Joke j)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid data.");
+                }
+                Joke joke = Globals.JokeDAL.GetJoke(j);
+                Created(new Uri(Request.RequestUri.AbsoluteUri + j), joke);
+                if (joke != null)
+                {
+                    return Ok(joke);
+                }
+                throw new Exception("Jokes not found");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/search/jokes")]
+        public IHttpActionResult GetAllJokes([FromBody] Joke j)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid data.");
+                }
+                List<Joke> jokes_list = Globals.JokeDAL.GetAllJokes(j);
+                Created(new Uri(Request.RequestUri.AbsoluteUri + j), jokes_list);
+                if (jokes_list != null)
+                {
+                    return Ok(jokes_list);
                 }
                 throw new Exception("Jokes not found");
             }
