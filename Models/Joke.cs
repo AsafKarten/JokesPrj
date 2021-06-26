@@ -1,4 +1,7 @@
-﻿namespace JokesPrj.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace JokesPrj.Models
 {
     public class Joke
     {
@@ -25,6 +28,4 @@
             Joke_body = joke_body;
         }
     }
-
-
 }
