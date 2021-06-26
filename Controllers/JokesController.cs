@@ -16,7 +16,8 @@ namespace JokesPrj.Controllers
                 {
                     return BadRequest("Invalid data.");
                 }
-                Created(new Uri(Request.RequestUri.AbsoluteUri + joke.Id_user), Globals.JokeDAL.SaveNewJokeToDB(joke));
+                
+                Created(new Uri(Request.RequestUri.AbsoluteUri +joke.Id_user ), Globals.JokeDAL.SaveNewJokeToDB(joke));
                 return Ok("Joke was posted successfully.");
             }
             catch (Exception ex)

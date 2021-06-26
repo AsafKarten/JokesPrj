@@ -16,6 +16,10 @@ namespace JokesPrj.Models
         public string Joke_body { get => joke_body; set => joke_body = value; }
         public string Joke_img { get => joke_img; set => joke_img = value; }
 
+        public Joke()
+        {
+            
+        }
         public Joke(int id_user, string joke_title, string joke_body)
         {
             Id_user = id_user;

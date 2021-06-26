@@ -21,6 +21,7 @@ namespace JokesPrj
             else
                 conStr = ConfigurationManager.ConnectionStrings["LiveDNSfromLivednsWebAPI"].ConnectionString;
             UserDAL = new UserDAL(conStr);
+            JokeDAL = new JokeDAL(conStr);
         }
         #endregion
 
