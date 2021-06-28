@@ -88,5 +88,31 @@ namespace JokesPrj.DAL
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<Joke> GetAllJokes()
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    List<Joke> jokes = new List<Joke>();
+                    Joke j = null;
+                    string query = "select * from jokes";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        j = new Joke(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["joke_title"]), Convert.ToString(reader["joke_body"]));
+                        jokes.Add(j);
+                    }
+                    return jokes;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

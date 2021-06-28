@@ -7,9 +7,21 @@ using System.Web.Http.Cors;
 
 namespace JokesPrj.Controllers
 {
-    [EnableCorsAttribute("*", "*", "*")]
     public class JokesController : ApiController
     {
+        public IHttpActionResult Get()
+        {
+            try
+            {
+                List<Joke> jokes = Globals.JokeDAL.GetAllJokes();
+                return Ok(jokes);
+            }
+            catch (Exception ex)
+            {
+                return Content(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
         [HttpPost]
         [Route("api/new/joke")]
         public IHttpActionResult AddNewUser([FromBody] Joke joke)
