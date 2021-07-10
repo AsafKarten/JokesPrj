@@ -12,8 +12,8 @@ namespace JokesPrj
         #region ctor
         static Globals()
         {
-            bool localWebAPI = false;//before doing publish need to be false
-            bool sqlLocal = false;//before doing publish need to be false
+            bool localWebAPI = true;//before doing publish need to be false
+            bool sqlLocal = true;//before doing publish need to be false
             if (localWebAPI && sqlLocal)
                 conStr = ConfigurationManager.ConnectionStrings["LocalDB"].ConnectionString;
             else if (localWebAPI && !sqlLocal)

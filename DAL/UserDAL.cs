@@ -57,5 +57,26 @@ namespace JokesPrj.DAL
                 throw new Exception(ex.Message);
             }
         }
+
+        public int SaveNewPhotoToDB(string path, int id)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    string query = $"Update JokesUsers Set user_img=@user_img where id_user=@id";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@user_img ", SqlDbType.NVarChar).Value = path;
+                    cmd.Parameters.AddWithValue("@id", SqlDbType.Int).Value = id;
+                    int res = cmd.ExecuteNonQuery();
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

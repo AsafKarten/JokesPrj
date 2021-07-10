@@ -49,7 +49,7 @@ namespace JokesPrj.DAL
                     cmd.Parameters.AddWithValue("@joke_title", j.Joke_title);
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
-                        j = new Joke(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["joke_title"]), Convert.ToString(reader["joke_body"]));
+                        j = new Joke(Convert.ToInt32(reader["id_joke"]), Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["joke_title"]), Convert.ToString(reader["joke_body"]));
                     return j;
                 }
             }
@@ -77,7 +77,7 @@ namespace JokesPrj.DAL
                     }
                     while (reader.Read())
                     {
-                        j = new Joke(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["joke_title"]), Convert.ToString(reader["joke_body"]));
+                        j = new Joke(Convert.ToInt32(reader["id_joke"]), Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["joke_title"]), Convert.ToString(reader["joke_body"]));
                         jokeList.Add(j);
                     }
                     return jokeList;
@@ -95,14 +95,16 @@ namespace JokesPrj.DAL
             {
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
+                    
                     List<Joke> jokes = new List<Joke>();
                     Joke j = null;
-                    string query = "select * from jokes";
+                    string query = "select * from Jokes";
                     SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Connection.Open();
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        j = new Joke(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["joke_title"]), Convert.ToString(reader["joke_body"]));
+                        j = new Joke(Convert.ToInt32(reader["id_joke"]), Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["joke_title"]), Convert.ToString(reader["joke_body"]));
                         jokes.Add(j);
                     }
                     return jokes;

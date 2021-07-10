@@ -6,9 +6,10 @@ namespace JokesPrj.Models
     {
         public class Img
         {
-            public string base64 { get; set; }
+            public string uri { get; set; }
             public string name { get; set; }
             public string folder { get; set; }
+            public string type { get; set; }
         }
 
         public class ImgRes

@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
-using System.Web.Http.Cors;
 
 namespace JokesPrj.Controllers
 {
     public class JokesController : ApiController
     {
-        public IHttpActionResult Get()
+        [HttpGet]
+        [Route("api/feed")]
+        public IHttpActionResult GetFeed()
         {
             try
             {
