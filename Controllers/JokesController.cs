@@ -3,11 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace JokesPrj.Controllers
 {
+    [EnableCorsAttribute("*", "*", "*")]
     public class JokesController : ApiController
     {
+
         [HttpGet]
         [Route("api/feed")]
         public IHttpActionResult GetFeed()
@@ -23,6 +26,9 @@ namespace JokesPrj.Controllers
             }
         }
 
+
+
+
         [HttpPost]
         [Route("api/new/joke")]
         public IHttpActionResult AddNewUser([FromBody] Joke joke)
@@ -36,6 +42,30 @@ namespace JokesPrj.Controllers
 
                 Created(new Uri(Request.RequestUri.AbsoluteUri + joke.Id_user), Globals.JokeDAL.SaveNewJokeToDB(joke));
                 return Ok("Joke was posted successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/profile/feed")]
+        public IHttpActionResult GetProfileFeed([FromBody] Joke j)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid data.");
+                }
+                List<Joke> jokes_list = Globals.JokeDAL.GetYourJokes(j.Id_user);
+                Created(new Uri(Request.RequestUri.AbsoluteUri + j), jokes_list);
+                if (jokes_list != null)
+                {
+                    return Ok(jokes_list);
+                }
+                throw new Exception("Jokes not found");
             }
             catch (Exception ex)
             {
