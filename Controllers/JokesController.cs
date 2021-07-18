@@ -26,12 +26,9 @@ namespace JokesPrj.Controllers
             }
         }
 
-
-
-
         [HttpPost]
         [Route("api/new/joke")]
-        public IHttpActionResult AddNewUser([FromBody] Joke joke)
+        public IHttpActionResult AddNewJoke([FromBody] Joke joke)
         {
             try
             {

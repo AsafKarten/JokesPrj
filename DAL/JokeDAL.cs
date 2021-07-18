@@ -21,7 +21,7 @@ namespace JokesPrj.DAL
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     con.Open();
-                    string query = $"Insert into Jokes (id_user,joke_title,joke_body,joke_img,username,user_img) VALUES (@id_user,@joke_title,@joke_body,@joke_img,@username,@user_img)";
+                    string query = $"Insert into Jokes (id_user,joke_title,joke_body,joke_like,joke_img,username,user_img) VALUES (@id_user,@joke_title,@joke_body,@joke_like,@joke_img,@username,@user_img)";
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@id_user", SqlDbType.Int).Value = j.Id_user;
                     cmd.Parameters.AddWithValue("@joke_title", SqlDbType.NVarChar).Value = j.Joke_title;
@@ -29,8 +29,41 @@ namespace JokesPrj.DAL
                     cmd.Parameters.AddWithValue("@joke_img", SqlDbType.NVarChar).Value = j.Joke_img;
                     cmd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = j.Username;
                     cmd.Parameters.AddWithValue("@user_img", SqlDbType.NVarChar).Value = j.User_img;
+                    cmd.Parameters.AddWithValue("@joke_like", SqlDbType.Int).Value = j.Joke_like;
                     int res = cmd.ExecuteNonQuery();
                     return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Joke GetJoke(int id_joke)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    Joke j = null;
+                    string query = $"SELECT * FROM Jokes WHERE id_joke= @id_joke";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@id_joke", id_joke);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                        j = new Joke(
+                            Convert.ToInt32(reader["id_joke"]),
+                            Convert.ToInt32(reader["id_user"]),
+                            Convert.ToInt32(reader["joke_like"]),
+                            Convert.ToString(reader["joke_title"]),
+                            Convert.ToString(reader["joke_body"]),
+                            Convert.ToString(reader["joke_img"]),
+                            Convert.ToString(reader["username"]),
+                            Convert.ToString(reader["user_img"])
+                            );
+                    return j;
                 }
             }
             catch (Exception ex)
@@ -61,6 +94,7 @@ namespace JokesPrj.DAL
                         j = new Joke(
                             Convert.ToInt32(reader["id_joke"]),
                             Convert.ToInt32(reader["id_user"]),
+                            Convert.ToInt32(reader["joke_like"]),
                             Convert.ToString(reader["joke_title"]),
                             Convert.ToString(reader["joke_body"]),
                             Convert.ToString(reader["joke_img"]),
@@ -85,7 +119,6 @@ namespace JokesPrj.DAL
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     con.Open();
-                    List<Joke> jokeList = new List<Joke>();
                     string query = $"SELECT * FROM Jokes WHERE joke_title= @joke_title";
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@joke_title", j.Joke_title);
@@ -94,6 +127,7 @@ namespace JokesPrj.DAL
                         j = new Joke(
                             Convert.ToInt32(reader["id_joke"]),
                             Convert.ToInt32(reader["id_user"]),
+                            Convert.ToInt32(reader["joke_like"]),
                             Convert.ToString(reader["joke_title"]),
                             Convert.ToString(reader["joke_body"]),
                             Convert.ToString(reader["joke_img"]),
@@ -130,6 +164,7 @@ namespace JokesPrj.DAL
                         j = new Joke(
                             Convert.ToInt32(reader["id_joke"]),
                             Convert.ToInt32(reader["id_user"]),
+                            Convert.ToInt32(reader["joke_like"]),
                             Convert.ToString(reader["joke_title"]),
                             Convert.ToString(reader["joke_body"]),
                             Convert.ToString(reader["joke_img"]),
@@ -165,6 +200,7 @@ namespace JokesPrj.DAL
                         j = new Joke(
                             Convert.ToInt32(reader["id_joke"]),
                             Convert.ToInt32(reader["id_user"]),
+                            Convert.ToInt32(reader["joke_like"]),
                             Convert.ToString(reader["joke_title"]),
                             Convert.ToString(reader["joke_body"]),
                             Convert.ToString(reader["joke_img"]),
@@ -182,5 +218,47 @@ namespace JokesPrj.DAL
                 throw new Exception(ex.Message);
             }
         }
+
+        public int IncrementLike(Joke j)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    string query = $"Update Jokes Set joke_like=@joke_like where id_joke=@id_joke";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@joke_like ", SqlDbType.Int).Value = ++j.Joke_like;
+                    cmd.Parameters.AddWithValue("@id_joke", SqlDbType.Int).Value = j.Id_joke;
+                    int res = cmd.ExecuteNonQuery();
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public int DecrementLike(Joke j)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    string query = $"Update Jokes Set joke_like=@joke_like where id_joke=@id_joke";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@joke_like ", SqlDbType.Int).Value = --j.Joke_like;
+                    cmd.Parameters.AddWithValue("@id_joke", SqlDbType.Int).Value = j.Id_joke;
+                    int res = cmd.ExecuteNonQuery();
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }
