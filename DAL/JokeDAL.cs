@@ -226,7 +226,7 @@ namespace JokesPrj.DAL
                 using (SqlConnection con = new SqlConnection(conStr))
                 { 
                     int like_counter = 0;
-                    if(j.Joke_like==0 || j.Joke_like == null)
+                    if(j.Joke_like==0)
                     {
                         like_counter = 1;
                     }
