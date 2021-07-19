@@ -21,7 +21,7 @@ namespace JokesPrj.Controllers
                     return BadRequest("Invalid data.");
                 }
                 Created(new Uri(Request.RequestUri.AbsoluteUri + like.Id_joke), Globals.LikeDAL.AddNewLikeToDB(like));
-                return Ok("User created successfully.");
+                return Ok("Like added successfully.");
             }
             catch (Exception ex)
             {
