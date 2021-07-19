@@ -235,7 +235,7 @@ namespace JokesPrj.DAL
                         like_counter = j.Joke_like +1;
                     }
                     con.Open();
-                    string query = $"Update Jokes Set joke_like=@joke_like where id_joke=@id_joke";
+                    string query = $"Update Jokes Set joke_like= @joke_like where id_joke= @id_joke";
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@joke_like ", SqlDbType.Int).Value = like_counter;
                     cmd.Parameters.AddWithValue("@id_joke", SqlDbType.Int).Value = j.Id_joke;
