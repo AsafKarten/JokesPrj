@@ -20,7 +20,7 @@ namespace JokesPrj.Controllers
                 {
                     return BadRequest("Invalid data.");
                 }
-                Created(new Uri(Request.RequestUri.AbsoluteUri + like.Id_joke), Globals.LikeDAL.AddNewLikeToDB(like));
+                Created(new Uri(Request.RequestUri.AbsoluteUri + like.Id_joke), Globals.LikeDAL.CheckLikeStauts(like));
                 return Ok("Like added successfully.");
             }
             catch (Exception ex)

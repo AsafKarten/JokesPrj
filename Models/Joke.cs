@@ -11,7 +11,6 @@ namespace JokesPrj.Models
         string joke_title;
         string joke_body;
         string joke_img;
-        
         string username;
         string user_img;
 

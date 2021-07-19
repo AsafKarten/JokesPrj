@@ -16,11 +16,12 @@ namespace JokesPrj.DAL
         {
             this.conStr = conStr;
         }
-
-        public void CheckLikeStauts(Like L)
+        //TODO: Fix it, need to fix the decremnet when i want to remove like on other joke
+        public int CheckLikeStauts(Like L)
         {
+            int res=0;
             bool status = false;
-            Joke current = new Joke();
+            Joke current;
             current = Globals.JokeDAL.GetJoke(L.Id_joke);
             List<Like> likes;
             likes = GetAllLikes(L.Id_joke);
@@ -28,20 +29,21 @@ namespace JokesPrj.DAL
             {
                 if (item.Id_user.Equals(L.Id_user))
                 {
-                    status = true;
+                    status = false;
                 }
 
             }
             if (status == true)
             {
                 Globals.JokeDAL.DecrementLike(current);
-                RemoveLikeFromDB(L.Like_id);
+                res = RemoveLikeFromDB(L.Like_id);
             }
             else
             {
                 Globals.JokeDAL.IncrementLike(current);
-                AddNewLikeToDB(L);
+                res = AddNewLikeToDB(L);
             }
+            return res;
         }
 
         public int RemoveLikeFromDB(int like_id)

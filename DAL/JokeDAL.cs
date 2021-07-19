@@ -224,18 +224,18 @@ namespace JokesPrj.DAL
             try
             {
                 using (SqlConnection con = new SqlConnection(conStr))
-                { 
+                {
                     int like_counter = 0;
-                    if(j.Joke_like==0)
+                    if (j.Joke_like == 0)
                     {
                         like_counter = 1;
                     }
                     else
                     {
-                        like_counter = j.Joke_like +1;
+                        like_counter = j.Joke_like + 1;
                     }
                     con.Open();
-                    string query = $"Update Jokes Set joke_like= @joke_like where id_joke= @id_joke";
+                    string query = $"UPDATE Jokes SET joke_like= @joke_like WHERE id_joke= @id_joke";
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@joke_like ", SqlDbType.Int).Value = like_counter;
                     cmd.Parameters.AddWithValue("@id_joke", SqlDbType.Int).Value = j.Id_joke;
