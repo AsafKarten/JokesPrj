@@ -19,7 +19,7 @@ namespace JokesPrj.DAL
         //TODO: Fix it, need to fix the decremnet when i want to remove like on other joke
         public int CheckLikeStauts(Like L)
         {
-            int res=0;
+            int res = 0;
             bool status = false;
             Joke current;
             current = Globals.JokeDAL.GetJoke(L.Id_joke);
@@ -29,7 +29,7 @@ namespace JokesPrj.DAL
             {
                 if (item.Id_user.Equals(L.Id_user))
                 {
-                    status = false;
+                    status = true;
                 }
 
             }
@@ -90,6 +90,43 @@ namespace JokesPrj.DAL
             }
         }
 
+        public List<Like> GetLikesJokes(int id_user)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    Like L = null;
+                    List<Like> likeList = new List<Like>();
+                    string query = $"SELECT * FROM JokesLikes WHERE id_user= @id_user";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@id_user", id_user);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    if (reader == null)
+                    {
+                        return likeList;
+                    }
+                    while (reader.Read())
+                    {
+                        L = new Like(
+                            Convert.ToInt32(reader["like_id"]),
+                            Convert.ToInt32(reader["id_joke"]),
+                            Convert.ToInt32(reader["id_user"]),
+                            Convert.ToString(reader["user_img"]),
+                            Convert.ToString(reader["username"])
+                            );
+                        likeList.Add(L);
+                    }
+                    return likeList;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
 
         public List<Like> GetAllLikes(int id_joke)
         {
@@ -127,5 +164,7 @@ namespace JokesPrj.DAL
                 throw new Exception(ex.Message);
             }
         }
+
+
     }
 }
