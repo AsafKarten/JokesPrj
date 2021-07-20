@@ -12,7 +12,8 @@ namespace JokesPrj.Controllers
     {
         [HttpPost]
         [Route("api/get/comments")]
-        public IHttpActionResult GetJokeComments([FromBody] Comment C)
+        //move to joke
+        public IHttpActionResult GetJokeComments([FromBody] Joke j)
         {
             try
             {
@@ -20,8 +21,8 @@ namespace JokesPrj.Controllers
                 {
                     return BadRequest("Invalid data.");
                 }
-                List<Comment> comment_list = Globals.CommentDAL.GetAllComments(C.Id_joke);
-                Created(new Uri(Request.RequestUri.AbsoluteUri + C), comment_list);
+                List<Comment> comment_list = Globals.CommentDAL.GetAllComments(j.Id_joke);
+                Created(new Uri(Request.RequestUri.AbsoluteUri + j), comment_list);
                 if (comment_list != null)
                 {
                     return Ok(comment_list);

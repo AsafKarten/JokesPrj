@@ -31,7 +31,8 @@ namespace JokesPrj.Controllers
 
         [HttpPost]
         [Route("api/get/likes")]
-        public IHttpActionResult GetJokeLikes([FromBody] Like L)
+        //move to joke controller
+        public IHttpActionResult GetJokeLikes([FromBody] Joke j)
         {
             try
             {
@@ -39,8 +40,8 @@ namespace JokesPrj.Controllers
                 {
                     return BadRequest("Invalid data.");
                 }
-                List<Like> like_list = Globals.LikeDAL.GetAllLikes(L.Id_joke);
-                Created(new Uri(Request.RequestUri.AbsoluteUri + L), like_list);
+                List<Like> like_list = Globals.LikeDAL.GetAllLikes(j.Id_joke);
+                Created(new Uri(Request.RequestUri.AbsoluteUri + j), like_list);
                 if (like_list != null)
                 {
                     return Ok(like_list);
