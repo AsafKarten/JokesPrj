@@ -45,17 +45,17 @@ namespace JokesPrj.Models
             User_img = user_img;
             Joke_img = joke_img;
         }
-        public Joke(int id_joke, int id_user, int joke_like, int comment_count, string joke_title, string joke_body, string joke_img, string username, string user_img)
+        public Joke(int id_joke, int id_user, int joke_like, string joke_title, string joke_body, string joke_img, string username, string user_img,int comment_count)
         {
             Id_joke = id_joke;
             Id_user = id_user;
             Joke_like = joke_like;
-            Comment_count = comment_count;
             Joke_title = joke_title;
             Joke_body = joke_body;
             Username = username;
             User_img = user_img;
             Joke_img = joke_img;
+            Comment_count = comment_count;
         }
     }
 }

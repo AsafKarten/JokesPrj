@@ -21,7 +21,7 @@ namespace JokesPrj.DAL
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     con.Open();
-                    string query = $"Insert into Jokes (id_user,joke_title,joke_body,joke_like,comment_count,joke_img,username,user_img) VALUES (@id_user,@joke_title,@joke_body,@joke_like,@comment_count,@joke_img,@username,@user_img)";
+                    string query = $"Insert into Jokes (id_user,joke_title,joke_body,joke_like,joke_img,username,user_img,comment_count) VALUES (@id_user,@joke_title,@joke_body,@joke_like,@joke_img,@username,@user_img,@comment_count)";
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@id_user", SqlDbType.Int).Value = j.Id_user;
                     cmd.Parameters.AddWithValue("@joke_title", SqlDbType.NVarChar).Value = j.Joke_title;
@@ -29,7 +29,7 @@ namespace JokesPrj.DAL
                     cmd.Parameters.AddWithValue("@joke_img", SqlDbType.NVarChar).Value = j.Joke_img;
                     cmd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = j.Username;
                     cmd.Parameters.AddWithValue("@user_img", SqlDbType.NVarChar).Value = j.User_img;
-                    cmd.Parameters.AddWithValue("@joke_like", SqlDbType.Int).Value = j.Joke_like;
+                    cmd.Parameters.AddWithValue("@joke_like", SqlDbType.Int).Value = 0;
                     cmd.Parameters.AddWithValue("@comment_count", SqlDbType.Int).Value = 0;
                     int res = cmd.ExecuteNonQuery();
                     return res;
@@ -58,12 +58,12 @@ namespace JokesPrj.DAL
                             Convert.ToInt32(reader["id_joke"]),
                             Convert.ToInt32(reader["id_user"]),
                             Convert.ToInt32(reader["joke_like"]),
-                            Convert.ToInt32(reader["comment_count"]),
                             Convert.ToString(reader["joke_title"]),
                             Convert.ToString(reader["joke_body"]),
                             Convert.ToString(reader["joke_img"]),
                             Convert.ToString(reader["username"]),
-                            Convert.ToString(reader["user_img"])
+                            Convert.ToString(reader["user_img"]),
+                            Convert.ToInt32(reader["comment_count"])
                             );
                     return j;
                 }
@@ -99,12 +99,12 @@ namespace JokesPrj.DAL
                             Convert.ToInt32(reader["id_joke"]),
                             Convert.ToInt32(reader["id_user"]),
                             Convert.ToInt32(reader["joke_like"]),
-                            Convert.ToInt32(reader["comment_count"]),
                             Convert.ToString(reader["joke_title"]),
                             Convert.ToString(reader["joke_body"]),
                             Convert.ToString(reader["joke_img"]),
                             Convert.ToString(reader["username"]),
-                            Convert.ToString(reader["user_img"])
+                            Convert.ToString(reader["user_img"]),
+                            Convert.ToInt32(reader["comment_count"])
                             );
                         jokeList.Add(j);
                     }
@@ -144,12 +144,12 @@ namespace JokesPrj.DAL
                             Convert.ToInt32(reader["id_joke"]),
                             Convert.ToInt32(reader["id_user"]),
                             Convert.ToInt32(reader["joke_like"]),
-                            Convert.ToInt32(reader["comment_count"]),
                             Convert.ToString(reader["joke_title"]),
                             Convert.ToString(reader["joke_body"]),
                             Convert.ToString(reader["joke_img"]),
                             Convert.ToString(reader["username"]),
-                            Convert.ToString(reader["user_img"])
+                            Convert.ToString(reader["user_img"]),
+                            Convert.ToInt32(reader["comment_count"])
                             );
                     return j;
                 }
@@ -182,12 +182,12 @@ namespace JokesPrj.DAL
                             Convert.ToInt32(reader["id_joke"]),
                             Convert.ToInt32(reader["id_user"]),
                             Convert.ToInt32(reader["joke_like"]),
-                            Convert.ToInt32(reader["comment_count"]),
                             Convert.ToString(reader["joke_title"]),
                             Convert.ToString(reader["joke_body"]),
                             Convert.ToString(reader["joke_img"]),
                             Convert.ToString(reader["username"]),
-                            Convert.ToString(reader["user_img"])
+                            Convert.ToString(reader["user_img"]),
+                            Convert.ToInt32(reader["comment_count"])
                             );
                         jokeList.Add(j);
                     }
@@ -219,12 +219,12 @@ namespace JokesPrj.DAL
                             Convert.ToInt32(reader["id_joke"]),
                             Convert.ToInt32(reader["id_user"]),
                             Convert.ToInt32(reader["joke_like"]),
-                            Convert.ToInt32(reader["comment_count"]),
                             Convert.ToString(reader["joke_title"]),
                             Convert.ToString(reader["joke_body"]),
                             Convert.ToString(reader["joke_img"]),
                             Convert.ToString(reader["username"]),
-                            Convert.ToString(reader["user_img"])
+                            Convert.ToString(reader["user_img"]),
+                            Convert.ToInt32(reader["comment_count"])
                             );
                         jokes.Add(j);
                     }
