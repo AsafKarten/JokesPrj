@@ -53,7 +53,7 @@ namespace JokesPrj.DAL
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     con.Open();
-                    string query = $"Delete from JokesLikes where like_id= @like_id";
+                    string query = $"DELETE FROM JokesLikes WHERE like_id= @like_id";
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@like_id", SqlDbType.Int).Value = like_id;
                     int res = cmd.ExecuteNonQuery();
@@ -90,22 +90,22 @@ namespace JokesPrj.DAL
             }
         }
 
-        public List<Like> GetLikesJokes(int id_user)
+        public List<Joke> GetLikesJokes(int id_user)
         {
             try
             {
+                Like L = null;
+                List<Like> likeList = new List<Like>();
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     con.Open();
-                    Like L = null;
-                    List<Like> likeList = new List<Like>();
                     string query = $"SELECT * FROM JokesLikes WHERE id_user= @id_user";
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@id_user", id_user);
                     SqlDataReader reader = cmd.ExecuteReader();
                     if (reader == null)
                     {
-                        return likeList;
+                        return null;
                     }
                     while (reader.Read())
                     {
@@ -118,8 +118,9 @@ namespace JokesPrj.DAL
                             );
                         likeList.Add(L);
                     }
-                    return likeList;
                 }
+                List<Joke> JokesList = Globals.JokeDAL.RetriveJokesList(likeList);
+                return JokesList;
             }
             catch (Exception ex)
             {

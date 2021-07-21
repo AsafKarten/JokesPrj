@@ -20,8 +20,9 @@ namespace JokesPrj.Controllers
                 {
                     return BadRequest("Invalid data.");
                 }
-                Created(new Uri(Request.RequestUri.AbsoluteUri + like.Id_joke), Globals.LikeDAL.CheckLikeStauts(like));
-                return Ok("Like added successfully.");
+                int res = Globals.LikeDAL.CheckLikeStauts(like);
+                Created(new Uri(Request.RequestUri.AbsoluteUri + like.Id_joke), res);
+                return Ok("Like added successfully." + res);
             }
             catch (Exception ex)
             {
@@ -54,10 +55,9 @@ namespace JokesPrj.Controllers
             }
         }
 
-        //fix this
         [HttpPost]
         [Route("api/your/likes/jokes")]
-        public IHttpActionResult GetJokesUserLike([FromBody] Like L)
+        public IHttpActionResult GetJokesUserLike([FromBody] User u)
         {
             try
             {
@@ -65,8 +65,8 @@ namespace JokesPrj.Controllers
                 {
                     return BadRequest("Invalid data.");
                 }
-                List<Like> jokes_list = Globals.LikeDAL.GetLikesJokes(L.Id_user);
-                Created(new Uri(Request.RequestUri.AbsoluteUri + L), jokes_list);
+                List<Joke> jokes_list = Globals.LikeDAL.GetLikesJokes(u.Id_user);
+                Created(new Uri(Request.RequestUri.AbsoluteUri + u), jokes_list);
                 if (jokes_list != null)
                 {
                     return Ok(jokes_list);

@@ -72,6 +72,8 @@ namespace JokesPrj.DAL
             }
         }
 
+
+
         public List<Joke> GetYourJokes(int id)
         {
             try
@@ -105,6 +107,47 @@ namespace JokesPrj.DAL
                     }
                     return jokeList;
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public List<Joke> RetriveJokesList(List<Like> likeList)
+        {
+            List<Joke> fullListJokes = new List<Joke>();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    foreach (Like item in likeList)
+                    {
+                        Joke j = null;
+                        string query = $"SELECT * FROM Jokes WHERE id_joke= @id_joke";
+                        SqlCommand cmd = new SqlCommand(query, con);
+                        cmd.Parameters.AddWithValue("@id_joke", item.Id_joke);
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        if (reader == null)
+                        {
+                            return fullListJokes;
+                        }
+                        while (reader.Read())
+                            j = new Joke(
+                                Convert.ToInt32(reader["id_joke"]),
+                                Convert.ToInt32(reader["id_user"]),
+                                Convert.ToInt32(reader["joke_like"]),
+                                Convert.ToString(reader["joke_title"]),
+                                Convert.ToString(reader["joke_body"]),
+                                Convert.ToString(reader["joke_img"]),
+                                Convert.ToString(reader["username"]),
+                                Convert.ToString(reader["user_img"])
+                                );
+                        fullListJokes.Add(j);
+                    }
+                }
+                return fullListJokes;
+
             }
             catch (Exception ex)
             {

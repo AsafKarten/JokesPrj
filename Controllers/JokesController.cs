@@ -7,7 +7,6 @@ using System.Web.Http.Cors;
 
 namespace JokesPrj.Controllers
 {
-    [EnableCorsAttribute("*", "*", "*")]
     public class JokesController : ApiController
     {
 
