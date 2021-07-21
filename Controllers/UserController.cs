@@ -6,7 +6,6 @@ using System.Web.Http.Cors;
 
 namespace JokesPrj.Controllers
 {
-    [EnableCorsAttribute("*", "*", "*")]
     public class UserController : ApiController
     {
         //Get One User from users table.
