@@ -24,6 +24,7 @@ namespace JokesPrj
             JokeDAL = new JokeDAL(conStr);
             LikeDAL = new LikeDAL(conStr);
             CommentDAL = new CommentDAL(conStr);
+            FollowDAL = new FollowDAL(conStr);
         }
         #endregion
 
@@ -31,23 +32,27 @@ namespace JokesPrj
         public static UserController UserController { get; set; }
         public static ImageController ImageController { get; set; }
         public static JokesController JokesController { get; set; }
-
         public static LikeController LikeController { get; set; }
         public static CommentController CommentController { get; set; }
-
+        public static FollowController FollowController { get; set; }
         #endregion
 
         #region DAL
         public static UserDAL UserDAL { get; set; }
         public static JokeDAL JokeDAL { get; set; }
         public static LikeDAL LikeDAL { get; set; }
+        public static FollowDAL FollowDAL { get; set; }
         public static CommentDAL CommentDAL { get; set; }
+
+
         #endregion
 
         #region Models
         public static User User { get; set; }
         public static Image Image { get; set; }
         public static Joke Joke { get; set; }
+        public static Follow Follow { get; set; }
+        public static Comment Comment { get; set; }
         #endregion
     }
 }

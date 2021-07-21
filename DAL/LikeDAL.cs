@@ -103,10 +103,6 @@ namespace JokesPrj.DAL
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@id_user", id_user);
                     SqlDataReader reader = cmd.ExecuteReader();
-                    if (reader == null)
-                    {
-                        return null;
-                    }
                     while (reader.Read())
                     {
                         L = new Like(
