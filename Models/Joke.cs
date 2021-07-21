@@ -8,7 +8,7 @@ namespace JokesPrj.Models
         int id_joke;
         int id_user;
         int joke_like;
-        int comment_counter;
+        int comment_count;
         string joke_title;
         string joke_body;
         string joke_img;
@@ -24,7 +24,7 @@ namespace JokesPrj.Models
         public string Username { get => username; set => username = value; }
         public string User_img { get => user_img; set => user_img = value; }
         public int Joke_like { get => joke_like; set => joke_like = value; }
-        public int Comment_counter { get => comment_counter; set => comment_counter = value; }
+        public int Comment_count { get => comment_count; set => comment_count = value; }
 
         public Joke()
         {
@@ -38,19 +38,19 @@ namespace JokesPrj.Models
         {
             Id_user = id_user;
             Joke_like = 0;
-            Comment_counter = 0;
+            Comment_count = 0;
             Joke_title = joke_title;
             Joke_body = joke_body;
             Username = username;
             User_img = user_img;
             Joke_img = joke_img;
         }
-        public Joke(int id_joke, int id_user, int joke_like, int comment_counter, string joke_title, string joke_body, string joke_img, string username, string user_img)
+        public Joke(int id_joke, int id_user, int joke_like, int comment_count, string joke_title, string joke_body, string joke_img, string username, string user_img)
         {
             Id_joke = id_joke;
             Id_user = id_user;
             Joke_like = joke_like;
-            Comment_counter = comment_counter;
+            Comment_count = comment_count;
             Joke_title = joke_title;
             Joke_body = joke_body;
             Username = username;

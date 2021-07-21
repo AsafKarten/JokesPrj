@@ -92,7 +92,7 @@ namespace JokesPrj.DAL
                     con.Open();
                     string query = $"UPDATE Jokes SET comment_count= @comment_count WHERE id_joke= @id_joke";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@comment_count ", SqlDbType.Int).Value = ++j.Comment_counter;
+                    cmd.Parameters.AddWithValue("@comment_count ", SqlDbType.Int).Value = ++j.Comment_count;
                     cmd.Parameters.AddWithValue("@id_joke", SqlDbType.Int).Value = j.Id_joke;
                     int res = cmd.ExecuteNonQuery();
                     return res;
