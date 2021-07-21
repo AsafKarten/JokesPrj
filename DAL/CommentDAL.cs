@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -16,7 +17,6 @@ namespace JokesPrj.DAL
         {
             this.conStr = conStr;
         }
-
 
         public List<Comment> GetAllComments(int id_joke)
         {
@@ -69,9 +69,31 @@ namespace JokesPrj.DAL
                     cmd.Parameters.AddWithValue("@id_joke", SqlDbType.Int).Value = comment.Id_joke;
                     cmd.Parameters.AddWithValue("@id_user", SqlDbType.Int).Value = comment.Id_user;
                     cmd.Parameters.AddWithValue("@comment_body", SqlDbType.NVarChar).Value = comment.Comment_body;
-                    cmd.Parameters.AddWithValue("@comment_date", SqlDbType.DateTime).Value = comment.Comment_date;
+                    cmd.Parameters.AddWithValue("@comment_date", SqlDbType.DateTime).Value = comment.Comment_date.ToLocalTime();
                     cmd.Parameters.AddWithValue("@user_img", SqlDbType.NVarChar).Value = comment.User_img;
                     cmd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = comment.Username;
+                    IncCommentCounter(comment.Id_joke);
+                    int res = cmd.ExecuteNonQuery();
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public int IncCommentCounter(int id_joke)
+        {
+            Joke j = Globals.JokeDAL.GetJoke(id_joke);
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    string query = $"UPDATE Jokes SET comment_count= @comment_count WHERE id_joke= @id_joke";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@comment_count ", SqlDbType.Int).Value = ++j.Comment_counter;
+                    cmd.Parameters.AddWithValue("@id_joke", SqlDbType.Int).Value = j.Id_joke;
                     int res = cmd.ExecuteNonQuery();
                     return res;
                 }
