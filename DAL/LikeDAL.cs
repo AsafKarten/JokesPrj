@@ -3,8 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
+
 
 namespace JokesPrj.DAL
 {
@@ -30,33 +29,34 @@ namespace JokesPrj.DAL
                 if (item.Id_user.Equals(L.Id_user))
                 {
                     status = true;
+                    L = item;
                 }
-
             }
             if (status == true)
             {
+                res = RemoveLikeFromDB(L);
                 Globals.JokeDAL.DecrementLike(current);
-                res = RemoveLikeFromDB(L.Like_id);
             }
             else
             {
-                Globals.JokeDAL.IncrementLike(current);
                 res = AddNewLikeToDB(L);
+                Globals.JokeDAL.IncrementLike(current);
             }
             return res;
         }
 
-        public int RemoveLikeFromDB(int like_id)
+        public int RemoveLikeFromDB(Like L)
         {
+            int ID = L.Like_id;
             try
             {
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     con.Open();
-                    string query = $"DELETE FROM JokesLikes WHERE like_id= @like_id";
-                    SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@like_id", SqlDbType.Int).Value = like_id;
-                    int res = cmd.ExecuteNonQuery();
+                    SqlCommand sql_cmnd = new SqlCommand("DeleteLike", con);
+                    sql_cmnd.CommandType = CommandType.StoredProcedure;
+                    sql_cmnd.Parameters.AddWithValue("@ID", SqlDbType.Int).Value = ID;
+                    int res = sql_cmnd.ExecuteNonQuery();
                     return res;
                 }
             }

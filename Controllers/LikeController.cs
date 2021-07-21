@@ -21,7 +21,7 @@ namespace JokesPrj.Controllers
                     return BadRequest("Invalid data.");
                 }
                 int res = Globals.LikeDAL.CheckLikeStauts(like);
-                Created(new Uri(Request.RequestUri.AbsoluteUri + like.Id_joke), res);
+                Created(new Uri(Request.RequestUri.AbsoluteUri + like), res);
                 return Ok("Like added successfully." + res);
             }
             catch (Exception ex)
