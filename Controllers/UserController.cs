@@ -33,7 +33,7 @@ namespace JokesPrj.Controllers
             try
             {
                 User u;
-                u = Globals.UserDAL.GetUserByID(id_user)
+                u = Globals.UserDAL.GetUserByID(id_user);
                 if (u == null)
                     return Content(HttpStatusCode.NotFound, $"User was not found");
                 return Ok(u);
