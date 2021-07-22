@@ -83,7 +83,7 @@ namespace JokesPrj.DAL
                     }
                     string query = $"Update JokesUsers Set follow_me=@follow_me where id_user=@id_user";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@i_follow ", SqlDbType.NVarChar).Value = target_user.Follow_me;
+                    cmd.Parameters.AddWithValue("@follow_me ", SqlDbType.NVarChar).Value = target_user.Follow_me;
                     cmd.Parameters.AddWithValue("@id_user", SqlDbType.Int).Value = target_user.Id_user;
                     int res = cmd.ExecuteNonQuery();
                     return res;

@@ -28,12 +28,12 @@ namespace JokesPrj.Controllers
 
         [HttpPost]
         [Route("api/get/user")]
-        public IHttpActionResult GetUserFromDB([FromBody] int id_user)
+        public IHttpActionResult GetUserFriendFromDB([FromBody] User u)
         {
             try
             {
-                User u;
-                u = Globals.UserDAL.GetUserByID(id_user);
+                
+                u = Globals.UserDAL.GetUserByID(u.Id_user);
                 if (u == null)
                     return Content(HttpStatusCode.NotFound, $"User was not found");
                 return Ok(u);
