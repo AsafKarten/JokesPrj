@@ -37,6 +37,28 @@ namespace JokesPrj.DAL
             }
         }
 
+        public User GetUser(User user)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    string query = $"SELECT * FROM JokesUsers where id_user= @id_user";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@id_user", user.Id_user);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                        user = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]));
+                    return user;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public int UpdateIFollow(User logged_user, bool status)
         {
             try
@@ -124,11 +146,12 @@ namespace JokesPrj.DAL
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     con.Open();
-                    string query = $"Insert into JokesUsers (username,phash,email,i_follow,follow_me,salt) VALUES (@username,@phash,@email,@i_follow,@follow_me,@salt)";
+                    string query = $"Insert into JokesUsers (username,phash,email,user_img,i_follow,follow_me,salt) VALUES (@username,@phash,@email,@user_img,@i_follow,@follow_me,@salt)";
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = u.Username;
                     cmd.Parameters.AddWithValue("@phash", SqlDbType.NVarChar).Value = u.Hash;
                     cmd.Parameters.AddWithValue("@email", SqlDbType.NVarChar).Value = u.Email;
+                    cmd.Parameters.AddWithValue("@user_img", SqlDbType.NVarChar).Value = u.User_img;
                     cmd.Parameters.AddWithValue("@i_follow", SqlDbType.Int).Value = 0;
                     cmd.Parameters.AddWithValue("@follow_me", SqlDbType.Int).Value = 0;
                     cmd.Parameters.AddWithValue("@salt", SqlDbType.NVarChar).Value = u.Salt;
