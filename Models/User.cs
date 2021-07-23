@@ -7,6 +7,7 @@
         string email;
         string user_img;
         string hash;
+        string salt;
         int i_follow;
         int follow_me;
         public int Id_user { get => id_user; set => id_user = value; }
@@ -16,6 +17,7 @@
         public string Hash { get => hash; set => hash = value; }
         public int I_follow { get => i_follow; set => i_follow = value; }
         public int Follow_me { get => follow_me; set => follow_me = value; }
+        public string Salt { get => salt; set => salt = value; }
 
         public User()
         {

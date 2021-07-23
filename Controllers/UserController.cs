@@ -2,7 +2,6 @@
 using System;
 using System.Net;
 using System.Web.Http;
-using System.Web.Http.Cors;
 
 namespace JokesPrj.Controllers
 {
@@ -54,7 +53,7 @@ namespace JokesPrj.Controllers
                 {
                     return BadRequest("Invalid data.");
                 }
-                Created(new Uri(Request.RequestUri.AbsoluteUri + user.Id_user), Globals.UserDAL.SaveNewUserToDB(user));
+                Created(new Uri(Request.RequestUri.AbsoluteUri + user), Globals.UserDAL.SaveNewUserToDB(user));
                 return Ok("User created successfully.");
             }
             catch (Exception ex)
