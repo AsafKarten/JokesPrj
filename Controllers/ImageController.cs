@@ -23,7 +23,7 @@ namespace JokesPrj.Controllers
             try
             {
                 //path
-                string path = HttpContext.Current.Server.MapPath(@"~/upload/" + image.folder);
+                string path = HttpContext.Current.Server.MapPath(@"~/Upload_users/" + image.folder);
 
                 //create directory if not exists
                 if (!Directory.Exists(path))
@@ -38,7 +38,7 @@ namespace JokesPrj.Controllers
                 File.WriteAllBytes(imagePath, imageBytes);
 
                 //update the resposne object
-                res.path = $"{Server.GetServerUrl()}/upload/{image.folder}/{imageName}";
+                res.path = $"{Server.GetServerUrl()}/Upload_users/{image.folder}/{imageName}";
                 res.isOk = true;
                 Globals.UserDAL.SaveNewPhotoToDB(res.path, int.Parse(image.folder));
                 return Ok(res);
