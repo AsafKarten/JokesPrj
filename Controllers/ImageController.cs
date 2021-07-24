@@ -12,7 +12,6 @@ namespace JokesPrj.Controllers
 
     public class ImageController : ApiController
     {
-
         [Route("api/uploadpicture")]
         [HttpPost]
         public IHttpActionResult UploadImage([FromBody] Img image)
