@@ -6,7 +6,6 @@ import * as GoogleSignIn from 'expo-google-sign-in';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 var isaac = require('isaac');
 
-//test
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
