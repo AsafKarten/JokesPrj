@@ -171,10 +171,8 @@ const styles = StyleSheet.create({
     UserImg: {
         width: 30,
         height: 30,
-        borderRadius: 100,
         borderWidth: 2,
-        borderRadius: 90,
-        borderColor: 'orange',
+        borderRadius:110,
         resizeMode: 'stretch',
     },
     UserName: {

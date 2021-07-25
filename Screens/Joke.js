@@ -284,7 +284,6 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         borderWidth: 2,
         borderRadius: 90,
-        borderColor: 'orange',
         resizeMode: 'stretch',
     },
     UserName: {

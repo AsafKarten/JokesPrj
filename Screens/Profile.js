@@ -61,21 +61,6 @@ export default function Profile({ navigation, user }) {
         }
     }
 
-    // const _mergeData = async (new_user, old_user) => {
-    //     try {
-    //         // first save the userName1 suppose it is “Tom”
-    //         await AsyncStorage.setItem('loggedUser', new_user);
-    //         // now merge userName2 suppose it is “Jerry”
-    //         await AsyncStorage.mergeItem('loggedUser', old_user);
-    //         // we have assigned userName2 for same key “user_name”
-    //         const currentUser = await AsyncStorage.getItem('loggedUser');
-    //         console.log('result:', currentUser);
-    //         // result:Jerry
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
-
     const clearOldLoggedUser = async () => {
         try {
             await AsyncStorage.clear();
@@ -127,7 +112,6 @@ export default function Profile({ navigation, user }) {
         } catch (e) {
             console.error(e);
         }
-
     }
 
     const updateLoggedUser = async () => {

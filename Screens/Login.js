@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TextInput, Button, Text, TouchableOpacity } from 'react-native';
+import { Alert, View, StyleSheet, TextInput, Button, Text, TouchableOpacity } from 'react-native';
 import Header from '../Components/Header';
 import * as Facebook from 'expo-facebook';
 import * as GoogleSignIn from 'expo-google-sign-in';
@@ -50,6 +50,125 @@ export default function Login({ navigation }) {
         }
     }
 
+    const imageUpload = async (user) => {
+        try {
+            let imgUri = user.User_img
+            let picName = user.Username
+            let userId = user.Id_user
+            let res = await fetch(url + "api/uploadpicture", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    uri: imgUri,
+                    name: picName,
+                    folder: userId,
+                    type: 'jpg',
+                })
+            });
+            let result = await res.json();
+            console.log('====================================');
+            console.log("image upload 4 " + result);
+            console.log('====================================');
+            let data = updateLoggedUser(userId);
+            console.log('====================================');
+            console.log("image get obj 5 " + data);
+            console.log('====================================');
+            storeData(data);
+            navigation.navigate("TabStack", { user: data });
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    const updateLoggedUser = async (userId) => {
+        try {
+            let result = await fetch(url + "api/user/id", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    Id_user: userId,
+                })
+            });
+            let data = await result.json();
+            return data;
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+
+
+    const RegistrationUser = async (user) => {
+        let id = user.id;
+        let name = user.username;
+        let email = user.email;
+        let image = user.picture.data.url
+        try {
+            var salt = await bcrypt.genSaltSync(10);
+            var hash = await bcrypt.hashSync(id, salt);
+            let result = await fetch(url + "api/add/user", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    Username: name,
+                    Email: email,
+                    Hash: hash,
+                    Salt: salt,
+                    User_img: image
+                })
+            });
+            let data = await result.json();
+            console.log('====================================');
+            console.log("image first obj " + data);
+            console.log('====================================');
+            let user = updateLoggedUser(data.Id_user);
+            console.log('====================================');
+            console.log("image second obj " + user);
+            console.log('====================================');
+            imageUpload(user)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const LogInWithFacebook = async () => {
+        try {
+            await Facebook.initializeAsync({
+                appId: facebookID,
+            });
+            const {
+                type,
+                token,
+                expirationDate,
+                permissions,
+                declinedPermissions,
+            } = await Facebook.logInWithReadPermissionsAsync({
+                permissions: ['public_profile'],
+            });
+            if (type === 'success') {
+                // Get the user's name using Facebook's Graph API
+                const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email,picture&access_token=${token}`);
+                let res = await response.json();
+                RegistrationUser(res)
+                //Alert.alert('Logged in!', `Hi ${res.name}!\n EMAIL ${res.email}  `);
+                //Alert.alert(Logged in!', Hi NAME: res. name}! nEMAIL res. email nPICTURE res. picture nRES JSON. stringify res)}
+            } else {
+                // type === 'cancel'
+            }
+        } catch ({ message }) {
+            alert(`Facebook Login Error: ${message}`);
+        }
+    }
+
 
     const LoginNormal = async (Username, Pass) => {
         try {
@@ -76,9 +195,6 @@ export default function Login({ navigation }) {
                 }
                 else {
                     storeData(data);
-                    console.log('====================================');
-                    console.log(data);
-                    console.log('====================================');
                     navigation.navigate("TabStack", { user: data });
                 }
             }
@@ -87,44 +203,6 @@ export default function Login({ navigation }) {
         }
 
     }
-
-    const LogInWithFacebook = async () => {
-        try {
-            await Facebook.initializeAsync({
-                appId: facebookID,
-            });
-            const {
-                type,
-                token,
-                expirationDate,
-                permissions,
-                declinedPermissions,
-            } = await Facebook.logInWithReadPermissionsAsync({
-                permissions: ['public_profile'],
-            });
-            if (type === 'success') {
-                // Get the user's name using Facebook's Graph API
-                const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email,picture&access_token=${token}`);
-                let res = await response.json();
-                //RegistrationUser(res)
-                //Alert.alert('Logged in!', `Hi ${res.name}!\n EMAIL ${res.email} n\ Picture ${res.picture}`);
-                //Alert.alert Logged in!', Hi NAME: res. name}! nEMAIL res. email nPICTURE res. picture nRES JSON. stringify res)}
-            } else {
-                // type === 'cancel'
-            }
-        } catch ({ message }) {
-            alert(`Facebook Login Error: ${message}`);
-        }
-    }
-
-    // const toggleAuthAsync = async () => {
-    //     const auth = await Facebook.getAuthenticationCredentialAsync();
-    //     if (!auth) {
-    //         navigation.navigate("Login");
-    //     } else {
-    //         navigation.navigate("Profile", { user: res });
-    //     }
-    // }
 
     return (
         <View>
@@ -145,12 +223,12 @@ export default function Login({ navigation }) {
                         placeholder="Password"
                     />
                     <Button title="Login" onPress={() => LoginNormal(Username, Pass)} />
-                    {/* <TouchableOpacity onPress={() => LoginNormal(Username, Pass)}>
+                    <Text style={styles.text}>Don't have an account yet ?</Text>
+                    <TouchableOpacity onPress={() => LoginNormal(Username, Pass)}>
                         <View >
                             <Text >Login</Text>
                         </View>
                     </TouchableOpacity>
-                    <Text style={styles.text}>Don't have an account yet ?</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('Registration')}>
                         <View >
                             <Text >Sign up!</Text>
@@ -166,7 +244,7 @@ export default function Login({ navigation }) {
                         <View >
                             <Text >Google</Text>
                         </View>
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
