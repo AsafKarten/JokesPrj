@@ -71,7 +71,7 @@ namespace JokesPrj.Controllers
                 {
                     return Ok(jokes_list);
                 }
-                throw new Exception("Jokes not found");
+                throw new Exception("Jokes not found!");
             }
             catch (Exception ex)
             {
