@@ -121,20 +121,8 @@ export default function Profile({ navigation, user }) {
                     var content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
                     result.uri = content
                     setImage(result.uri)
-<<<<<<< HEAD
-                    console.log('====================================');
-                    console.log(result);
-                    console.log('====================================');
-                    imageUploadW(result.uri, username)
-=======
-<<<<<<< HEAD
                     imageUploadW(result.uri, username)
                     console.log(result);
-                    console.log('====================================');
-=======
-                    imageUpload(result.uri, username)
->>>>>>> d2e2cb76d084273dcf616db81292bae47b611196
->>>>>>> 83eaabf09d7d0fb54ac9726888f28357839595cd
                 }
                 else {
                     setImage(result.uri);
@@ -145,9 +133,7 @@ export default function Profile({ navigation, user }) {
             console.error(e);
         }
     }
-<<<<<<< HEAD
-    const imageUploadW = async (imgUri, picName) => {
-=======
+
     const imageUploadW= async (imgUri, picName) => {
         try {
             let res = await fetch(url + "api/uploadpicture", {
@@ -171,7 +157,6 @@ export default function Profile({ navigation, user }) {
         }
     }
     const imageUpload = async (imgUri, picName) => {
->>>>>>> 83eaabf09d7d0fb54ac9726888f28357839595cd
         try {
             let res = await fetch(url + "api/uploadpicture", {
                 method: 'POST',
@@ -190,28 +175,6 @@ export default function Profile({ navigation, user }) {
             console.log('====================================');
             console.log(data);
             console.log('====================================');
-            //await updateLoggedUser(data);
-
-        } catch (e) {
-            console.error(e);
-        }
-    }
-    const imageUpload = async (imgUri, picName) => {
-        try {
-            let res = await fetch(url + "api/uploadpicture", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    uri: imgUri.split(',')[1],
-                    name: picName,
-                    folder: userId,
-                    type: 'jpg',
-                })
-            });
-            let data = await res.json();
             //await updateLoggedUser(data);
 
         } catch (e) {
