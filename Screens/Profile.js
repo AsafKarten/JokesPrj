@@ -111,7 +111,7 @@ export default function Profile({ navigation, user }) {
                     result.uri = content
                     setImage(result.uri)
                     imageUploadW(result.uri, username)
-                    console.log(resulr);
+                    console.log(result);
                     console.log('====================================');
                 }
                 else {
@@ -121,6 +121,28 @@ export default function Profile({ navigation, user }) {
                 }
 
             }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+    const imageUploadW= async (imgUri, picName) => {
+        try {
+            let res = await fetch(url + "api/uploadpicture", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    uri: imgUri,
+                    name: picName,
+                    folder: userId,
+                    type: 'jpg',
+                })
+            });
+            let data = await res.json();
+            updateLoggedUser(userId);
+
         } catch (e) {
             console.error(e);
         }
