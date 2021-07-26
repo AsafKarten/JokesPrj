@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Animated, Alert, Platform, Button, StyleSheet, Image, Text, TextInput, View, FlatList, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { Alert, Platform, Button, StyleSheet, Image, Text, TextInput, View, FlatList, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -34,7 +34,6 @@ export default function Profile({ navigation, user }) {
         (async () => {
             if (user !== undefined) {
                 setUserName(user.Username)
-
                 setImage(user.User_img)
                 setUserId(user.Id_user)
                 LoadJokes(user.Id_user)
@@ -81,7 +80,7 @@ export default function Profile({ navigation, user }) {
 
     const clearOldLoggedUser = async () => {
         try {
-            await AsyncStorage.clear();
+            await AsyncStorage.removeItem('loggedUser');
             console.log('Done');
         } catch (error) {
             console.log(error);
@@ -102,24 +101,22 @@ export default function Profile({ navigation, user }) {
                 quality: 0.7
             });
             if (!result.cancelled) {
-                var img = result.uri
-                console.log('====================================');
-                console.log(result);
-                console.log('====================================');
                 if (Platform.OS !== 'web') {
                     var content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
                     result.uri = content
                     setImage(result.uri)
+<<<<<<< HEAD
                     imageUploadW(result.uri, username)
                     console.log(result);
                     console.log('====================================');
+=======
+                    imageUpload(result.uri, username)
+>>>>>>> d2e2cb76d084273dcf616db81292bae47b611196
                 }
                 else {
-
                     setImage(result.uri);
                     imageUpload(result.uri, username);
                 }
-
             }
         } catch (e) {
             console.error(e);
@@ -163,14 +160,14 @@ export default function Profile({ navigation, user }) {
                 })
             });
             let data = await res.json();
-            updateLoggedUser(userId);
+            await updateLoggedUser();
 
         } catch (e) {
             console.error(e);
         }
     }
 
-    const updateLoggedUser = async (userId) => {
+    const updateLoggedUser = async () => {
         try {
             let result = await fetch(url + "api/user/id", {
                 method: 'POST',
@@ -183,8 +180,8 @@ export default function Profile({ navigation, user }) {
                 })
             });
             let data = await result.json();
-            clearOldLoggedUser();//to remove item from async storage
-            storeData(data);
+            await clearOldLoggedUser();
+            await storeData(data);
             console.log(data);
         } catch (e) {
             console.error(e);
