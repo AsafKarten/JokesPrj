@@ -1,23 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Alert, Platform, Button, StyleSheet, Image, Text, TextInput, View, FlatList, TouchableOpacity } from 'react-native';
+import { Animated, Alert, Platform, Button, StyleSheet, Image, Text, TextInput, View, FlatList, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+//import AsyncStorage from '@react-native-async-storage/async-storage';
 import ActionSheet from 'react-native-actionsheet';
 import * as FileSystem from 'expo-file-system';
 
-
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
-
-
 
 export default function Profile({ navigation, user }) {
     let actionSheet = useRef();
     var optionArray = ['take a photo', 'choose from a gallery', 'Cancel'];
     const [userId, setUserId] = useState(user.Id_user);
     const [username, setUserName] = useState();
-    const [image, setImage] = useState();
+    const [image, setImage] = useState(null);
     const [search, onChangeSearch] = useState();
     const [comment, onChangeComment] = useState();
     const [profileJokes, setList] = useState([
@@ -77,11 +75,10 @@ export default function Profile({ navigation, user }) {
         actionSheet.current.show();
     };
 
-    // const clearOldLoggedUser = async (data) => {
+    // const clearOldLoggedUser = async () => {
     //     try {
     //         await AsyncStorage.clear();
-    //         await storeData(data);
-    //         console.log('Done' + data);
+    //         console.log('Done');
     //     } catch (error) {
     //         console.log(error);
     //     }
@@ -98,27 +95,54 @@ export default function Profile({ navigation, user }) {
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
                 allowsEditing: true,
                 aspect: [4, 3],
-                quality: 1
+                quality: 0.7
             });
             if (!result.cancelled) {
+                var img = result.uri
+                console.log('====================================');
+                console.log(result);
+                console.log('====================================');
                 if (Platform.OS !== 'web') {
                     var content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
                     result.uri = content
                     setImage(result.uri)
                     imageUploadW(result.uri, username)
-                    console.log(result);
+                    console.log('====================================');
                 }
                 else {
                     setImage(result.uri);
                     imageUpload(result.uri, username);
                 }
+
             }
         } catch (e) {
             console.error(e);
         }
     }
+    const imageUpload = async (imgUri, picName) => {
+        try {
+            let res = await fetch(url + "api/uploadpicture", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    uri: imgUri.split(',')[1],
+                    name: picName,
+                    folder: userId,
+                    type: 'jpg',
+                })
+            });
+            let data = await res.json();
+            //updateLoggedUser(userId);
 
-    const imageUploadW= async (imgUri, picName) => {
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    const imageUploadW = async (imgUri, picName) => {
         try {
             let res = await fetch(url + "api/uploadpicture", {
                 method: 'POST',
@@ -140,33 +164,8 @@ export default function Profile({ navigation, user }) {
             console.error(e);
         }
     }
-    const imageUpload = async (imgUri, picName) => {
-        try {
-            let res = await fetch(url + "api/uploadpicture", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    uri: imgUri.split(',')[1],
-                    name: picName,
-                    folder: userId,
-                    type: 'jpg',
-                })
-            });
-            let data = await res.json();
-            console.log('====================================');
-            console.log(data);
-            console.log('====================================');
-            //await updateLoggedUser(data);
 
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
-    // const updateLoggedUser = async () => {
+    // const updateLoggedUser = async (userId) => {
     //     try {
     //         let result = await fetch(url + "api/user/id", {
     //             method: 'POST',
@@ -179,8 +178,9 @@ export default function Profile({ navigation, user }) {
     //             })
     //         });
     //         let data = await result.json();
-    //         await clearOldLoggedUser(data);
-    //         //console.log(data);
+    //         clearOldLoggedUser();//to remove item from async storage
+    //         storeData(data);
+    //         console.log(data);
     //     } catch (e) {
     //         console.error(e);
     //     }
