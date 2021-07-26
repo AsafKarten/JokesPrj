@@ -165,7 +165,8 @@ export default function Profile({ navigation, user }) {
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    uri: imgUri,
+                    uri: imgUri.split(',')[1],
+
                     name: picName,
                     folder: userId,
                     type: 'jpg',
