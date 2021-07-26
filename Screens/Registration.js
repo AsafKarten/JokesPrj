@@ -118,10 +118,13 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        margin: 12,
+        width: 200,
         borderWidth: 1,
         borderRadius: 8,
+        fontWeight: "bold",
         textAlign: 'center',
+        justifyContent: 'center',
+        margin: 15
     },
     text: {
         color: 'red',

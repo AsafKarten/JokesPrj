@@ -9,20 +9,12 @@ export default function Home({ navigation, user }) {
     const [allJokes, setList] = useState([
         //  { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_like: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
     ]);
-
-    console.log('====================================');
-    console.log(allJokes);
-    console.log('====================================');
-
     const LoadJokes = async () => {
         try {
             let result = await fetch(url + "api/feed", {
                 method: 'GET'
             });
             let data = [...await result.json()];
-            console.log('====================================');
-            console.log(data);
-            console.log('====================================');
             setList(data.reverse());
         } catch (error) {
             console.error(error)
@@ -58,7 +50,6 @@ export default function Home({ navigation, user }) {
     }
     const MoveToJoke = (item) => {
         var route = { user: user, item: item }
-        console.log(route);
         navigation.navigate("Joke", { navigation: navigation, route: route });
 
     }

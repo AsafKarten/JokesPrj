@@ -137,12 +137,8 @@ export default function FriendProfile({ navigation, route }) {
                     <View style={styles.profileHeader}>
                         <Text style={styles.username}>{other_user.username}</Text>
                     </View>
-
                     <View style={styles.imageHolder}>
                         <Image style={styles.profile_image} source={{ uri: other_user.User_img }} />
-                    </View>
-                    <View style={styles.addTextHolder}>
-                        <Text style={styles.addText}>Add a funny piture of yourself</Text>
                     </View>
                     <View style={styles.buttonGroup}>
                         <View style={styles.buttons}>
