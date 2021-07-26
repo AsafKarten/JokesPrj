@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Button, StyleSheet, Image, Text, Platform, TextInput, View, FlatList } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Animated, Alert, Button, StyleSheet, Image, Text, Platform, TextInput, View, FlatList, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import ActionSheet from 'react-native-actionsheet';
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
@@ -12,6 +12,8 @@ const urlLocal = "http://localhost:52763/"
 
 
 export default function Profile({ navigation, user }) {
+    let actionSheet = useRef();
+    var optionArray = ['take a photo', 'choose from a gallery', 'Cancel'];
     // var default_img = require('../assets/funny_icon.jpg')
     const [userId, setUserId] = useState();
     const [username, setUserName] = useState();
@@ -21,6 +23,16 @@ export default function Profile({ navigation, user }) {
     const [profileJokes, setList] = useState([
         // { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_likes: 0, Joke_img: '', Username: '', User_img: '', Comment_count: 0 },
     ]);
+    const [animatePress, setAnimatePress] = useState(new Animated.Value(1))
+
+    const animateIn = () => {
+        Animated.timing(animatePress, {
+            toValue: 0.5,
+            duration: 500,
+            useNativeDriver: true ,
+            scrollEventThrottle: 1
+        }).start();
+    }
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     var time = today.getHours() + ":" + today.getMinutes();
@@ -61,6 +73,11 @@ export default function Profile({ navigation, user }) {
         }
     }
 
+    const showActionSheet = () => {
+        animateIn()
+        actionSheet.current.show();
+    };
+
     const clearOldLoggedUser = async () => {
         try {
             await AsyncStorage.clear();
@@ -70,7 +87,12 @@ export default function Profile({ navigation, user }) {
         }
     };
 
-    const AddProfilPicture = async () => {
+    const takePicture = () => {
+        Alert.alert("take a picture");
+        return;
+    }
+
+    const GalleryPicture = async () => {
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -85,7 +107,6 @@ export default function Profile({ navigation, user }) {
         } catch (e) {
             console.error(e);
         }
-
     }
 
     const imageUpload = async (imgUri, picName) => {
@@ -104,17 +125,14 @@ export default function Profile({ navigation, user }) {
                 })
             });
             let data = await res.json();
-            console.log('====================================');
-            console.log(data);
-            console.log('====================================');
-            updateLoggedUser();
+            updateLoggedUser(userId);
 
         } catch (e) {
             console.error(e);
         }
     }
 
-    const updateLoggedUser = async () => {
+    const updateLoggedUser = async (userId) => {
         try {
             let result = await fetch(url + "api/user/id", {
                 method: 'POST',
@@ -127,8 +145,6 @@ export default function Profile({ navigation, user }) {
                 })
             });
             let data = await result.json();
-            // const loggedUser = await AsyncStorage.getItem('loggedUser')
-            // _mergeData(data, loggedUser)
             clearOldLoggedUser();//to remove item from async storage
             storeData(data);
         } catch (e) {
@@ -205,85 +221,111 @@ export default function Profile({ navigation, user }) {
     }
 
     return (
-        <View>
-            <View style={styles.container}>
-                <View style={styles.search_holder}>
-                    <TextInput style={styles.search}
-                        onChangeText={onChangeSearch}
-                        value={search}
-                        placeholder="Search friends/jokes" />
-                    <FontAwesome style={styles.serach_icon} onPress={() => SearchFunc(search)} name="search" size={24} color="grey" />
+        <View style={styles.container}>
+            <View style={styles.search_holder}>
+                <TextInput style={styles.search}
+                    onChangeText={onChangeSearch}
+                    value={search}
+                    placeholder="Search friends/jokes" />
+                <FontAwesome style={styles.serach_icon} onPress={() => SearchFunc(search)} name="search" size={24} color="grey" />
+            </View>
+            <View style={styles.profileHolder}>
+                <View style={styles.profileHeader}>
+                    <Text style={styles.username}>{username}</Text>
                 </View>
-                <View style={styles.profileHolder}>
-                    <View style={styles.profileHeader}>
-                        <Text style={styles.username}>{username}</Text>
-                    </View>
 
-                    <View style={styles.imageHolder}>
-                        <Image style={styles.profile_image} source={{ uri: image }} />
-                        <AntDesign style={styles.add_icon} onPress={AddProfilPicture} name="camera" size={24} color="grey" fontWeight={'bold'} />
-                    </View>
-                    <View style={styles.addTextHolder}>
-                        <Text style={styles.addText}>Add a funny piture of yourself</Text>
-                    </View>
-                    <View style={styles.buttonGroup}>
-                        <View style={styles.buttons}>
-                            <Button
-                                title="Jokes you like"
-                                onPress={() => LikeJokes(user)}
-                            /></View>
-                        <View style={styles.buttons}>
-                            <Button
-                                title="Followers"
-                            //onPress={() => AddJoke()}
-                            /></View>
-                        <View style={styles.buttons}>
-
-                            <Button
-                                title="Following"
-                            //onPress={() => AddJoke()}
-                            /></View>
-
-                    </View>
-                    <View style={styles.profileFooter}>
+                <View style={styles.imageHolder}>
+                    <Image style={styles.profile_image} source={{ uri: image }} />
+                    <TouchableOpacity
+                        style={styles.buttonStyle}
+                        onPress={showActionSheet}>
+                        <Text style={styles.buttonTextStyle}>
+                            <AntDesign style={styles.add_icon} name="camera" size={24} color="grey" fontWeight={'bold'} />
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.addTextHolder}>
+                    <Text style={styles.addText}>Add a funny piture of yourself</Text>
+                </View>
+                <View style={styles.buttonGroup}>
+                    <View style={styles.buttons}>
                         <Button
-                            title="Add new Joke"
-                            onPress={() => AddJoke()}
-                        />
-                    </View>
+                            title="Jokes you like"
+                            onPress={() => LikeJokes(user)}
+                        /></View>
+                    <View style={styles.buttons}>
+                        <Button
+                            title="Followers"
+                        //onPress={() => AddJoke()}
+                        /></View>
+                    <View style={styles.buttons}>
+
+                        <Button
+                            title="Following"
+                        //onPress={() => AddJoke()}
+                        /></View>
+
                 </View>
+                <View style={styles.profileFooter}>
+                    <Button
+                        title="Add new Joke"
+                        onPress={() => AddJoke()}
+                    />
+                </View>
+            </View>
 
-                <FlatList
-                    data={profileJokes}
-                    keyExtractor={(item) => item.Id_user}
-                    renderItem={({ item }) => (
-                        <View style={styles.list}>
-                            <View style={styles.buttonGroup}>
-                                <Image source={{ uri: item.User_img }} style={styles.UserImg} />
-                                <Text style={styles.UserName}>{item.Username}</Text>
+            <FlatList
+                data={profileJokes}
+                keyExtractor={(item) => item.Id_user}
+                renderItem={({ item }) => (
+                    <View style={styles.list}>
+                        <View style={styles.buttonGroup}>
+                            <Image source={{ uri: item.User_img }} style={styles.UserImg} />
+                            <Text style={styles.UserName}>{item.Username}</Text>
+                        </View>
+
+                        <Text style={styles.postTitle}>
+                            {item.Joke_title}
+                        </Text>
+
+                        <Image onPress={() => MoveToJoke(item)} source={{ uri: item.Joke_img }} style={styles.JokeImage} />
+
+                        <Text style={styles.Body} onPress={() => MoveToJoke(item)}>
+                            {item.Joke_body}
+                        </Text>
+                        <View style={styles.buttonGroup}>
+                            <View style={styles.buttons}>
+                                <Button style={styles.buttons} title={item.Joke_like + " Like"} />
                             </View>
-
-                            <Text style={styles.postTitle}>
-                                {item.Joke_title}
-                            </Text>
-
-                            <Image onPress={() => MoveToJoke(item)} source={{ uri: item.Joke_img }} style={styles.JokeImage} />
-
-                            <Text style={styles.Body} onPress={() => MoveToJoke(item)}>
-                                {item.Joke_body}
-                            </Text>
-                            <View style={styles.buttonGroup}>
-                                <View style={styles.buttons}>
-                                    <Button style={styles.buttons} title={item.Joke_like + " Like"} />
-                                </View>
-                                <View style={styles.buttons}>
-                                    <Button onPress={() => AddComment(item.Id_joke)} title="Comment" />
-                                </View>
+                            <View style={styles.buttons}>
+                                <Button onPress={() => AddComment(item.Id_joke)} title="Comment" />
                             </View>
                         </View>
-                    )} />
-
-            </View>
+                    </View>
+                )} />
+            <ActionSheet
+                ref={actionSheet}
+                // Title of the Bottom Sheet
+                title={'Choose from where to upload a funny picture '}
+                // Options Array to show in bottom sheet
+                options={optionArray}
+                // Define cancel button index in the option array
+                // This will take the cancel option in bottom
+                // and will highlight it
+                cancelButtonIndex={2}
+                // Highlight any specific option
+                destructiveButtonIndex={1}
+                onPress={(index) => {
+                    if (index == 0) {
+                        takePicture();
+                        Alert.alert(optionArray[index]);
+                    }
+                    else if (index == 1) {
+                        GalleryPicture();
+                        Alert.alert(optionArray[index]);
+                    }
+                }}
+            />
         </View>
     )
 }
@@ -294,7 +336,7 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 8,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     //search holder
     search_holder: {
@@ -420,6 +462,14 @@ const styles = StyleSheet.create({
         resizeMode: 'stretch',
 
     },
-
+    buttonStyle: {
+        height: 30,
+        padding: 10,
+        marginTop: 5,
+    },
+    buttonTextStyle: {
+        color: 'white',
+        textAlign: 'center',
+    },
 
 });

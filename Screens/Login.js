@@ -85,7 +85,8 @@ export default function Login({ navigation }) {
             });
             let data = await result.json();
             if (data.Id_user != 0) {
-                Alert.alert("Error message", "User allready registered")
+                getData();
+                console.info("Error message", "User allready registered")
                 return;
             } else {
                 var salt = bcrypt.genSaltSync(10);
