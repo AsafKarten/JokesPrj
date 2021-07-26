@@ -3,7 +3,6 @@ import { Alert, Platform, Button, StyleSheet, Image, Text, TextInput, View, Flat
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import ActionSheet from 'react-native-actionsheet';
 import * as FileSystem from 'expo-file-system';
 
@@ -56,14 +55,14 @@ export default function Profile({ navigation, user }) {
         return loaderjokes;
     }, [navigation])
 
-    const storeData = async (data) => {
-        try {
-            const loggedUser = JSON.stringify(data);
-            await AsyncStorage.setItem('loggedUser', loggedUser)
-        } catch (e) {
-            console.error(e)
-        }
-    }
+    // const storeData = async (data) => {
+    //     try {
+    //         const loggedUser = JSON.stringify(data);
+    //         await AsyncStorage.setItem('loggedUser', loggedUser)
+    //     } catch (e) {
+    //         console.error(e)
+    //     }
+    // }
 
     const checkDevice = async () => {
         if (Platform.OS === 'web') {
@@ -78,30 +77,15 @@ export default function Profile({ navigation, user }) {
         actionSheet.current.show();
     };
 
-    const updateLoggedUser = () => {
-        AsyncStorage.getItem('loggedUser').then(data => {
-            // transform it back to an object
-            data = JSON.parse(data);
-
-            // Decrement
-            data.question_count--;
-            console.log(data);
-
-            //save the value to AsyncStorage again
-            AsyncStorage.setItem('user', JSON.stringify(data));
-
-        }).done();
-    }
-
-    const clearOldLoggedUser = async (data) => {
-        try {
-            await AsyncStorage.clear();
-            await storeData(data);
-            console.log('Done' + data);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    // const clearOldLoggedUser = async (data) => {
+    //     try {
+    //         await AsyncStorage.clear();
+    //         await storeData(data);
+    //         console.log('Done' + data);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
 
     const takePicture = () => {
         Alert.alert("take a picture");
@@ -150,7 +134,7 @@ export default function Profile({ navigation, user }) {
                 })
             });
             let data = await res.json();
-            updateLoggedUser(userId);
+            //updateLoggedUser(userId);
 
         } catch (e) {
             console.error(e);

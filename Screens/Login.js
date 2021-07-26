@@ -33,6 +33,10 @@ export default function Login({ navigation }) {
     const getData = async () => {
         try {
             const data = await AsyncStorage.getItem('loggedUser')
+            console.log('====================================');
+            console.log(data);
+            console.log(data.Username);
+            console.log('====================================');
             if (data != null) {
                 let result = await fetch(url + "api/user", {
                     method: 'POST',
@@ -45,7 +49,12 @@ export default function Login({ navigation }) {
                     })
                 });
                 let user = await result.json();
-                return navigation.navigate("TabStack", { user: user })
+                if (user !== undefined) {
+                    return navigation.navigate("TabStack", { user: user })
+                }
+                else {
+                    return
+                }
             }
             //return navigation.navigate("Login");
         } catch (e) {
