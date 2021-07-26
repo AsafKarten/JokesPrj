@@ -15,9 +15,9 @@ namespace JokesPrj.Controllers
             try
             {
                 user = Globals.UserDAL.GetUserHash(user);
-                if (user == null)
-                    return Content(HttpStatusCode.NotFound, $"User {user.Username} or pass is incorrect");
-                return Ok(user);
+                if (user != null)
+                    return Ok(user);
+                return Content(HttpStatusCode.NotFound, $"User {user.Username} or pass is incorrect");
             }
             catch (Exception ex)
             {
@@ -33,7 +33,7 @@ namespace JokesPrj.Controllers
             {
                 user = Globals.UserDAL.GetUser(user);
                 if (user == null)
-                    return Content(HttpStatusCode.NotFound,"error update user");
+                    return Content(HttpStatusCode.NotFound, "error update user");
                 return Ok(user);
             }
             catch (Exception ex)
@@ -48,7 +48,7 @@ namespace JokesPrj.Controllers
         {
             try
             {
-                
+
                 u = Globals.UserDAL.GetUserByID(u.Id_user);
                 if (u == null)
                     return Content(HttpStatusCode.NotFound, $"User was not found");
@@ -72,6 +72,7 @@ namespace JokesPrj.Controllers
                 }
                 Created(new Uri(Request.RequestUri.AbsoluteUri + user), Globals.UserDAL.SaveNewUserToDB(user));
                 return Ok("User created successfully.");
+
             }
             catch (Exception ex)
             {
