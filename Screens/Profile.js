@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Animated, Alert, Button, StyleSheet, Image, Text, Platform, TextInput, View, FlatList, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { Animated, Alert, Platform, Button, StyleSheet, Image, Text, TextInput, View, FlatList, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ActionSheet from 'react-native-actionsheet';
+import uploadToAnonymousFilesAsync from 'anonymous-files';
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
@@ -14,25 +15,15 @@ const urlLocal = "http://localhost:52763/"
 export default function Profile({ navigation, user }) {
     let actionSheet = useRef();
     var optionArray = ['take a photo', 'choose from a gallery', 'Cancel'];
-    // var default_img = require('../assets/funny_icon.jpg')
     const [userId, setUserId] = useState();
     const [username, setUserName] = useState();
-    const [image, setImage] = useState();
+    const [image, setImage] = useState(null);
     const [search, onChangeSearch] = useState();
     const [comment, onChangeComment] = useState();
     const [profileJokes, setList] = useState([
         // { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_likes: 0, Joke_img: '', Username: '', User_img: '', Comment_count: 0 },
     ]);
-    const [animatePress, setAnimatePress] = useState(new Animated.Value(1))
 
-    const animateIn = () => {
-        Animated.timing(animatePress, {
-            toValue: 0.5,
-            duration: 500,
-            useNativeDriver: true ,
-            scrollEventThrottle: 1
-        }).start();
-    }
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     var time = today.getHours() + ":" + today.getMinutes();
@@ -73,8 +64,16 @@ export default function Profile({ navigation, user }) {
         }
     }
 
+    const checkDevice = async () => {
+        if (Platform.OS === 'web') {
+            await GalleryPicture();
+        }
+        else {
+            showActionSheet();
+        }
+    }
+
     const showActionSheet = () => {
-        animateIn()
         actionSheet.current.show();
     };
 
@@ -101,6 +100,10 @@ export default function Profile({ navigation, user }) {
                 quality: 0.7
             });
             if (!result.cancelled) {
+                var img = result.uri
+                console.log('====================================');
+                console.log(img);
+                console.log('====================================');
                 setImage(result.uri);
                 imageUpload(result.uri, username);
             }
@@ -238,7 +241,7 @@ export default function Profile({ navigation, user }) {
                     <Image style={styles.profile_image} source={{ uri: image }} />
                     <TouchableOpacity
                         style={styles.buttonStyle}
-                        onPress={showActionSheet}>
+                        onPress={checkDevice}>
                         <Text style={styles.buttonTextStyle}>
                             <AntDesign style={styles.add_icon} name="camera" size={24} color="grey" fontWeight={'bold'} />
                         </Text>
@@ -321,6 +324,7 @@ export default function Profile({ navigation, user }) {
                         Alert.alert(optionArray[index]);
                     }
                     else if (index == 1) {
+                        //cheackDeviceForSelectImage();
                         GalleryPicture();
                         Alert.alert(optionArray[index]);
                     }
