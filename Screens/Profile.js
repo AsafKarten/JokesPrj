@@ -166,7 +166,6 @@ export default function Profile({ navigation, user }) {
                 },
                 body: JSON.stringify({
                     uri: imgUri.split(',')[1],
-
                     name: picName,
                     folder: userId,
                     type: 'jpg',

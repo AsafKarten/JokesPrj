@@ -34,7 +34,18 @@ export default function Login({ navigation }) {
         try {
             const data = await AsyncStorage.getItem('loggedUser')
             if (data != null) {
-                return navigation.navigate("TabStack", { user: JSON.parse(data) })
+                let result = await fetch(url + "api/user", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json; charset=UTF-8',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        Username: data.Username,
+                    })
+                });
+                let user = await result.json();
+                return navigation.navigate("TabStack", { user: user })
             }
             //return navigation.navigate("Login");
         } catch (e) {
