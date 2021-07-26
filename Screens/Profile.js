@@ -5,7 +5,8 @@ import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ActionSheet from 'react-native-actionsheet';
-import uploadToAnonymousFilesAsync from 'anonymous-files';
+import * as FileSystem from 'expo-file-system';
+
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
@@ -15,7 +16,7 @@ const urlLocal = "http://localhost:52763/"
 export default function Profile({ navigation, user }) {
     let actionSheet = useRef();
     var optionArray = ['take a photo', 'choose from a gallery', 'Cancel'];
-    const [userId, setUserId] = useState();
+    const [userId, setUserId] = useState(user.Id_user);
     const [username, setUserName] = useState();
     const [image, setImage] = useState(null);
     const [search, onChangeSearch] = useState();
@@ -33,6 +34,7 @@ export default function Profile({ navigation, user }) {
         (async () => {
             if (user !== undefined) {
                 setUserName(user.Username)
+
                 setImage(user.User_img)
                 setUserId(user.Id_user)
                 LoadJokes(user.Id_user)
@@ -102,16 +104,27 @@ export default function Profile({ navigation, user }) {
             if (!result.cancelled) {
                 var img = result.uri
                 console.log('====================================');
-                console.log(img);
+                console.log(result);
                 console.log('====================================');
-                setImage(result.uri);
-                imageUpload(result.uri, username);
+                if (Platform.OS !== 'web') {
+                    var content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
+                    result.uri = content
+                    setImage(result.uri)
+                    imageUploadW(result.uri, username)
+                    console.log(resulr);
+                    console.log('====================================');
+                }
+                else {
+
+                    setImage(result.uri);
+                    imageUpload(result.uri, username);
+                }
+
             }
         } catch (e) {
             console.error(e);
         }
     }
-
     const imageUpload = async (imgUri, picName) => {
         try {
             let res = await fetch(url + "api/uploadpicture", {
@@ -150,6 +163,7 @@ export default function Profile({ navigation, user }) {
             let data = await result.json();
             clearOldLoggedUser();//to remove item from async storage
             storeData(data);
+            console.log(data);
         } catch (e) {
             console.error(e);
         }
@@ -386,8 +400,8 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     imageHolder: {
-        // flexDirection: 'row',
-        // alignItems: 'flex-end'
+        flexDirection: 'row',
+        alignItems: 'flex-end',
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 8
@@ -399,7 +413,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         borderWidth: 2,
         borderRadius: 90,
-        borderColor: 'orange',
+        // borderColor: 'orange',
         resizeMode: 'stretch',
 
     },
