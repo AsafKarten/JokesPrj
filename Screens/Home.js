@@ -106,7 +106,7 @@ export default function Home({ navigation, user }) {
                 renderItem={({ item }) => (
                     <View style={styles.list}>
                         <View style={styles.buttonGroup}>
-                            <Image source={{ uri: (user.User_img.indexOf(`?asid`) == -1) ? `${user.User_img}?t=${Date.now()}` : user.User_img }} style={styles.UserImg} />
+                            <Image source={{ uri: (item.User_img.indexOf(`?asid`) == -1) ? `${item.User_img}?t=${Date.now()}` : item.User_img }} style={styles.UserImg} />
                             <Text onPress={() => MoveToProfile(item)} style={styles.UserName}>{item.Username}</Text>
                         </View>
 
