@@ -1,21 +1,24 @@
-import React, { useState, useEffect, onFocus } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextInput, StyleSheet, Text, FlatList, View, Image, Button } from 'react-native';
 
 
 const urlLocal = "http://localhost:52763/"
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 
+const default_img = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_icon.jpg"
+
 export default function Home({ navigation, user }) {
     const [allJokes, setList] = useState([
-        //  { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_like: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
+         { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_like: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
     ]);
+
     const LoadJokes = async () => {
         try {
             let result = await fetch(url + "api/feed", {
                 method: 'GET'
             });
             let data = [...await result.json()];
-            setList(data.reverse());
+            await setList(data.reverse());
         } catch (error) {
             console.error(error)
         }
@@ -27,10 +30,13 @@ export default function Home({ navigation, user }) {
         })()
     }, [])
 
-    useEffect(() => {
-        const loader_jokes = navigation.addListener('focus', () => {
+    useEffect( () => {
+        const loader_jokes = navigation.addListener('focus', async () => {
             if (user !== undefined) {
-                LoadJokes()
+                await LoadJokes();
+                if (user.User_img.indexOf("?asid") == -1)
+                    user.User_img = `${user.User_img}?t=${Date.now()}`
+                navigation.navigate("TabStack", { user: user })
             }
         });
         return loader_jokes;
@@ -87,10 +93,12 @@ export default function Home({ navigation, user }) {
         <View style={styles.container}>
             <View >
                 <View style={styles.buttonGroup}>
-                    <Image source={{ uri: user.User_img }} style={styles.UserImg} />
+                    <Image source={{
+                        uri: (user.User_img.indexOf(`?asid`) == -1) ? `${user.User_img}?t=${Date.now()}` : user.User_img
+                    }} style={styles.UserImg} />
                     <Text onPress={() => MoveToProfile(user)} style={styles.UserName}>{user.Username}</Text>
                 </View>
-                <TextInput onFocus={onFocus}  placeholder="What's on your mind ?" />
+                <TextInput onFocus={onFocus} placeholder="What's on your mind ?" />
             </View>
             <FlatList
                 data={allJokes}
@@ -98,7 +106,7 @@ export default function Home({ navigation, user }) {
                 renderItem={({ item }) => (
                     <View style={styles.list}>
                         <View style={styles.buttonGroup}>
-                            <Image source={{ uri: item.User_img }} style={styles.UserImg} />
+                            <Image source={{ uri: (user.User_img.indexOf(`?asid`) == -1) ? `${user.User_img}?t=${Date.now()}` : user.User_img }} style={styles.UserImg} />
                             <Text onPress={() => MoveToProfile(item)} style={styles.UserName}>{item.Username}</Text>
                         </View>
 
@@ -163,7 +171,7 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         borderWidth: 2,
-        borderRadius:110,
+        borderRadius: 110,
         resizeMode: 'stretch',
     },
     UserName: {

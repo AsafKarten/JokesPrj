@@ -3,23 +3,25 @@ import { Animated, Alert, Platform, Button, StyleSheet, Image, Text, TextInput, 
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-//import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import ActionSheet from 'react-native-actionsheet';
 import * as FileSystem from 'expo-file-system';
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
 
+const default_img = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_icon.jpg"
+
 export default function Profile({ navigation, user }) {
     let actionSheet = useRef();
     var optionArray = ['take a photo', 'choose from a gallery', 'Cancel'];
     const [userId, setUserId] = useState(user.Id_user);
     const [username, setUserName] = useState();
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState(user.User_img);
     const [search, onChangeSearch] = useState();
     const [comment, onChangeComment] = useState();
     const [profileJokes, setList] = useState([
-        // { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_likes: 0, Joke_img: '', Username: '', User_img: '', Comment_count: 0 },
+        { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_likes: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
     ]);
 
     var today = new Date();
@@ -31,7 +33,8 @@ export default function Profile({ navigation, user }) {
         (async () => {
             if (user !== undefined) {
                 setUserName(user.Username)
-                setImage(user.User_img)
+                if (user.User_img.indexOf("?asid") == -1)
+                    setImage(`${user.User_img}?t=${Date.now()}`)
                 setUserId(user.Id_user)
                 LoadJokes(user.Id_user)
             }
@@ -53,14 +56,14 @@ export default function Profile({ navigation, user }) {
         return loaderjokes;
     }, [navigation])
 
-    // const storeData = async (data) => {
-    //     try {
-    //         const loggedUser = JSON.stringify(data);
-    //         await AsyncStorage.setItem('loggedUser', loggedUser)
-    //     } catch (e) {
-    //         console.error(e)
-    //     }
-    // }
+    const storeData = async (data) => {
+        try {
+            const loggedUser = JSON.stringify(data);
+            await AsyncStorage.setItem('loggedUser', loggedUser)
+        } catch (e) {
+            console.error(e)
+        }
+    }
 
     const checkDevice = async () => {
         if (Platform.OS === 'web') {
@@ -75,14 +78,7 @@ export default function Profile({ navigation, user }) {
         actionSheet.current.show();
     };
 
-    // const clearOldLoggedUser = async () => {
-    //     try {
-    //         await AsyncStorage.clear();
-    //         console.log('Done');
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
+
 
     const takePicture = () => {
         Alert.alert("take a picture");
@@ -98,19 +94,18 @@ export default function Profile({ navigation, user }) {
                 quality: 0.7
             });
             if (!result.cancelled) {
-                debugger
                 console.log('====================================');
                 console.log(result);
                 console.log('====================================');
                 if (Platform.OS !== 'web') {
                     var content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
                     result.uri = content
-                    await setImage(result.uri)
-                    await imageUploadW(result.uri, username)
+                    //await setImage(result.uri)
+                    await imageUploadA(result.uri, username)
                     console.log('====================================');
                 }
                 else {
-                    await setImage(result.uri);
+                    //await setImage(result.uri);
                     await imageUpload(result.uri, username);
                 }
 
@@ -135,6 +130,8 @@ export default function Profile({ navigation, user }) {
                 })
             });
             let data = await res.json();
+            if (data.path.indexOf("?asid") == -1)
+                setImage(`${data.path}?t=${Date.now()}`)
             await updateLoggedUser(userId);
 
         } catch (e) {
@@ -142,7 +139,7 @@ export default function Profile({ navigation, user }) {
         }
     }
 
-    const imageUploadW = async (imgUri, picName) => {
+    const imageUploadA = async (imgUri, picName) => {
         try {
             let res = await fetch(url + "api/uploadpicture", {
                 method: 'POST',
@@ -158,6 +155,8 @@ export default function Profile({ navigation, user }) {
                 })
             });
             let data = await res.json();
+            if (data.path.indexOf("?asid") == -1)
+                setImage(`${data.path}?t=${Date.now()}`)
             await updateLoggedUser(userId);
 
         } catch (e) {
@@ -178,8 +177,9 @@ export default function Profile({ navigation, user }) {
                 })
             });
             let data = await result.json();
-            //clearOldLoggedUser();//to remove item from async storage
-            //storeData(data);
+            if (data.User_img.indexOf("?asid") == -1)
+                data.User_img = `${data.User_img}?t=${Date.now()}`;
+            storeData(data);
             console.log(data);
         } catch (e) {
             console.error(e);

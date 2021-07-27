@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, StyleSheet, Image, Text, TextInput, View } from 'react-native';
-// import { ButtonGroup } from 'react-native-elements';
+import { Button, StyleSheet, TextInput, View } from 'react-native';
 
 
 const urlLocal = "http://localhost:52763/"

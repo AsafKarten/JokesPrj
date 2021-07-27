@@ -9,10 +9,6 @@ import Notifications from '../Screens/Notifications.js';
 
 const Tab = createMaterialTopTabNavigator();
 
-
-
-
-
 export default function TabStack({ route }) {
     const [search_route, setSearch] = useState();
     const user = route.params.user
@@ -52,9 +48,9 @@ export default function TabStack({ route }) {
                 name="Home"
                 //component={Home}
                 options={{
-                    tabBarLabel: 'Home',
+                    //tabBarLabel: 'Home',
                     tabBarIcon: () => (
-                        <MaterialCommunityIcons name="home" color="black" size={24} />
+                        <MaterialCommunityIcons name="home" size={24} color="black" />
                     ),
                 }}>
                 {props => <Home {...props} user={route.params.user} />}
@@ -65,7 +61,7 @@ export default function TabStack({ route }) {
                 options={{
                     tabBarLabel: 'Updates',
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="bell" color={color} size={24} />
+                        <MaterialIcons name="bell" color={color} size={24} />
                     ),
                 }}
             />
@@ -74,7 +70,7 @@ export default function TabStack({ route }) {
                 options={{
                     tabBarLabel: 'Profile',
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="account" color={color} size={24} />
+                        <MaterialIcons name="account" color={color} size={24} />
                     ),
                 }}>
                 {props => <Profile {...props} user={route.params.user} />}
@@ -84,7 +80,7 @@ export default function TabStack({ route }) {
                 options={{
                     tabBarLabel: 'Search',
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="search" color={color} size={24} />
+                        <MaterialIcons name="search" color={color} size={24} />
                     ),
                 }}>
                 {props => <Search {...props} route={search_route} />}

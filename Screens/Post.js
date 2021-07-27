@@ -60,8 +60,7 @@ export default function Post({ navigation, route }) {
             console.error(e);
         }
     }
-
-
+    
     return (
         <View style={styles.container}>
             <Text></Text>

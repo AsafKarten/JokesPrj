@@ -3,7 +3,7 @@ import { Alert, View, StyleSheet, TextInput, Button, Text, TouchableOpacity } fr
 import Header from '../Components/Header';
 import * as Facebook from 'expo-facebook';
 import * as GoogleSignIn from 'expo-google-sign-in';
-//import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 var isaac = require('isaac');
 
 
@@ -24,72 +24,59 @@ export default function Login({ navigation }) {
     const [Username, onChangeUsername] = useState()
     const [Pass, onChangePass] = useState();
 
-    // useEffect(() => {
-    //     (async () => {
-    //         await getData();
-    //     })()
-    // }, [])
+    useEffect(() => {
+        (async () => {
+            await getData();
+        })()
+    }, [])
 
-    // const getData = async () => {
-    //     try {
-    //         const data = await AsyncStorage.getItem('loggedUser')
-    //         console.log('====================================');
-    //         console.log(data);
-    //         console.log(data.Username);
-    //         console.log('====================================');
-    //         if (data != null) {
-    //             let result = await fetch(url + "api/user", {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Content-Type': 'application/json; charset=UTF-8',
-    //                     'Accept': 'application/json'
-    //                 },
-    //                 body: JSON.stringify({
-    //                     Username: data.Username,
-    //                 })
-    //             });
-    //             let user = await result.json();
-    //             if (user !== undefined) {
-    //                 return navigation.navigate("TabStack", { user: user })
-    //             }
-    //             else {
-    //                 return
-    //             }
-    //         }
-    //         //return navigation.navigate("Login");
-    //     } catch (e) {
-    //         console.error(e)
-    //     }
-    // }
+    const getData = async () => {
+        const data = await AsyncStorage.getItem('loggedUser')
+        if (data !== undefined) {
+            let user = JSON.parse(data)
 
-    // const storeData = async (data) => {
-    //     try {
-    //         const loggedUser = JSON.stringify(data);
-    //         await AsyncStorage.setItem('loggedUser', loggedUser)
-    //     } catch (e) {
-    //         console.error(e)
-    //     }
-    // }
+            await updateLoggedUser(user.Username);
+        }
+        else {
+            return;
+        }
+    }
 
-    // const updateLoggedUser = async (username) => {
-    //     try {
-    //         let result = await fetch(url + "api/user", {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json; charset=UTF-8',
-    //                 'Accept': 'application/json'
-    //             },
-    //             body: JSON.stringify({
-    //                 Username: username
-    //             })
-    //         });
-    //         let data = await result.json();
-    //         storeData(data);
-    //         navigation.navigate("TabStack", { user: data });
-    //     } catch (e) {
-    //         console.error(e);
-    //     }
-    // }
+
+    const storeData = async (data) => {
+        try {
+            const loggedUser = JSON.stringify(data);
+            await AsyncStorage.setItem('loggedUser', loggedUser)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const updateLoggedUser = async (username) => {
+
+        try {
+            let result = await fetch(url + "api/user", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    Username: username
+                })
+            });
+            let data = await result.json();
+            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+            console.log(data);
+            console.log('====================================');
+            if (data.User_img.indexOf("?asid") == -1)
+                data.User_img = `${data.User_img}?t=${Date.now()}`;
+            storeData(data);
+            navigation.navigate("TabStack", { user: data });
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
     const RegistrationUser = async (id, username, email, img) => {
         try {
@@ -105,7 +92,7 @@ export default function Login({ navigation }) {
             });
             let data = await result.json();
             if (data.Id_user != 0) {
-                navigation.navigate("TabStack", { user: data });
+                await updateLoggedUser(username);
             } else {
                 var salt = bcrypt.genSaltSync(10);
                 var hash = bcrypt.hashSync(id, salt);
@@ -124,7 +111,7 @@ export default function Login({ navigation }) {
                     })
                 });
                 let data = await result.json();
-                //updateLoggedUser(username);
+                await updateLoggedUser(username);
             }
         } catch (e) {
             console.error(e)
@@ -183,7 +170,9 @@ export default function Login({ navigation }) {
                     return;
                 }
                 else {
-                    //storeData(data);
+                    if (data.User_img.indexOf("?asid") == -1)
+                        data.User_img = `${data.User_img}?t=${Date.now()}`;
+                    storeData(data);
                     navigation.navigate("TabStack", { user: data });
                 }
             }
