@@ -13,10 +13,6 @@ export default function JokeMap({ navigation, route }) {
     ]);
     const [user, setUser] = useState(route.params.route.user);
 
-    console.log('====================================');
-    console.log('====================================');
-    console.log(user);
-
     useEffect(() => {
         (async () => {
             if (route.params.route.jokeList !== undefined) {
@@ -30,7 +26,6 @@ export default function JokeMap({ navigation, route }) {
 
     const MoveToJoke = (item) => {
         var route = { user: user, item: item }
-        console.log(route);
         navigation.navigate("Joke", { navigation: navigation, route: route });
     }
 
@@ -54,9 +49,26 @@ export default function JokeMap({ navigation, route }) {
             })
         });
         let data = await result.json();
-        console.log(Id_joke, Id_user, User_img, Username)
-        console.log(data);
-        LoadJokes();
+        LoadJokes(route.params.route.searchTitle);
+    }
+
+    const LoadJokes = async (searchTitle) => {
+        try {
+            let result = await fetch(url + "api/search/jokes", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    Joke_title: searchTitle
+                })
+            });
+            let data = [...await result.json()];
+            setResults(data.reverse());
+        } catch (e) {
+            console.error(e)
+        }
     }
 
     const MoveToProfile = (item) => {

@@ -98,20 +98,20 @@ export default function Profile({ navigation, user }) {
                 quality: 0.7
             });
             if (!result.cancelled) {
-                var img = result.uri
+                debugger
                 console.log('====================================');
                 console.log(result);
                 console.log('====================================');
                 if (Platform.OS !== 'web') {
                     var content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
                     result.uri = content
-                    setImage(result.uri)
-                    imageUploadW(result.uri, username)
+                    await setImage(result.uri)
+                    await imageUploadW(result.uri, username)
                     console.log('====================================');
                 }
                 else {
-                    setImage(result.uri);
-                    imageUpload(result.uri, username);
+                    await setImage(result.uri);
+                    await imageUpload(result.uri, username);
                 }
 
             }
@@ -135,7 +135,7 @@ export default function Profile({ navigation, user }) {
                 })
             });
             let data = await res.json();
-            //updateLoggedUser(userId);
+            await updateLoggedUser(userId);
 
         } catch (e) {
             console.error(e);
@@ -158,33 +158,33 @@ export default function Profile({ navigation, user }) {
                 })
             });
             let data = await res.json();
-            //updateLoggedUser(userId);
+            await updateLoggedUser(userId);
 
         } catch (e) {
             console.error(e);
         }
     }
 
-    // const updateLoggedUser = async (userId) => {
-    //     try {
-    //         let result = await fetch(url + "api/user/id", {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json; charset=UTF-8',
-    //                 'Accept': 'application/json'
-    //             },
-    //             body: JSON.stringify({
-    //                 Id_user: userId,
-    //             })
-    //         });
-    //         let data = await result.json();
-    //         clearOldLoggedUser();//to remove item from async storage
-    //         storeData(data);
-    //         console.log(data);
-    //     } catch (e) {
-    //         console.error(e);
-    //     }
-    // }
+    const updateLoggedUser = async (userId) => {
+        try {
+            let result = await fetch(url + "api/user/id", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    Id_user: userId,
+                })
+            });
+            let data = await result.json();
+            //clearOldLoggedUser();//to remove item from async storage
+            //storeData(data);
+            console.log(data);
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
 
     const LikeJokes = (user) => {
