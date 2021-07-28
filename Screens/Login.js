@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, View, StyleSheet, TextInput, Text, TouchableOpacity } from 'react-native';
-import Header from '../Components/Header';
 import * as Facebook from 'expo-facebook';
 import * as Google from 'expo-google-app-auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -64,20 +63,10 @@ export default function Login({ navigation }) {
                 })
             });
             let data = await result.json();
-            console.log('====================================');
-            console.log("Updated username " + data);
-            console.log('====================================');
-            if (data.Id_external != 0) {
-                //if (data.User_img.indexOf("?asid") == -1)
+            if (data.User_img.indexOf("?asid") == -1)
                 data.User_img = `${data.User_img}?t=${Date.now()}`;
-                storeData(data);
-                return data;
-                //navigation.navigate("TabStack", { user: data });
-            }
-            else {
-                return;
-            }
-
+            storeData(data);
+            navigation.navigate("TabStack", { user: data });
         } catch (e) {
             console.error(e);
         }
@@ -169,8 +158,7 @@ export default function Login({ navigation }) {
             console.log('====================================');
             console.log("after register first time " + data);
             console.log('====================================');
-            let user = await updateLoggedUser(username);
-            navigation.navigate("TabStack", { user: user });
+            updateLoggedUser(username);
         } catch (error) {
             console.error(error)
         }
@@ -246,11 +234,14 @@ export default function Login({ navigation }) {
                         data.User_img = `${data.User_img}?t=${Date.now()}`;
                     storeData(data);
                     navigation.navigate("TabStack", { user: data });
+
                 }
             }
+
         } catch (error) {
             console.log(error);
         }
+
 
     }
 
@@ -288,7 +279,7 @@ export default function Login({ navigation }) {
                         <Text style={styles.textFB}>Facebook</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => LogInWithGoogle()}>
+                <TouchableOpacity onPress={() => LogInWithGoogle()} >
                     <View style={styles.buttonGoogle}>
                         <Text style={styles.textGo}>Google</Text>
                     </View>
@@ -367,3 +358,4 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     }
 });
+
