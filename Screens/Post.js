@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet,Alert, Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { StyleSheet, Alert, Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
@@ -53,7 +53,7 @@ export default function Post({ navigation, route }) {
             await GalleryPicture();
         }
         else {
-           await showActionSheet();
+            await showActionSheet();
         }
     }
 
@@ -69,14 +69,14 @@ export default function Post({ navigation, route }) {
                 aspect: [4, 3],
                 quality: 0.1
             });
-            if (!result.cancelled) {  
+            if (!result.cancelled) {
                 if (Platform.OS !== 'web') {
                     const content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
                     result.uri = content
                     await setPostImg(result.uri);
                 }
                 else {
-                   Alert.alert("no live picture on web")
+                    Alert.alert("no live picture on web")
                 }
             }
         } catch (e) {
@@ -84,11 +84,11 @@ export default function Post({ navigation, route }) {
         }
     }
 
-  
-    const  GalleryPicture = async () => {
+
+    const GalleryPicture = async () => {
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [4, 3],
                 quality: 0.7
@@ -98,9 +98,9 @@ export default function Post({ navigation, route }) {
                     var content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
                     result.uri = content
                     console.log('====================================');
-                    console.log(result.uri);
+                    console.log(result);
                     console.log('====================================');
-                    await setPostImg(result.uri);
+                    await setPostImg(content);
                 } else {
                     await setPostImg(result.uri.split(',')[1]);
                 }
@@ -188,12 +188,12 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         borderWidth: 2,
         borderRadius: 50,
-       
+
         resizeMode: 'stretch',
     },
     button: {
         marginTop: 20,
-       
+
         borderRadius: 4,
         padding: 10,
         backgroundColor: "orange"

@@ -81,13 +81,16 @@ export default function Profile({ navigation, user }) {
     const takePicture = async () => {
         try {
             let result = await ImagePicker.launchCameraAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [4, 3],
                 quality: 0.1
             });
             if (!result.cancelled) {  
                 if (Platform.OS !== 'web') {
+                    console.log('====================================');
+                    console.log("Before convert " + result);
+                    console.log('====================================');
                     const content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
                     result.uri = content
                     await imageUploadA(result.uri, username)
