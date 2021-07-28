@@ -9,7 +9,6 @@ var isaac = require('isaac');
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
-const defaultImg = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_icon.jpg"
 
 const facebookID = "948649482370973"
 
