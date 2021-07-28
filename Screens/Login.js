@@ -34,7 +34,6 @@ export default function Login({ navigation }) {
         const data = await AsyncStorage.getItem('loggedUser')
         if (data !== undefined) {
             let user = JSON.parse(data)
-
             await updateLoggedUser(user.Username);
         }
         else {
@@ -65,10 +64,20 @@ export default function Login({ navigation }) {
                 })
             });
             let data = await result.json();
-            if (data.User_img.indexOf("?asid") == -1)
+            console.log('====================================');
+            console.log("Updated username " + data);
+            console.log('====================================');
+            if (data.Id_external != 0) {
+                //if (data.User_img.indexOf("?asid") == -1)
                 data.User_img = `${data.User_img}?t=${Date.now()}`;
-            storeData(data);
-            navigation.navigate("TabStack", { user: data });
+                storeData(data);
+                return data;
+                //navigation.navigate("TabStack", { user: data });
+            }
+            else {
+                return;
+            }
+
         } catch (e) {
             console.error(e);
         }
@@ -87,32 +96,86 @@ export default function Login({ navigation }) {
                 })
             });
             let data = await result.json();
-            if (data.Id_user != 0) {
-                await updateLoggedUser(username);
-            } else {
-                var salt = bcrypt.genSaltSync(10);
-                var hash = bcrypt.hashSync(id, salt);
-                let result = await fetch(url + "api/add/user", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json; charset=UTF-8',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        Username: username,
-                        Email: email,
-                        Hash: hash,
-                        Salt: salt,
-                        User_img: img
-                    })
-                });
-                let data = await result.json();
-                await updateLoggedUser(username);
+            console.log('====================================');
+            console.log(data);
+            console.log('====================================');
+            if (data.Id_external == 0) {
+                let res = await addNewExternalUser(id, username, email, img)
+                console.log('====================================');
+                console.log("check res " + res);
+                console.log('====================================');
+                // try {
+                //     var salt = bcrypt.genSaltSync(10);
+                //     var hash = bcrypt.hashSync(id, salt);
+                //     let result = await fetch(url + "api/add/user", {
+                //         method: 'POST',
+                //         headers: {
+                //             'Content-Type': 'application/json; charset=UTF-8',
+                //             'Accept': 'application/json'
+                //         },
+                //         body: JSON.stringify({
+                //             Username: username,
+                //             Email: email,
+                //             Hash: hash,
+                //             Salt: salt,
+                //             User_img: img,
+                //             Id_external: id
+                //         })
+                //     });
+                //     let data = await result.json();
+                //     console.log('====================================');
+                //     console.log("after register first time " + data);
+                //     console.log('====================================');
+                //     let user = await updateLoggedUser(username);
+                //     navigation.navigate("TabStack", { user: user });
+                // } catch (error) {
+                //     console.error(error)
+                // }
             }
-        } catch (e) {
-            console.error(e)
+            else {
+                if (data.Id_external == id) {
+                    await updateLoggedUser(username);
+                }
+                else {
+                    // TODO: Modal to change username
+                    //ChangeUserName(id, username, email, img)
+                }
+            }
+        } catch (error) {
+
         }
     }
+
+    const addNewExternalUser = async (id, username, email, img) => {
+        try {
+            var salt = bcrypt.genSaltSync(10);
+            var hash = bcrypt.hashSync(id, salt);
+            let result = await fetch(url + "api/add/user", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    Username: username,
+                    Email: email,
+                    Hash: hash,
+                    Salt: salt,
+                    User_img: img,
+                    Id_external: id
+                })
+            });
+            let data = await result.json();
+            console.log('====================================');
+            console.log("after register first time " + data);
+            console.log('====================================');
+            let user = await updateLoggedUser(username);
+            navigation.navigate("TabStack", { user: user });
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
 
     const LogInWithGoogle = async () => {
         try {
@@ -127,7 +190,8 @@ export default function Login({ navigation }) {
                     headers: { Authorization: `Bearer ${accessToken}` },
                 });
                 let res = await userInfoResponse.json();
-                RegistrationUser(res.id, res.name, res.email, res.picture)
+                console.log(res);
+                await RegistrationUser(res.id, res.name, res.email, res.picture)
             }
         } catch (message) {
             Alert.alert(`Google Login Error: ${message}`);
@@ -146,7 +210,7 @@ export default function Login({ navigation }) {
                 // Get the user's name using Facebook's Graph API
                 const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email,picture&access_token=${token}`);
                 let res = await response.json();
-                RegistrationUser(res.id, res.name, res.email, res.picture.data.url)
+                await RegistrationUser(res.id, res.name, res.email, res.picture.data.url)
             }
         } catch (message) {
             Alert.alert(`Facebook Login Error: ${message}`);
