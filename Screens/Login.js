@@ -69,7 +69,7 @@ export default function Login({ navigation }) {
             if (data.User_img.indexOf("?asid") == -1)
                 data.User_img = `${data.User_img}?t=${Date.now()}`;
             storeData(data);
-            setTimeout(() => navigation.navigate("TabStack", { user: data }), 1000);
+            navigation.navigate("TabStack", { user: data });
         } catch (e) {
             console.error(e);
         }
