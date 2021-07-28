@@ -88,9 +88,9 @@ export default function Profile({ navigation, user }) {
             });
             if (!result.cancelled) {  
                 if (Platform.OS !== 'web') {
-                    const content = await FileSystem.readAsStringAsync(result.uri, { encoding: 'base64' });
-                    //result.uri = content
-                    await imageUploadA(content, username)
+                    const content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
+                    result.uri = content
+                    await imageUploadA(result.uri, username)
                 }
                 else {
                     await imageUpload(result.uri, username);
