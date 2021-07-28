@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Animated, Alert, Platform, Button, StyleSheet, Image, Text, TextInput, View, FlatList, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { Alert, Platform, Button, StyleSheet, Image, Text, TextInput, View, FlatList, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -41,7 +41,7 @@ export default function Profile({ navigation, user }) {
             if (Platform.OS !== 'web') {
                 const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
                 if (status !== 'granted') {
-                    alert('Sorry, we need camera roll permissions to make this work!');
+                    Alert.alert('Sorry, we need media permissions to make this work!');
                 }
             }
         })()
@@ -78,12 +78,29 @@ export default function Profile({ navigation, user }) {
         actionSheet.current.show();
     };
 
-
-
-    const takePicture = () => {
-        Alert.alert("take a picture");
-        return;
+    const takePicture = async () => {
+        try {
+            let result = await ImagePicker.launchCameraAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: 0.1
+            });
+            if (!result.cancelled) {  
+                if (Platform.OS !== 'web') {
+                    const content = await FileSystem.readAsStringAsync(result.uri, { encoding: 'base64' });
+                    //result.uri = content
+                    await imageUploadA(content, username)
+                }
+                else {
+                    await imageUpload(result.uri, username);
+                }
+            }
+        } catch (e) {
+            console.error(e);
+        }
     }
+
 
     const GalleryPicture = async () => {
         try {
@@ -94,21 +111,14 @@ export default function Profile({ navigation, user }) {
                 quality: 0.7
             });
             if (!result.cancelled) {
-                console.log('====================================');
-                console.log(result);
-                console.log('====================================');
                 if (Platform.OS !== 'web') {
                     var content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
                     result.uri = content
-                    //await setImage(result.uri)
                     await imageUploadA(result.uri, username)
-                    console.log('====================================');
                 }
                 else {
-                    //await setImage(result.uri);
                     await imageUpload(result.uri, username);
                 }
-
             }
         } catch (e) {
             console.error(e);
@@ -140,6 +150,8 @@ export default function Profile({ navigation, user }) {
     }
 
     const imageUploadA = async (imgUri, picName) => {
+        console.log("imgUri " + imgUri);
+        console.log("picName " + picName);
         try {
             let res = await fetch(url + "api/uploadpicture", {
                 method: 'POST',
@@ -155,8 +167,9 @@ export default function Profile({ navigation, user }) {
                 })
             });
             let data = await res.json();
-            if (data.path.indexOf("?asid") == -1)
-                setImage(`${data.path}?t=${Date.now()}`)
+            console.log(data);
+            //if (data.path.indexOf("?asid") == -1)
+            await setImage(`${data.path}?t=${Date.now()}`)
             await updateLoggedUser(userId);
 
         } catch (e) {
@@ -352,12 +365,9 @@ export default function Profile({ navigation, user }) {
                 onPress={(index) => {
                     if (index == 0) {
                         takePicture();
-                        Alert.alert(optionArray[index]);
                     }
                     else if (index == 1) {
-                        //cheackDeviceForSelectImage();
                         GalleryPicture();
-                        Alert.alert(optionArray[index]);
                     }
                 }}
             />
@@ -506,5 +516,33 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
     },
+    camera: {
+        // position: 'absolute',
+        // bottom: 0,
+        // flexDirection: 'row',
+        // flex: 1,
+        // width: '100%',
+        // padding: 20,
+        // justifyContent: 'space-between'
+        flex: 1
+    },
+    buttonContainer: {
+        flex: 1,
+        backgroundColor: 'transparent',
+        flexDirection: 'row',
+        margin: 20,
+    },
+    buttonSetType: {
+        flex: 0.1,
+        alignSelf: 'flex-end',
+        alignItems: 'center',
+    },
+    btnTakePicture: {
+        width: 70,
+        height: 70,
+        bottom: 0,
+        borderRadius: 50,
+        backgroundColor: '#fff'
+    }
 
 });

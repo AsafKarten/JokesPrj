@@ -6,15 +6,15 @@ import { FontAwesome } from '@expo/vector-icons';
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
 
+const default_img = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_icon.jpg"
 
 
 export default function FriendProfile({ navigation, route }) {
-    //var default_img = require('../assets/funny_icon.jpg')
 
     const [profileJokes, setList] = useState([
-        // { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_likes: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
+        { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_likes: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
     ]);
-    const [other_user, setOtherUser] = useState([{ Id_user: 0, Username: '', User_img: '', I_follow: 0, Follow_me: 0 }]);
+    const [other_user, setOtherUser] = useState([{ Id_user: 0, Username: '', User_img: default_img, I_follow: 0, Follow_me: 0 }]);
     const [search, onChangeSearch] = useState();
     const friendId = route.params.route.item.Id_user
     const item = route.params.route.item;
@@ -39,9 +39,9 @@ export default function FriendProfile({ navigation, route }) {
                     Id_user: friendId
                 })
             });
-            let data = await result.json();
-            setOtherUser(data);
+            let data = await result.json(); 
             console.log(data);
+            await setOtherUser(data);
         } catch (error) {
             console.log(error);
         }
@@ -74,7 +74,7 @@ export default function FriendProfile({ navigation, route }) {
 
         });
         let data = await result.json();
-        GetFriendData();
+        await GetFriendData();
     }
     const LoadJokes = async () => {
         let result = await fetch(url + "api/profile/feed", {
@@ -89,7 +89,7 @@ export default function FriendProfile({ navigation, route }) {
 
         });
         let data = [...await result.json()];
-        setList(data.reverse());
+        await setList(data.reverse());
     }
 
     const MoveToJoke = (item) => {
@@ -120,7 +120,7 @@ export default function FriendProfile({ navigation, route }) {
         let data = await result.json();
         console.log(Id_joke, Id_user, User_img, Username)
         console.log(data);
-        LoadJokes();
+        await LoadJokes();
     }
 
     return (
@@ -138,7 +138,8 @@ export default function FriendProfile({ navigation, route }) {
                         <Text style={styles.username}>{other_user.username}</Text>
                     </View>
                     <View style={styles.imageHolder}>
-                        <Image style={styles.profile_image} source={{ uri: other_user.User_img }} />
+
+                        <Image style={styles.profile_image} source={{ uri: `${other_user.User_img}?t=${Date.now()}` }} />
                     </View>
                     <View style={styles.buttonGroup}>
                         <View style={styles.buttons}>

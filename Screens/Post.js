@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 const urlLocal = "http://localhost:52763/"
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 
@@ -36,7 +37,6 @@ export default function Post({ navigation, route }) {
                     })
                 });
                 let data = await result.json();
-                console.log(data);
                 navigation.navigate("TabStack", { user: route.params.user });
             } catch (e) {
                 console.error(e);
@@ -51,16 +51,24 @@ export default function Post({ navigation, route }) {
                 allowsEditing: true,
                 aspect: [4, 3],
                 quality: 0.7
-
             });
             if (!result.cancelled) {
-                setPostImg(result.uri);
+                if (Platform.OS !== 'web') {
+                    // var content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
+                    // result.uri = content
+                    console.log('====================================');
+                    console.log(result.uri);
+                    console.log('====================================');
+                    await setPostImg(result.uri);
+                } else {
+                    await setPostImg(result.uri);
+                }
             }
         } catch (e) {
             console.error(e);
         }
     }
-    
+
     return (
         <View style={styles.container}>
             <Text></Text>

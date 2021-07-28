@@ -114,7 +114,7 @@ export default function Home({ navigation, user }) {
                             {item.Joke_title}
                         </Text>
 
-                        <Image source={{ uri: item.Joke_img }} style={styles.JokeImage} />
+                        <Image source={{ uri: (item.Joke_img.indexOf(`?asid`) == -1) ? `${item.Joke_img}?t=${Date.now()}` : item.Joke_img }} style={styles.JokeImage} />
 
                         <Text style={styles.Body} onPress={() => MoveToJoke(item)}>
                             {item.Joke_body}
