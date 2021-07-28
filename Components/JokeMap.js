@@ -66,6 +66,7 @@ export default function JokeMap({ navigation, route }) {
             });
             let data = [...await result.json()];
             setResults(data.reverse());
+            console.log(searchJokes);
         } catch (e) {
             console.error(e)
         }

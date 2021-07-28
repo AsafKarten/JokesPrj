@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import { StyleSheet, Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { StyleSheet,Alert, Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
+import ActionSheet from 'react-native-actionsheet';
+
+
 const urlLocal = "http://localhost:52763/"
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 
 
 export default function Post({ navigation, route }) {
+    let actionSheet = useRef();
+    var optionArray = ['take a photo', 'choose from a gallery', 'Cancel'];
     const [Joke_title, onChangeJokeTitle] = useState("");
     const [Joke_body, onChangeJokeBody] = useState("")
     const [userId, setUserId] = useState(route.params.user.Id_user);
@@ -43,8 +48,44 @@ export default function Post({ navigation, route }) {
             }
         }
     }
+    const checkDevice = async () => {
+        if (Platform.OS === 'web') {
+            await GalleryPicture();
+        }
+        else {
+           await showActionSheet();
+        }
+    }
 
-    const AddPostPicture = async () => {
+    const showActionSheet = () => {
+        actionSheet.current.show();
+    };
+
+    const takePicture = async () => {
+        try {
+            let result = await ImagePicker.launchCameraAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: 0.1
+            });
+            if (!result.cancelled) {  
+                if (Platform.OS !== 'web') {
+                    const content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
+                    result.uri = content
+                    await setPostImg(result.uri);
+                }
+                else {
+                   Alert.alert("no live picture on web")
+                }
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+  
+    const  GalleryPicture = async () => {
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -54,20 +95,21 @@ export default function Post({ navigation, route }) {
             });
             if (!result.cancelled) {
                 if (Platform.OS !== 'web') {
-                    // var content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
-                    // result.uri = content
+                    var content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
+                    result.uri = content
                     console.log('====================================');
                     console.log(result.uri);
                     console.log('====================================');
                     await setPostImg(result.uri);
                 } else {
-                    await setPostImg(result.uri);
+                    await setPostImg(result.uri.split(',')[1]);
                 }
             }
         } catch (e) {
             console.error(e);
         }
     }
+
 
     return (
         <View style={styles.container}>
@@ -86,7 +128,7 @@ export default function Post({ navigation, route }) {
             />
             <View style={styles.imageHolder}>
                 <Text style={styles.text}>Add mim :) </Text>
-                <AntDesign style={styles.add_icon} onPress={AddPostPicture} name="upload" size={24} color="grey" fontWeight={'bold'} />
+                <AntDesign style={styles.add_icon} onPress={checkDevice} name="upload" size={24} color="grey" fontWeight={'bold'} />
                 <Image style={styles.post_image} source={{ uri: post_img }} />
             </View>
             <TouchableOpacity onPress={() => PostJoke()}>
@@ -94,6 +136,27 @@ export default function Post({ navigation, route }) {
                     <Text style={styles.textBtn}>Post</Text>
                 </View>
             </TouchableOpacity >
+            <ActionSheet
+                ref={actionSheet}
+                // Title of the Bottom Sheet
+                title={'Choose from where to upload a funny picture '}
+                // Options Array to show in bottom sheet
+                options={optionArray}
+                // Define cancel button index in the option array
+                // This will take the cancel option in bottom
+                // and will highlight it
+                cancelButtonIndex={2}
+                // Highlight any specific option
+                destructiveButtonIndex={1}
+                onPress={(index) => {
+                    if (index == 0) {
+                        takePicture();
+                    }
+                    else if (index == 1) {
+                        GalleryPicture();
+                    }
+                }}
+            />
         </View >
     )
 }
@@ -125,12 +188,12 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         borderWidth: 2,
         borderRadius: 50,
-        borderColor: 'orange',
+       
         resizeMode: 'stretch',
     },
     button: {
         marginTop: 20,
-        width: "100%",
+       
         borderRadius: 4,
         padding: 10,
         backgroundColor: "orange"
