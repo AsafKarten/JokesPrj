@@ -38,6 +38,7 @@ const Search = ({ navigation, route }) => {
                 });
                 let data = [...await result.json()];
                 var route = { user: user, jokeList: data, searchTitle: searchTitle };
+                console.log(route);
                 navigation.navigate("JokeMap", { navigation: navigation, route: route });
             } catch (e) {
                 console.error(e)

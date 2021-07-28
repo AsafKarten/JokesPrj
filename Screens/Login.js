@@ -25,7 +25,7 @@ export default function Login({ navigation }) {
 
     useEffect(() => {
         (async () => {
-            await getData();
+            // await getData();
         })()
     }, [])
 

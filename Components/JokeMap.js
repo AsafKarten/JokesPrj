@@ -15,8 +15,11 @@ export default function JokeMap({ navigation, route }) {
 
     useEffect(() => {
         (async () => {
+            LoadJokes(route.params.route.searchTitle)
             if (route.params.route.jokeList !== undefined) {
                 setResults(route.params.route.jokeList)
+                console.log(route.params.route.jokeList);
+                
             }
             else {
                 console.log("no data found");
@@ -53,6 +56,7 @@ export default function JokeMap({ navigation, route }) {
     }
 
     const LoadJokes = async (searchTitle) => {
+        console.log(searchTitle);
         try {
             let result = await fetch(url + "api/search/jokes", {
                 method: 'POST',
@@ -65,7 +69,9 @@ export default function JokeMap({ navigation, route }) {
                 })
             });
             let data = [...await result.json()];
-            setResults(data.reverse());
+            data = data.reverse()
+            setResults(data);
+            console.log(data)
             console.log(searchJokes);
         } catch (e) {
             console.error(e)

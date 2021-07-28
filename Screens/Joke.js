@@ -190,7 +190,26 @@ export default function Joke({ navigation, route }) {
 
                 </View>
             </View>
-            <Modal
+   
+            <FlatList
+                data={allComments}
+                keyExtractor={(item) => item.Comment_id}
+                renderItem={({ item }) => (
+                    <View style={styles.list}>
+                        <View style={styles.buttonGroup}>
+                            <Image source={{ uri: item.User_img }} style={styles.UserImg} />
+                            <Text onPress={() => MoveToProfileFromComment(item)} style={styles.UserName}>{item.Username}</Text>
+                        </View>
+                        <Text style={styles.postTitle}>
+                            {item.Comment_body}
+                        </Text>
+
+                        <Text style={styles.Body}>
+                            {item.Comment_date}
+                        </Text>
+                    </View>
+                )} />
+                         <Modal
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
@@ -222,25 +241,8 @@ export default function Joke({ navigation, route }) {
                     </View>
                 </View>
             </Modal>
-            <FlatList
-                data={allComments}
-                keyExtractor={(item) => item.Comment_id}
-                renderItem={({ item }) => (
-                    <View style={styles.list}>
-                        <View style={styles.buttonGroup}>
-                            <Image source={{ uri: item.User_img }} style={styles.UserImg} />
-                            <Text onPress={() => MoveToProfileFromComment(item)} style={styles.UserName}>{item.Username}</Text>
-                        </View>
-                        <Text style={styles.postTitle}>
-                            {item.Comment_body}
-                        </Text>
-
-                        <Text style={styles.Body}>
-                            {item.Comment_date}
-                        </Text>
-                    </View>
-                )} />
         </View>
+        
     );
 }
 const styles = StyleSheet.create({
