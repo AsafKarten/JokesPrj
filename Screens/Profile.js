@@ -323,7 +323,7 @@ export default function Profile({ navigation, user }) {
                     />
                 </View>
             </View>
-
+<View style={styles.container}>
             <FlatList
                 data={profileJokes}
                 keyExtractor={(item) => item.Id_user}
@@ -353,6 +353,7 @@ export default function Profile({ navigation, user }) {
                         </View>
                     </View>
                 )} />
+                </View>
             <ActionSheet
                 ref={actionSheet}
                 // Title of the Bottom Sheet
@@ -409,10 +410,10 @@ const styles = StyleSheet.create({
     profileHolder: {
         flexWrap: 'wrap',
         flex: 1,
-        justifyContent: 'center',
+       justifyContent: 'center',
         alignItems: 'center',
-        padding: 18,
-        margin: 8,
+       padding: 8,
+      margin: 8,
         borderWidth: 1,
         borderRadius: 9,
         borderColor: 'grey',
@@ -448,7 +449,7 @@ const styles = StyleSheet.create({
 
     },
     addTextHolder: {
-        justifyContent: 'center',
+       justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
     },
@@ -456,6 +457,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     profileFooter: {
+       
         margin: 5,
         padding: 5,
     },
@@ -482,7 +484,7 @@ const styles = StyleSheet.create({
         textAlign: 'left'
     },
     buttonGroup: {
-        flex: 3,
+        //flex: 3,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
 
