@@ -63,8 +63,8 @@ export default function Login({ navigation }) {
                 })
             });
             let data = await result.json();
-            if (data.User_img.indexOf("?asid") == -1)
-                data.User_img = `${data.User_img}?t=${Date.now()}`;
+            // if (data.User_img.indexOf("?asid") == -1)
+            //     data.User_img = `${data.User_img}?t=${Date.now()}`;
             storeData(data);
             navigation.navigate("TabStack", { user: data });
         } catch (e) {

@@ -8,8 +8,6 @@ const defaultImg = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_ico
 
 var bcrypt = require('bcryptjs');
 
-
-
 var rjxEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
 //var rjxUsername = /^[a-z0-9_-]{3,16}$/
 //var rjxPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,8}$/

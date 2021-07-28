@@ -9,7 +9,7 @@ const default_img = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_ic
 
 export default function Home({ navigation, user }) {
     const [allJokes, setList] = useState([
-         { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_like: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
+        { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_like: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
     ]);
 
     const LoadJokes = async () => {
@@ -30,7 +30,7 @@ export default function Home({ navigation, user }) {
         })()
     }, [])
 
-    useEffect( () => {
+    useEffect(() => {
         const loader_jokes = navigation.addListener('focus', async () => {
             if (user !== undefined) {
                 await LoadJokes();
@@ -113,7 +113,6 @@ export default function Home({ navigation, user }) {
                         <Text style={styles.postTitle}>
                             {item.Joke_title}
                         </Text>
-
                         <Image source={{ uri: item.Joke_img }} style={styles.JokeImage} />
 
                         <Text style={styles.Body} onPress={() => MoveToJoke(item)}>

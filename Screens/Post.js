@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { StyleSheet, Alert, Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { Platform, StyleSheet, Alert, Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
@@ -49,11 +49,11 @@ export default function Post({ navigation, route }) {
         }
     }
     const checkDevice = async () => {
-        if (Platform.OS === 'web') {
-            await GalleryPicture();
+        if (Platform.OS !== 'web') {
+            await showActionSheet();
         }
         else {
-            await showActionSheet();
+            await GalleryPicture();
         }
     }
 
@@ -64,7 +64,7 @@ export default function Post({ navigation, route }) {
     const takePicture = async () => {
         try {
             let result = await ImagePicker.launchCameraAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [4, 3],
                 quality: 0.1
@@ -73,7 +73,7 @@ export default function Post({ navigation, route }) {
                 if (Platform.OS !== 'web') {
                     const content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
                     result.uri = content
-                    await setPostImg(result.uri);
+                    await setPostImg(content);
                 }
                 else {
                     Alert.alert("no live picture on web")
@@ -95,14 +95,9 @@ export default function Post({ navigation, route }) {
             });
             if (!result.cancelled) {
                 if (Platform.OS !== 'web') {
-                    var content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
-                    result.uri = content
-                    console.log('====================================');
-                    console.log(result);
-                    console.log('====================================');
-                    await setPostImg(content);
+                    await setPostImg(result.uri);
                 } else {
-                    await setPostImg(result.uri.split(',')[1]);
+                    await setPostImg(result.uri);
                 }
             }
         } catch (e) {
@@ -127,7 +122,7 @@ export default function Post({ navigation, route }) {
                 placeholder="Body"
             />
             <View style={styles.imageHolder}>
-                <Text style={styles.text}>Add mim :) </Text>
+                <Text style={styles.text}>Add mem :) </Text>
                 <AntDesign style={styles.add_icon} onPress={checkDevice} name="upload" size={24} color="grey" fontWeight={'bold'} />
                 <Image style={styles.post_image} source={{ uri: post_img }} />
             </View>
@@ -188,7 +183,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         borderWidth: 2,
         borderRadius: 50,
-
+        borderColor: 'orange',
         resizeMode: 'stretch',
     },
     button: {
