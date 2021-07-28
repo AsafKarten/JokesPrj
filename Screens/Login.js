@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, View, StyleSheet, TextInput, Button, Text, TouchableOpacity } from 'react-native';
+import { Alert, View, StyleSheet, TextInput, Text, TouchableOpacity } from 'react-native';
 import Header from '../Components/Header';
 import * as Facebook from 'expo-facebook';
-import * as GoogleSignIn from 'expo-google-sign-in';
+import * as Google from 'expo-google-app-auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 var isaac = require('isaac');
 
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
-const defaultImg = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_icon.jpg"
 
 const facebookID = "948649482370973"
+
 
 var bcrypt = require('bcryptjs');
 bcrypt.setRandomFallback((len) => {
@@ -53,7 +53,6 @@ export default function Login({ navigation }) {
     }
 
     const updateLoggedUser = async (username) => {
-
         try {
             let result = await fetch(url + "api/user", {
                 method: 'POST',
@@ -66,9 +65,6 @@ export default function Login({ navigation }) {
                 })
             });
             let data = await result.json();
-            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-            console.log(data);
-            console.log('====================================');
             if (data.User_img.indexOf("?asid") == -1)
                 data.User_img = `${data.User_img}?t=${Date.now()}`;
             storeData(data);
@@ -118,18 +114,32 @@ export default function Login({ navigation }) {
         }
     }
 
+    const LogInWithGoogle = async () => {
+        try {
+            const config = {
+                iosClientId: `134638348384-9nlcaf7dgmu0f5eiu02brqqqtgtmo440.apps.googleusercontent.com`,
+                androidClientId: `134638348384-qbaq5p76aahk007c7jr7b638fbpgqb6n.apps.googleusercontent.com`,
+                scopes: ['profile', 'email']
+            };
+            const { type, accessToken } = await Google.logInAsync(config);
+            if (type === 'success') {
+                let userInfoResponse = await fetch('https://www.googleapis.com/userinfo/v2/me', {
+                    headers: { Authorization: `Bearer ${accessToken}` },
+                });
+                let res = await userInfoResponse.json();
+                RegistrationUser(res.id, res.name, res.email, res.picture)
+            }
+        } catch (message) {
+            Alert.alert(`Google Login Error: ${message}`);
+        }
+    }
+
     const LogInWithFacebook = async () => {
         try {
             await Facebook.initializeAsync({
                 appId: facebookID,
             });
-            const {
-                type,
-                token,
-                expirationDate,
-                permissions,
-                declinedPermissions,
-            } = await Facebook.logInWithReadPermissionsAsync({
+            const { type, token } = await Facebook.logInWithReadPermissionsAsync({
                 permissions: ['public_profile'],
             });
             if (type === 'success') {
@@ -137,11 +147,9 @@ export default function Login({ navigation }) {
                 const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email,picture&access_token=${token}`);
                 let res = await response.json();
                 RegistrationUser(res.id, res.name, res.email, res.picture.data.url)
-            } else {
-                // type === 'cancel'
             }
-        } catch ({ message }) {
-            alert(`Facebook Login Error: ${message}`);
+        } catch (message) {
+            Alert.alert(`Facebook Login Error: ${message}`);
         }
     }
 
@@ -216,7 +224,7 @@ export default function Login({ navigation }) {
                         <Text style={styles.textFB}>Facebook</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => LogInWithGoogle()} class>
+                <TouchableOpacity onPress={() => LogInWithGoogle()}>
                     <View style={styles.buttonGoogle}>
                         <Text style={styles.textGo}>Google</Text>
                     </View>
