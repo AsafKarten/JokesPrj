@@ -18,7 +18,7 @@ export default function Home({ navigation, user }) {
                 method: 'GET'
             });
             let data = [...await result.json()];
-            await setList(data.reverse());
+            setList(data.reverse());
         } catch (error) {
             console.error(error)
         }
