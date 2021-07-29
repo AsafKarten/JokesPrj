@@ -18,6 +18,7 @@ export default function Post({ navigation, route }) {
     const [userId, setUserId] = useState(route.params.user.Id_user);
     const [user_img, setUserImg] = useState(route.params.user.User_img);
     const [post_img, setPostImg] = useState();
+    const [image_data, setImgData] = useState();
 
     const PostJoke = async () => {
         if (Joke_title == "" || Joke_body == "") {
@@ -59,7 +60,7 @@ export default function Post({ navigation, route }) {
     }
 
     const imageUpload = async (id_joke) => {
-        console.log(post_img);
+        console.log(image_data);
         console.log(Joke_title);
         console.log(id_joke);
         try {
@@ -70,13 +71,15 @@ export default function Post({ navigation, route }) {
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    uri: post_img.split(',')[1],
+                    uri: image_data.split(',')[1],
                     name: Joke_title,
                     folder: id_joke,
                     type: 'jpg',
                 })
             });
             let data = await res.json();
+            await setPostImg(`${data.path}?t=${Date.now()}`)
+            navigation.navigate("TabStack", { user: route.params.user });
 
         } catch (e) {
             console.error(e);
@@ -84,7 +87,7 @@ export default function Post({ navigation, route }) {
     }
 
     const imageUploadA = async (id_joke) => {
-        console.log(post_img);
+        console.log(image_data);
         console.log(Joke_title);
         console.log(id_joke);
         try {
@@ -95,14 +98,16 @@ export default function Post({ navigation, route }) {
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    uri: post_img,
+                    uri: image_data,
                     name: Joke_title,
                     folder: id_joke,
                     type: 'jpg',
                 })
             });
             let data = await res.json();
+            await setPostImg(`${data.path}?t=${Date.now()}`)
             console.log(data);
+            navigation.navigate("TabStack", { user: route.params.user });
 
         } catch (e) {
             console.error(e);
@@ -123,10 +128,10 @@ export default function Post({ navigation, route }) {
                 if (Platform.OS !== 'web') {
                     var content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
                     result.uri = content
-                    setPostImg(result.uri)
+                    await setImgData(content)
                 }
                 else{
-                    setPostImg(result.uri)
+                    await setImgData(result.uri)
                 }
               
             }
