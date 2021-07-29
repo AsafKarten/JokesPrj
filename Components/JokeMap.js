@@ -6,11 +6,11 @@ const urlLocal = "http://localhost:52763/"
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 
 export default function JokeMap({ navigation, route }) {
-    //var default_img = require('../assets/funny_icon.jpg')
-    // const [searchJokes, setResults] = useState([{
-    // //     Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_likes: 0, Joke_img: '', Username: '', User_img: '', Comment_count: 0
-    // // },
-    // ]);
+   
+    const [searchJokes, setResults] = useState([{
+        Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_likes: 0, Joke_img: '', Username: '', User_img: '', Comment_count: 0
+    },
+    ]);
     const [user, setUser] = useState(route.params.route.user);
 
     useEffect(() => {
@@ -70,9 +70,9 @@ export default function JokeMap({ navigation, route }) {
             });
             let data = [...await result.json()];
             data = data.reverse()
-            setResults(data);
+            await setResults(data);
             console.log(data)
-            console.log(searchJokes);
+            
         } catch (e) {
             console.error(e)
         }
