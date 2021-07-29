@@ -315,7 +315,7 @@ export default function Login({ navigation }) {
                     }}>
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <Text style={styles.modalText}>The username {badUsername} already exists,please choose another username</Text>
+                            <Text style={styles.modalText}>The username {badUsername} already exists, please choose another username</Text>
                             <TextInput
                                 style={styles.input}
                                 onChangeText={onChangeNewUsername}
@@ -327,19 +327,9 @@ export default function Login({ navigation }) {
                                     <Text style={styles.textBtn}>Save</Text>
                                 </View>
                             </TouchableOpacity>
-                            {/* <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => setModalVisible(!modalVisible)}>
-                                <Text style={styles.textStyle}>Hide Modal</Text>
-                            </Pressable> */}
                         </View>
                     </View>
                 </Modal>
-                {/* <Pressable
-                    style={[styles.button, styles.buttonOpen]}
-                    onPress={() => setModalVisible(true)}>
-                    <Text style={styles.textStyle}>Show Modal</Text>
-                </Pressable> */}
             </View>
         </View>
     );
