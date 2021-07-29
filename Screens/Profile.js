@@ -153,8 +153,6 @@ export default function Profile({ navigation, user }) {
     }
 
     const imageUploadA = async (imgUri, picName) => {
-        console.log("imgUri " + imgUri);
-        console.log("picName " + picName);
         try {
             let res = await fetch(url + "api/uploadpicture", {
                 method: 'POST',
@@ -174,7 +172,6 @@ export default function Profile({ navigation, user }) {
             //if (data.path.indexOf("?asid") == -1)
             await setImage(`${data.path}?t=${Date.now()}`)
             await updateLoggedUser(userId);
-
         } catch (e) {
             console.error(e);
         }
