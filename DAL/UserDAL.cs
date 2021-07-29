@@ -37,6 +37,29 @@ namespace JokesPrj.DAL
             }
         }
 
+        public User GetUserByIDExternal(string id_external)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    User u = null;
+                    string query = $"SELECT * FROM JokesUsers where id_external= @id_external ";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@id_external", id_external);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                        u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
+                    return u;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public User GetUser(User user)
         {
             try

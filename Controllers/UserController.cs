@@ -61,6 +61,24 @@ namespace JokesPrj.Controllers
             }
         }
 
+
+        [HttpPost]
+        [Route("api/get/externalUser")]
+        public IHttpActionResult GetExternalUserFromDB([FromBody] User u)
+        {
+            try
+            {
+                u = Globals.UserDAL.GetUserByIDExternal(u.Id_external);
+                if (u == null)
+                    return Content(HttpStatusCode.NotFound, $"User was not found");
+                return Ok(u);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost]
         [Route("api/add/user")]
         public IHttpActionResult AddNewUser([FromBody] User user)
