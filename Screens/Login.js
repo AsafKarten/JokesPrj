@@ -9,7 +9,7 @@ var isaac = require('isaac');
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
 
-const facebookID = "948649482370973"
+
 
 
 var bcrypt = require('bcryptjs');
@@ -25,7 +25,7 @@ export default function Login({ navigation }) {
 
     useEffect(() => {
         (async () => {
-            //await getData();
+            await getData();
         })()
     }, [])
 
@@ -36,6 +36,7 @@ export default function Login({ navigation }) {
             await updateLoggedUser(user.Username);
         }
         else {
+            navigation.navigate("Login");
             return;
         }
     }
@@ -51,6 +52,9 @@ export default function Login({ navigation }) {
     }
 
     const updateLoggedUser = async (username) => {
+        console.log('====================================');
+        console.log(username);
+        console.log('====================================');
         try {
             let result = await fetch(url + "api/user", {
                 method: 'POST',
@@ -63,8 +67,8 @@ export default function Login({ navigation }) {
                 })
             });
             let data = await result.json();
-            // if (data.User_img.indexOf("?asid") == -1)
-            //     data.User_img = `${data.User_img}?t=${Date.now()}`;
+            if (data.User_img.indexOf("?asid") == -1)
+                data.User_img = `${data.User_img}?t=${Date.now()}`;
             storeData(data);
             navigation.navigate("TabStack", { user: data });
         } catch (e) {
@@ -88,38 +92,11 @@ export default function Login({ navigation }) {
             console.log('====================================');
             console.log(data);
             console.log('====================================');
-            if (data.Id_external == 0) {
+            if (data.Id_user == 0) {
                 let res = await addNewExternalUser(id, username, email, img)
                 console.log('====================================');
                 console.log("check res " + res);
                 console.log('====================================');
-                // try {
-                //     var salt = bcrypt.genSaltSync(10);
-                //     var hash = bcrypt.hashSync(id, salt);
-                //     let result = await fetch(url + "api/add/user", {
-                //         method: 'POST',
-                //         headers: {
-                //             'Content-Type': 'application/json; charset=UTF-8',
-                //             'Accept': 'application/json'
-                //         },
-                //         body: JSON.stringify({
-                //             Username: username,
-                //             Email: email,
-                //             Hash: hash,
-                //             Salt: salt,
-                //             User_img: img,
-                //             Id_external: id
-                //         })
-                //     });
-                //     let data = await result.json();
-                //     console.log('====================================');
-                //     console.log("after register first time " + data);
-                //     console.log('====================================');
-                //     let user = await updateLoggedUser(username);
-                //     navigation.navigate("TabStack", { user: user });
-                // } catch (error) {
-                //     console.error(error)
-                // }
             }
             else {
                 if (data.Id_external == id) {
@@ -136,9 +113,14 @@ export default function Login({ navigation }) {
     }
 
     const addNewExternalUser = async (id, username, email, img) => {
+
         try {
-            var salt = bcrypt.genSaltSync(10);
-            var hash = bcrypt.hashSync(id, salt);
+            const id_external = id
+            const username_external = username
+            const email_external = email
+            const img_external = img
+            const new_salt = await bcrypt.genSaltSync(10);
+            const new_hash = await bcrypt.hashSync(id, new_salt);
             let result = await fetch(url + "api/add/user", {
                 method: 'POST',
                 headers: {
@@ -146,19 +128,19 @@ export default function Login({ navigation }) {
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    Username: username,
-                    Email: email,
-                    Hash: hash,
-                    Salt: salt,
-                    User_img: img,
-                    Id_external: id
+                    Username: username_external,
+                    Email: email_external,
+                    Hash: new_hash,
+                    Salt: new_salt,
+                    User_img: img_external,
+                    Id_external: id_external
                 })
             });
             let data = await result.json();
             console.log('====================================');
             console.log("after register first time " + data);
             console.log('====================================');
-            updateLoggedUser(username);
+            await updateLoggedUser(username_external);
         } catch (error) {
             console.error(error)
         }
@@ -189,15 +171,23 @@ export default function Login({ navigation }) {
     const LogInWithFacebook = async () => {
         try {
             await Facebook.initializeAsync({
-                appId: facebookID,
+                appId: '948649482370973',
             });
-            const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+            const {
+                type,
+                token,
+                expirationDate,
+                permissions,
+                declinedPermissions,
+            } = await Facebook.logInWithReadPermissionsAsync({
                 permissions: ['public_profile'],
             });
             if (type === 'success') {
-                // Get the user's name using Facebook's Graph API
                 const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email,picture&access_token=${token}`);
                 let res = await response.json();
+                console.log('====================================');
+                console.log(res);
+                console.log('====================================');
                 await RegistrationUser(res.id, res.name, res.email, res.picture.data.url)
             }
         } catch (message) {
@@ -241,8 +231,6 @@ export default function Login({ navigation }) {
         } catch (error) {
             console.log(error);
         }
-
-
     }
 
     return (

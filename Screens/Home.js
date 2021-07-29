@@ -62,7 +62,7 @@ export default function Home({ navigation, user }) {
     const AddLike = async (item) => {
         var Id_joke = item.Id_joke;
         var Id_user = user.Id_user;
-        var User_img = user.User_img;
+        var User_img = `${user.User_img}?t=${Date.now()}`;
         var Username = user.Username;
         try {
             let result = await fetch(url + "api/add/like", {
