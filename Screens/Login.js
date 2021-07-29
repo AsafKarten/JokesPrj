@@ -55,6 +55,7 @@ export default function Login({ navigation }) {
 
     const updateLoggedUser = async (username) => {
         try {
+            await clearAsyncStorage();
             let result = await fetch(url + "api/user", {
                 method: 'POST',
                 headers: {
