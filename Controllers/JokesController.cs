@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
 
+
 namespace JokesPrj.Controllers
 {
     public class JokesController : ApiController
@@ -34,9 +35,9 @@ namespace JokesPrj.Controllers
                 {
                     return BadRequest("Invalid data.");
                 }
-
-                Created(new Uri(Request.RequestUri.AbsoluteUri + joke.Id_user), Globals.JokeDAL.SaveNewJokeToDB(joke));
-                return Ok("Joke was posted successfully.");
+                int id_joke = Globals.JokeDAL.SaveNewJokeToDB(joke);
+                Created(new Uri(Request.RequestUri.AbsoluteUri + joke.Id_user), id_joke);
+                return Ok(id_joke);
             }
             catch (Exception ex)
             {

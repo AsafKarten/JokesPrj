@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-
+using System.IO;
+using System.Web;
+using static JokesPrj.Models.Image;
 
 namespace JokesPrj.DAL
 {
@@ -14,6 +16,31 @@ namespace JokesPrj.DAL
         {
             this.conStr = conStr;
         }
+
+        public int SaveNewPhotoToDB(string path, int id)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    string query = $"Update Jokes Set joke_img=@joke_img where id_joke=@id_joke";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@joke_img ", SqlDbType.NVarChar).Value = path;
+                    cmd.Parameters.AddWithValue("@id_joke", SqlDbType.Int).Value = id;
+                    int res = cmd.ExecuteNonQuery();
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+
+
         public int SaveNewJokeToDB(Joke j)
         {
             try
@@ -21,18 +48,52 @@ namespace JokesPrj.DAL
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     con.Open();
-                    string query = $"Insert into Jokes (id_user,joke_title,joke_body,joke_like,joke_img,username,user_img,comment_count) VALUES (@id_user,@joke_title,@joke_body,@joke_like,@joke_img,@username,@user_img,@comment_count)";
+                    string query = $"Insert into Jokes (id_user,joke_title,joke_body,joke_like,username,user_img,comment_count) VALUES (@id_user,@joke_title,@joke_body,@joke_like,@username,@user_img,@comment_count)";
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@id_user", SqlDbType.Int).Value = j.Id_user;
                     cmd.Parameters.AddWithValue("@joke_title", SqlDbType.NVarChar).Value = j.Joke_title;
                     cmd.Parameters.AddWithValue("@joke_body", SqlDbType.NVarChar).Value = j.Joke_body;
-                    cmd.Parameters.AddWithValue("@joke_img", SqlDbType.NVarChar).Value = j.Joke_img;
                     cmd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = j.Username;
                     cmd.Parameters.AddWithValue("@user_img", SqlDbType.NVarChar).Value = j.User_img;
                     cmd.Parameters.AddWithValue("@joke_like", SqlDbType.Int).Value = 0;
                     cmd.Parameters.AddWithValue("@comment_count", SqlDbType.Int).Value = 0;
                     int res = cmd.ExecuteNonQuery();
-                    return res;
+                    int joke_id = GetJokeID(j);
+                    return joke_id;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private int GetJokeID(Joke j)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    string img = j.Joke_img;
+                    con.Open();
+                    string query = $"SELECT * FROM Jokes WHERE joke_title= @joke_title and username= @username and joke_body= @joke_body";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@joke_title", j.Joke_title);
+                    cmd.Parameters.AddWithValue("@joke_body", j.Joke_body);
+                    cmd.Parameters.AddWithValue("@username", j.Username);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                        j = new Joke(
+                            Convert.ToInt32(reader["id_joke"]),
+                            Convert.ToInt32(reader["id_user"]),
+                            Convert.ToInt32(reader["joke_like"]),
+                            Convert.ToString(reader["joke_title"]),
+                            Convert.ToString(reader["joke_body"]),
+                            Convert.ToString(reader["username"]),
+                            Convert.ToString(reader["user_img"]),
+                            Convert.ToInt32(reader["comment_count"])
+                            );
+                    return j.Id_joke;
                 }
             }
             catch (Exception ex)

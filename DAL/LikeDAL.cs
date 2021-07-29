@@ -15,7 +15,6 @@ namespace JokesPrj.DAL
         {
             this.conStr = conStr;
         }
-        //TODO: Fix it, need to fix the decremnet when i want to remove like on other joke
         public int CheckLikeStauts(Like L)
         {
             int res = 0;
@@ -161,7 +160,5 @@ namespace JokesPrj.DAL
                 throw new Exception(ex.Message);
             }
         }
-
-
     }
 }

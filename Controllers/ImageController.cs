@@ -48,5 +48,42 @@ namespace JokesPrj.Controllers
                 return Content(HttpStatusCode.BadRequest, res);
             }
         }
+
+        [Route("api/uploadjokeimage")]
+        [HttpPost]
+        public IHttpActionResult UploadJokeImage([FromBody] Img image)
+        {
+            //create the response object
+            ImgRes res = new ImgRes();
+            try
+            {
+                //path
+                string path = HttpContext.Current.Server.MapPath(@"~/Jokes/" + image.folder);
+
+                //create directory if not exists
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                //create the image data
+                string imageName = image.name + "." + image.type;
+                string imagePath = Path.Combine(path, imageName);
+                byte[] imageBytes = Convert.FromBase64String(image.uri);
+
+                //write the image and save it
+                File.WriteAllBytes(imagePath, imageBytes);
+
+                //update the resposne object
+                res.path = $"{Server.GetServerUrl()}/Jokes/{image.folder}/{imageName}";
+                res.isOk = true;
+                Globals.JokeDAL.SaveNewPhotoToDB(res.path, int.Parse(image.folder));
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                res.message = e.Message;
+                res.isOk = false;
+                return Content(HttpStatusCode.BadRequest, res);
+            }
+        }
     }
 }

@@ -22,11 +22,6 @@ namespace JokesPrj.Models
         public string User_img { get => user_img; set => user_img = value; }
         public string Username { get => username; set => username = value; }
 
-        public Comment()
-        {
-
-        }
-
         public Comment(int comment_id, int id_joke, int id_user, string comment_body, DateTime comment_date, string user_img, string username)
         {
             Comment_id = comment_id;

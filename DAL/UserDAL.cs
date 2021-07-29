@@ -50,7 +50,7 @@ namespace JokesPrj.DAL
                     cmd.Parameters.AddWithValue("@id_external", id_external);
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
-                        u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
+                        u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["email"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
                     return u;
                 }
             }
@@ -72,7 +72,7 @@ namespace JokesPrj.DAL
                     cmd.Parameters.AddWithValue("@id_user", user.Id_user);
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
-                        user = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
+                        user = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["email"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
                     return user;
                 }
             }
@@ -152,7 +152,7 @@ namespace JokesPrj.DAL
                     cmd.Parameters.AddWithValue("@username", u.Username);
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
-                        u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
+                        u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["email"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
                     return u;
                 }
             }
