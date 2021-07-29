@@ -3,7 +3,7 @@ import { Platform, StyleSheet, Alert, Image, Text, TextInput, View, TouchableOpa
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
-import ActionSheet from 'react-native-actionsheet';
+
 
 
 const urlLocal = "http://localhost:52763/"
@@ -38,67 +38,97 @@ export default function Post({ navigation, route }) {
                         Joke_body: Joke_body,
                         Username: route.params.user.Username,
                         User_img: user_img,
-                        Joke_img: post_img
                     })
                 });
                 let data = await result.json();
-                navigation.navigate("TabStack", { user: route.params.user });
+                let id_joke = data
+                console.log(data);
+                if (Platform.OS !== 'web')
+                {
+                    imageUploadA(id_joke)
+                }
+                else{
+                    imageUpload(id_joke)
+                }
+                
+                //navigation.navigate("TabStack", { user: route.params.user });
             } catch (e) {
                 console.error(e);
             }
         }
     }
-    const checkDevice = async () => {
-        if (Platform.OS !== 'web') {
-            await showActionSheet();
-        }
-        else {
-            await GalleryPicture();
+
+    const imageUpload = async (id_joke) => {
+        console.log(post_img);
+        console.log(Joke_title);
+        console.log(id_joke);
+        try {
+            let res = await fetch(url + "api/uploadjokeimage", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    uri: post_img.split(',')[1],
+                    name: Joke_title,
+                    folder: id_joke,
+                    type: 'jpg',
+                })
+            });
+            let data = await res.json();
+
+        } catch (e) {
+            console.error(e);
         }
     }
 
-    const showActionSheet = () => {
-        actionSheet.current.show();
-    };
-
-    const takePicture = async () => {
+    const imageUploadA = async (id_joke) => {
+        console.log(post_img);
+        console.log(Joke_title);
+        console.log(id_joke);
         try {
-            let result = await ImagePicker.launchCameraAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
-                aspect: [4, 3],
-                quality: 0.1
+            let res = await fetch(url + "api/uploadjokeimage", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    uri: post_img,
+                    name: Joke_title,
+                    folder: id_joke,
+                    type: 'jpg',
+                })
             });
-            if (!result.cancelled) {
-                if (Platform.OS !== 'web') {
-                    const content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
-                    result.uri = content
-                    await setPostImg(content);
-                }
-                else {
-                    Alert.alert("no live picture on web")
-                }
-            }
+            let data = await res.json();
+            console.log(data);
+
         } catch (e) {
             console.error(e);
         }
     }
 
 
+
     const GalleryPicture = async () => {
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
                 allowsEditing: true,
                 aspect: [4, 3],
                 quality: 0.7
             });
             if (!result.cancelled) {
                 if (Platform.OS !== 'web') {
-                    await setPostImg(result.uri);
-                } else {
-                    await setPostImg(result.uri);
+                    var content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
+                    result.uri = content
+                    setPostImg(result.uri)
                 }
+                else{
+                    setPostImg(result.uri)
+                }
+              
             }
         } catch (e) {
             console.error(e);
@@ -123,7 +153,7 @@ export default function Post({ navigation, route }) {
             />
             <View style={styles.imageHolder}>
                 <Text style={styles.text}>Add mem :) </Text>
-                <AntDesign style={styles.add_icon} onPress={checkDevice} name="upload" size={24} color="grey" fontWeight={'bold'} />
+                <AntDesign style={styles.add_icon} onPress={GalleryPicture} name="upload" size={24} color="grey" fontWeight={'bold'} />
                 <Image style={styles.post_image} source={{ uri: post_img }} />
             </View>
             <TouchableOpacity onPress={() => PostJoke()}>
@@ -131,27 +161,6 @@ export default function Post({ navigation, route }) {
                     <Text style={styles.textBtn}>Post</Text>
                 </View>
             </TouchableOpacity >
-            <ActionSheet
-                ref={actionSheet}
-                // Title of the Bottom Sheet
-                title={'Choose from where to upload a funny picture '}
-                // Options Array to show in bottom sheet
-                options={optionArray}
-                // Define cancel button index in the option array
-                // This will take the cancel option in bottom
-                // and will highlight it
-                cancelButtonIndex={2}
-                // Highlight any specific option
-                destructiveButtonIndex={1}
-                onPress={(index) => {
-                    if (index == 0) {
-                        takePicture();
-                    }
-                    else if (index == 1) {
-                        GalleryPicture();
-                    }
-                }}
-            />
         </View >
     )
 }
