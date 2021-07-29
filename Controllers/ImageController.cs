@@ -18,7 +18,6 @@ namespace JokesPrj.Controllers
         {
             //create the response object
             ImgRes res = new ImgRes();
-
             try
             {
                 //path

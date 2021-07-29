@@ -49,7 +49,7 @@ namespace JokesPrj.DAL
                     cmd.Parameters.AddWithValue("@id_user", user.Id_user);
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
-                        user = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]));
+                        user = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
                     return user;
                 }
             }
@@ -129,7 +129,7 @@ namespace JokesPrj.DAL
                     cmd.Parameters.AddWithValue("@username", u.Username);
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
-                        u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]));
+                        u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
                     return u;
                 }
             }
@@ -146,7 +146,7 @@ namespace JokesPrj.DAL
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     con.Open();
-                    string query = $"Insert into JokesUsers (username,phash,email,user_img,i_follow,follow_me,salt) VALUES (@username,@phash,@email,@user_img,@i_follow,@follow_me,@salt)";
+                    string query = $"Insert into JokesUsers (username,phash,email,user_img,i_follow,follow_me,salt,id_external) VALUES (@username,@phash,@email,@user_img,@i_follow,@follow_me,@salt,@id_external)";
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = u.Username;
                     cmd.Parameters.AddWithValue("@phash", SqlDbType.NVarChar).Value = u.Hash;
@@ -155,6 +155,7 @@ namespace JokesPrj.DAL
                     cmd.Parameters.AddWithValue("@i_follow", SqlDbType.Int).Value = 0;
                     cmd.Parameters.AddWithValue("@follow_me", SqlDbType.Int).Value = 0;
                     cmd.Parameters.AddWithValue("@salt", SqlDbType.NVarChar).Value = u.Salt;
+                    cmd.Parameters.AddWithValue("@id_external", SqlDbType.NVarChar).Value = u.Id_external;
                     int res = cmd.ExecuteNonQuery();
                     return res;
                 }

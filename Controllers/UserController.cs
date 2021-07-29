@@ -14,9 +14,10 @@ namespace JokesPrj.Controllers
         {
             try
             {
-                user = Globals.UserDAL.GetUserHash(user);
-                if (user != null)
-                    return Ok(user);
+                User checked_user = null;
+                checked_user = Globals.UserDAL.GetUserHash(user);
+                if (checked_user != null)
+                    return Ok(checked_user);
                 return Content(HttpStatusCode.NotFound, $"User {user.Username} or pass is incorrect");
             }
             catch (Exception ex)
@@ -66,13 +67,8 @@ namespace JokesPrj.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest("Invalid data.");
-                }
                 Created(new Uri(Request.RequestUri.AbsoluteUri + user), Globals.UserDAL.SaveNewUserToDB(user));
                 return Ok("User created successfully.");
-
             }
             catch (Exception ex)
             {
