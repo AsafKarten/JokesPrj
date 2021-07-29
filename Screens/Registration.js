@@ -102,7 +102,7 @@ export default function RegistrationNewUser({ navigation }) {
                 onChangeText={onChangeCPass}
                 secureTextEntry={true}
                 value={CPass}
-                placeholder="Confirm Password"
+                placeholder="Confirm password"
                 leftIcon={<Icon name='lock' size={24} color='black' />}
             />
             <TouchableOpacity onPress={() => Register()}>
