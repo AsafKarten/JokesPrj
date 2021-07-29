@@ -33,7 +33,7 @@ export default function Login({ navigation }) {
 
     useEffect(() => {
         (async () => {
-            //await getData();
+            await getData();
         })()
     }, [])
 
@@ -113,9 +113,6 @@ export default function Login({ navigation }) {
                         await updateLoggedUser(user_data.Username);
                     }
                     else {
-                        console.log('====================================');
-                        console.log("else same username");
-                        console.log('====================================');
                         setBadUsername(username);
                         setExEmail(email);
                         setExImg(img);
@@ -123,12 +120,12 @@ export default function Login({ navigation }) {
                         setModalVisible(!modalVisible);
                     }
                 } catch (error) {
-
+                    console.error(error);
                 }
 
             }
         } catch (error) {
-
+            console.error(error);
         }
     }
 
