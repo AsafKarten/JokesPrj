@@ -33,7 +33,7 @@ export default function Login({ navigation }) {
 
     useEffect(() => {
         (async () => {
-            await getData();
+            //await getData();
         })()
     }, [])
 
@@ -97,20 +97,35 @@ export default function Login({ navigation }) {
                 let res = await addNewExternalUser(id, username, email, img)
             }
             else {
-                if (data.Id_external == id) {
-                    await updateLoggedUser(username);
-                }
-                else {
-                    console.log('====================================');
-                    console.log("else same username");
-                    console.log('====================================');
-                    setBadUsername(username);
-                    setExEmail(email);
-                    setExImg(img);
-                    setExId(id)
-                    setModalVisible(!modalVisible);
+                try {
+                    let result = await fetch(url + "api/get/externalUser", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json; charset=UTF-8',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            Id_external: id
+                        })
+                    });
+                    let user_data = await result.json();
+                    if (user_data.Id_external == id) {
+                        await updateLoggedUser(user_data.Username);
+                    }
+                    else {
+                        console.log('====================================');
+                        console.log("else same username");
+                        console.log('====================================');
+                        setBadUsername(username);
+                        setExEmail(email);
+                        setExImg(img);
+                        setExId(id)
+                        setModalVisible(!modalVisible);
+                    }
+                } catch (error) {
 
                 }
+
             }
         } catch (error) {
 
@@ -120,6 +135,7 @@ export default function Login({ navigation }) {
     const HideModal = () => {
         addNewExternalUser(exId, new_username, exEmail, exImg)
         setModalVisible(!modalVisible);
+        onChangeNewUsername('');
     }
 
     const addNewExternalUser = async (id, username, email, img) => {
@@ -314,19 +330,19 @@ export default function Login({ navigation }) {
                                     <Text style={styles.textBtn}>Save</Text>
                                 </View>
                             </TouchableOpacity>
-                            <Pressable
+                            {/* <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => setModalVisible(!modalVisible)}>
                                 <Text style={styles.textStyle}>Hide Modal</Text>
-                            </Pressable>
+                            </Pressable> */}
                         </View>
                     </View>
                 </Modal>
-                <Pressable
+                {/* <Pressable
                     style={[styles.button, styles.buttonOpen]}
                     onPress={() => setModalVisible(true)}>
                     <Text style={styles.textStyle}>Show Modal</Text>
-                </Pressable>
+                </Pressable> */}
             </View>
         </View>
     );
@@ -343,7 +359,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: 'center',
         alignItems: 'center',
-        margin: 5
+        margin: 10
     },
     button_normal: {
         alignItems: 'center',

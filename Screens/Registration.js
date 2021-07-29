@@ -61,9 +61,8 @@ export default function RegistrationNewUser({ navigation }) {
                         Email: Email,
                         Hash: hash,
                         Salt: salt,
-                        User_img: '',
+                        User_img: defaultImg,
                         Id_external: ''
-
                     })
 
                 });
