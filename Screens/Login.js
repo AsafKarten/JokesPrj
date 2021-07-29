@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Modal, View, StyleSheet, Pressable, Text, TouchableOpacity } from 'react-native';
+import { Alert, Modal, View, StyleSheet, Pressable, Text, TextInput, TouchableOpacity } from 'react-native';
 import * as Facebook from 'expo-facebook';
 import * as Google from 'expo-google-app-auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,6 +24,10 @@ bcrypt.setRandomFallback((len) => {
 export default function Login({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
     const [Username, onChangeUsername] = useState()
+    const [badUsername, setBadUsername] = useState();
+    const [exEmail, setExEmail] = useState();
+    const [exId, setExId] = useState();
+    const [exImg, setExImg] = useState();
     const [new_username, onChangeNewUsername] = useState()
     const [Pass, onChangePass] = useState();
 
@@ -41,7 +45,6 @@ export default function Login({ navigation }) {
         }
         else {
             navigation.navigate("Login");
-            return;
         }
     }
 
@@ -79,7 +82,6 @@ export default function Login({ navigation }) {
 
     const RegistrationUser = async (id, username, email, img) => {
         try {
-            await clearAsyncStorage();
             let result = await fetch(url + "api/user", {
                 method: 'POST',
                 headers: {
@@ -99,13 +101,25 @@ export default function Login({ navigation }) {
                     await updateLoggedUser(username);
                 }
                 else {
-                    //ChangeUserName(id, username, email, img)
-                    setModalVisible(true);
+                    console.log('====================================');
+                    console.log("else same username");
+                    console.log('====================================');
+                    setBadUsername(username);
+                    setExEmail(email);
+                    setExImg(img);
+                    setExId(id)
+                    setModalVisible(!modalVisible);
+
                 }
             }
         } catch (error) {
 
         }
+    }
+
+    const HideModal = () => {
+        addNewExternalUser(exId, new_username, exEmail, exImg)
+        setModalVisible(!modalVisible);
     }
 
     const addNewExternalUser = async (id, username, email, img) => {
@@ -133,9 +147,6 @@ export default function Login({ navigation }) {
                 })
             });
             let data = await result.json();
-            console.log('====================================');
-            console.log("after register first time " + data);
-            console.log('====================================');
             await updateLoggedUser(username_external);
         } catch (error) {
             console.error(error)
@@ -197,9 +208,7 @@ export default function Login({ navigation }) {
         }
     }
 
-    const editUsername = (new_username) => {
 
-    }
 
     const LoginNormal = async (Username, Pass) => {
         try {
@@ -293,15 +302,14 @@ export default function Login({ navigation }) {
                     }}>
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Username already exists,please choose another username</Text>
-                            <Input
+                            <Text style={styles.modalText}>The username {badUsername} already exists,please choose another username</Text>
+                            <TextInput
                                 style={styles.input}
                                 onChangeText={onChangeNewUsername}
                                 value={new_username}
-                                placeholder="Username"
-                                leftIcon={<Icon name='user' size={24} color='black' />}
+                                placeholder="new username"
                             />
-                            <TouchableOpacity onPress={() => editUsername(new_username)}>
+                            <TouchableOpacity onPress={() => HideModal()}>
                                 <View style={styles.button_normal}>
                                     <Text style={styles.textBtn}>Save</Text>
                                 </View>
@@ -335,7 +343,6 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: 'center',
         alignItems: 'center',
-        justifyContent: 'center',
         margin: 5
     },
     button_normal: {
