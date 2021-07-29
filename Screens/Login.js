@@ -52,9 +52,6 @@ export default function Login({ navigation }) {
     }
 
     const updateLoggedUser = async (username) => {
-        console.log('====================================');
-        console.log(username);
-        console.log('====================================');
         try {
             let result = await fetch(url + "api/user", {
                 method: 'POST',
@@ -78,6 +75,7 @@ export default function Login({ navigation }) {
 
     const RegistrationUser = async (id, username, email, img) => {
         try {
+            await clearAsyncStorage();
             let result = await fetch(url + "api/user", {
                 method: 'POST',
                 headers: {
@@ -89,14 +87,8 @@ export default function Login({ navigation }) {
                 })
             });
             let data = await result.json();
-            console.log('====================================');
-            console.log(data);
-            console.log('====================================');
             if (data.Id_user == 0) {
                 let res = await addNewExternalUser(id, username, email, img)
-                console.log('====================================');
-                console.log("check res " + res);
-                console.log('====================================');
             }
             else {
                 if (data.Id_external == id) {
@@ -195,6 +187,14 @@ export default function Login({ navigation }) {
         }
     }
 
+    const clearAsyncStorage = async () => {
+        try {
+            await AsyncStorage.clear();
+            console.log('Done');
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const LoginNormal = async (Username, Pass) => {
         try {
@@ -203,6 +203,7 @@ export default function Login({ navigation }) {
                 return
             }
             else {
+                await clearAsyncStorage();
                 let result = await fetch(url + "api/user", {
                     method: 'POST',
                     headers: {
@@ -220,6 +221,7 @@ export default function Login({ navigation }) {
                     return;
                 }
                 else {
+
                     if (data.User_img.indexOf("?asid") == -1)
                         data.User_img = `${data.User_img}?t=${Date.now()}`;
                     storeData(data);
