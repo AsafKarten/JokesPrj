@@ -7,7 +7,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
 
-const defaultImg = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_icon.jpg"
+ const defaultImg = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_icon.jpg"
 
 var bcrypt = require('bcryptjs');
 
@@ -61,11 +61,14 @@ export default function RegistrationNewUser({ navigation }) {
                         Email: Email,
                         Hash: hash,
                         Salt: salt,
-                        User_img: defaultImg
+                        User_img: '',
+                        Id_external: ''
+
                     })
 
                 });
                 let data = await result.json();
+                console.log(data);
                 navigation.navigate("Login");
             } catch (e) {
                 console.error(e)
