@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, View, StyleSheet, TextInput, Text, TouchableOpacity } from 'react-native';
+import { Alert, Modal, View, StyleSheet, Pressable, Text, TouchableOpacity } from 'react-native';
 import * as Facebook from 'expo-facebook';
 import * as Google from 'expo-google-app-auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Input } from 'react-native-elements';
 var isaac = require('isaac');
 
 
@@ -20,7 +22,9 @@ bcrypt.setRandomFallback((len) => {
 
 
 export default function Login({ navigation }) {
+    const [modalVisible, setModalVisible] = useState(false);
     const [Username, onChangeUsername] = useState()
+    const [new_username, onChangeNewUsername] = useState()
     const [Pass, onChangePass] = useState();
 
     useEffect(() => {
@@ -95,8 +99,8 @@ export default function Login({ navigation }) {
                     await updateLoggedUser(username);
                 }
                 else {
-                    // TODO: Modal to change username
                     //ChangeUserName(id, username, email, img)
+                    setModalVisible(true);
                 }
             }
         } catch (error) {
@@ -177,9 +181,6 @@ export default function Login({ navigation }) {
             if (type === 'success') {
                 const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email,picture&access_token=${token}`);
                 let res = await response.json();
-                console.log('====================================');
-                console.log(res);
-                console.log('====================================');
                 await RegistrationUser(res.id, res.name, res.email, res.picture.data.url)
             }
         } catch (message) {
@@ -194,6 +195,10 @@ export default function Login({ navigation }) {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    const editUsername = (new_username) => {
+
     }
 
     const LoginNormal = async (Username, Pass) => {
@@ -237,28 +242,30 @@ export default function Login({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <Input
+                style={styles.input}
+                onChangeText={onChangeUsername}
+                value={Username}
+                placeholder="Username"
+                leftIcon={<Icon name='user' size={24} color='black' />}
+            />
+            <Input
+                style={styles.input}
+                onChangeText={onChangePass}
+                value={Pass}
+                secureTextEntry={true}
+                placeholder="Password"
+                leftIcon={<Icon name='lock' size={24} color='black' />}
+            />
             <View>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={onChangeUsername}
-                    value={Username}
-                    placeholder="Username"
-                />
-                <TextInput
-                    style={styles.input}
-                    onChangeText={onChangePass}
-                    value={Pass}
-                    secureTextEntry={true}
-                    placeholder="Password"
-                />
                 <TouchableOpacity onPress={() => LoginNormal(Username, Pass)}>
-                    <View style={styles.button}>
+                    <View style={styles.button_normal}>
                         <Text style={styles.textBtn}>Login</Text>
                     </View>
                 </TouchableOpacity>
                 <Text style={styles.text}>Don't have an account yet ?</Text>
                 <TouchableOpacity onPress={() => navigation.navigate('Registration')}>
-                    <View style={styles.button}>
+                    <View style={styles.button_normal}>
                         <Text style={styles.textBtn}>Sign up!</Text>
                     </View>
                 </TouchableOpacity>
@@ -275,6 +282,44 @@ export default function Login({ navigation }) {
                     </View>
                 </TouchableOpacity>
             </View>
+            <View style={styles.centeredView}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        Alert.alert("Modal has been closed.");
+                        setModalVisible(!modalVisible);
+                    }}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalText}>Username already exists,please choose another username</Text>
+                            <Input
+                                style={styles.input}
+                                onChangeText={onChangeNewUsername}
+                                value={new_username}
+                                placeholder="Username"
+                                leftIcon={<Icon name='user' size={24} color='black' />}
+                            />
+                            <TouchableOpacity onPress={() => editUsername(new_username)}>
+                                <View style={styles.button_normal}>
+                                    <Text style={styles.textBtn}>Save</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => setModalVisible(!modalVisible)}>
+                                <Text style={styles.textStyle}>Hide Modal</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </Modal>
+                <Pressable
+                    style={[styles.button, styles.buttonOpen]}
+                    onPress={() => setModalVisible(true)}>
+                    <Text style={styles.textStyle}>Show Modal</Text>
+                </Pressable>
+            </View>
         </View>
     );
 }
@@ -286,15 +331,14 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        width: 200,
-        borderWidth: 1,
-        borderRadius: 8,
+        width: 100,
         fontWeight: "bold",
         textAlign: 'center',
+        alignItems: 'center',
         justifyContent: 'center',
-        margin: 15
+        margin: 5
     },
-    button: {
+    button_normal: {
         alignItems: 'center',
         margin: 15,
         borderRadius: 8,
@@ -346,6 +390,48 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         alignItems: 'center',
         textAlign: 'center',
+    },
+    //Modal
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+    },
+    buttonOpen: {
+        backgroundColor: "#F194FF",
+    },
+    buttonClose: {
+        backgroundColor: "#2196F3",
+    },
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
     }
 });
 
