@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Button, Text } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, TextInput, Button, Text } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Input } from 'react-native-elements';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
@@ -71,40 +74,43 @@ export default function RegistrationNewUser({ navigation }) {
     }
 
     return (
-
         <View style={styles.container}>
-            <TextInput
+            <Input
                 style={styles.input}
                 onChangeText={onChangeUsername}
                 value={Username}
                 placeholder="Username"
+                leftIcon={<Icon name='user' size={24} color='black' />}
             />
-            <TextInput
+            <Input
                 style={styles.input}
                 onChangeText={onChangeEmail}
                 value={Email}
                 placeholder="Email"
+                leftIcon={<MaterialIcons name="email" size={24} color="black" />}
             />
-            <TextInput
+            <Input
                 style={styles.input}
                 onChangeText={onChangePass}
                 value={Pass}
                 secureTextEntry={true}
                 placeholder="Password"
+                leftIcon={<Icon name='lock' size={24} color='black' />}
             />
-            <TextInput
+            <Input
                 style={styles.input}
                 onChangeText={onChangeCPass}
                 secureTextEntry={true}
                 value={CPass}
                 placeholder="Confirm Password"
+                leftIcon={<Icon name='lock' size={24} color='black' />}
             />
-            <Button
-                title="Register!"
-                onPress={() => Register()}
-            />
+            <TouchableOpacity onPress={() => Register()}>
+                <View style={styles.button}>
+                    <Text style={styles.textBtn}>Register</Text>
+                </View>
+            </TouchableOpacity>
         </View>
-
     );
 
 }
@@ -117,14 +123,21 @@ const styles = StyleSheet.create({
     input: {
         height: 40,
         width: 200,
-        borderWidth: 1,
-        borderRadius: 8,
         fontWeight: "bold",
         textAlign: 'center',
         justifyContent: 'center',
         margin: 15
     },
-    text: {
-        color: 'red',
-    }
+    textBtn: {
+        color: "white",
+        fontWeight: "bold",
+        fontSize: 20
+    },
+    button: {
+        alignItems: 'center',
+        margin: 15,
+        borderRadius: 8,
+        padding: 10,
+        backgroundColor: "orange"
+    },
 });

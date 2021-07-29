@@ -25,7 +25,7 @@ export default function Login({ navigation }) {
 
     useEffect(() => {
         (async () => {
-            // await getData();
+            //await getData();
         })()
     }, [])
 
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     text: {
-        color: "red",
+        color: "brown",
         fontWeight: "bold",
         alignItems: 'center',
         textAlign: 'center',
