@@ -7,19 +7,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
 var isaac = require('isaac');
 
-
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
-
-
-
 
 var bcrypt = require('bcryptjs');
 bcrypt.setRandomFallback((len) => {
     const buf = new Uint8Array(len);
     return buf.map(() => Math.floor(isaac.random() * 256));
 });
-
 
 export default function Login({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false);
@@ -136,7 +131,6 @@ export default function Login({ navigation }) {
     }
 
     const addNewExternalUser = async (id, username, email, img) => {
-
         try {
             const id_external = id
             const username_external = username
@@ -221,8 +215,6 @@ export default function Login({ navigation }) {
         }
     }
 
-
-
     const LoginNormal = async (Username, Pass) => {
         try {
             if (Username == null || Username == "" || Pass == null || Pass == "") {
@@ -279,31 +271,29 @@ export default function Login({ navigation }) {
                 placeholder="Password"
                 leftIcon={<Icon name='lock' size={24} color='black' />}
             />
-            <View>
-                <TouchableOpacity onPress={() => LoginNormal(Username, Pass)}>
-                    <View style={styles.button_normal}>
-                        <Text style={styles.textBtn}>Login</Text>
-                    </View>
-                </TouchableOpacity>
-                <Text style={styles.text}>Don't have an account yet ?</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('Registration')}>
-                    <View style={styles.button_normal}>
-                        <Text style={styles.textBtn}>Sign up!</Text>
-                    </View>
-                </TouchableOpacity>
-                <Text style={styles.line} />
-                <Text style={styles.textOption} >Other login options</Text>
-                <TouchableOpacity onPress={() => LogInWithFacebook()}>
-                    <View style={styles.buttonFB}>
-                        <Text style={styles.textFB}>Facebook</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => LogInWithGoogle()} >
-                    <View style={styles.buttonGoogle}>
-                        <Text style={styles.textGo}>Google</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity onPress={() => LoginNormal(Username, Pass)}>
+                <View style={styles.button_normal}>
+                    <Text style={styles.textBtn}>Login</Text>
+                </View>
+            </TouchableOpacity>
+            <Text style={styles.text}>Don't have an account yet ?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Registration')}>
+                <View style={styles.button_normal}>
+                    <Text style={styles.textBtn}>Sign up!</Text>
+                </View>
+            </TouchableOpacity>
+            <Text style={styles.line} />
+            <Text style={styles.textOption} >Other login options</Text>
+            <TouchableOpacity onPress={() => LogInWithFacebook()}>
+                <View style={styles.buttonFB}>
+                    <Text style={styles.textFB}>Facebook</Text>
+                </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => LogInWithGoogle()} >
+                <View style={styles.buttonGoogle}>
+                    <Text style={styles.textGo}>Google</Text>
+                </View>
+            </TouchableOpacity>
             <View style={styles.centeredView}>
                 <Modal
                     animationType="slide"
