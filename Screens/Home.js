@@ -102,7 +102,7 @@ export default function Home({ navigation, user }) {
             </View>
             <FlatList
                 data={allJokes}
-                keyExtractor={(item) => item.Id_user}
+                keyExtractor={(item) => item.Id_joke}
                 renderItem={({ item }) => (
                     <View style={styles.list}>
                         <View style={styles.buttonGroup}>

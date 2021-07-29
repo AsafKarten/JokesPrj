@@ -153,7 +153,7 @@ export default function FriendProfile({ navigation, route }) {
                 </View>
                 <FlatList
                     data={profileJokes}
-                    keyExtractor={(item) => item.Id_user}
+                    keyExtractor={(item) => item.Id_joke}
                     renderItem={({ item }) => (
                         <View style={styles.list}>
                             <View style={styles.buttonGroup}>

@@ -323,7 +323,7 @@ export default function Profile({ navigation, user }) {
 <View style={styles.container}>
             <FlatList
                 data={profileJokes}
-                keyExtractor={(item) => item.Id_user}
+                keyExtractor={(item) => item.Id_joke}
                 renderItem={({ item }) => (
                     <View style={styles.list}>
                         <View style={styles.buttonGroup}>
