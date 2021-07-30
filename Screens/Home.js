@@ -24,10 +24,16 @@ export default function Home({ navigation, user }) {
         }
     }
 
+
+
+
     useEffect(() => {
-        (async () => {
-            await LoadJokes();
-        })()
+        const interval = setInterval(() => {
+            (async () => {
+                await LoadJokes();
+            })()
+        }, 9000);
+        return () => clearInterval(interval);
     }, [])
 
     useEffect(() => {
