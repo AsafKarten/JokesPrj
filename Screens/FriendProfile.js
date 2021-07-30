@@ -21,6 +21,14 @@ export default function FriendProfile({ navigation, route }) {
     const user = route.params.route.user;
 
     useEffect(() => {
+        const loaderjokes = navigation.addListener('focus', () => {
+            GetFriendData();
+            LoadJokes();
+        });
+        return loaderjokes;
+    }, [navigation])
+
+    useEffect(() => {
         const interval = setInterval(() => {
             (async () => {
                 await GetFriendData();
@@ -29,6 +37,8 @@ export default function FriendProfile({ navigation, route }) {
         }, 9000);
         return () => clearInterval(interval);
     }, [])
+
+
 
     const GetFriendData = async () => {
         try {
