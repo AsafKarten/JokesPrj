@@ -140,10 +140,10 @@ export default function FriendProfile({ navigation, route }) {
                 </View>
                 {/* <View style={styles.profileHolder}> */}
                     {/* <View style={styles.profileHeader}> */}
-                        
+                        <Text style={styles.username}>{other_user.Username}</Text>
                     {/* </View> */}
                     {/* <View style={styles.imageHolder}> */}
-                        <Text style={styles.username}>{other_user.username}</Text>
+                        
                         <Image style={styles.profile_image} source={{ uri: `${other_user.User_img}?t=${Date.now()}` }} />
                     {/* </View> */}
                     {/* <View style={styles.buttonGroup}> */}
@@ -239,7 +239,6 @@ const styles = StyleSheet.create({
         color: 'orange',
         fontSize: 25,
         fontWeight: 'bold',
-        padding: 10,
     },
     imageHolder: {
         // flexDirection: 'row',
