@@ -131,6 +131,11 @@ export default function Joke({ navigation, route }) {
 
     const AddComment = async () => {
         try {
+            if(comment=="")
+            {
+                Alert.alert("cant submit an empty comment")
+            }
+            else{
             let result = await fetch(url + "api/add/comment", {
                 method: 'POST',
                 headers: {
@@ -149,6 +154,7 @@ export default function Joke({ navigation, route }) {
             let data = await result.json();
             LoadComments();
             onChangeComment("")
+        }
         } catch (e) {
             console.error(e)
         }
