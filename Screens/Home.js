@@ -39,7 +39,7 @@ export default function Home({ navigation, user }) {
                 await LoadJokes();
                 if (user.User_img.indexOf("?asid") == -1)
                     user.User_img = `${user.User_img}?t=${Date.now()}`
-                navigation.navigate("TabStack", { user: user })
+                //navigation.navigate("TabStack", { user: user })
             }
         });
         return loader_jokes;

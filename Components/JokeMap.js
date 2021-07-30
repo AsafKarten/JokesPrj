@@ -48,25 +48,7 @@ export default function JokeMap({ navigation, route }) {
     }
 
 
-    const GetlikesJokes = async () => {
-        try {
-            let result = await fetch(url + "api/your/likes/jokes", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    Id_user: userId
-                })
 
-            });
-            let data = [...await result.json()];
-            setList(data);
-        } catch (e) {
-            console.error(e);
-        }
-    }
     const MoveToJoke = (item) => {
         var route = { user: user, item: item }
         console.log(route);
@@ -96,7 +78,7 @@ export default function JokeMap({ navigation, route }) {
         console.log(Id_joke, Id_user, User_img, Username)
         console.log(data);
         LoadJokes();
-        //GetlikesJokes();
+        
     }
 
 
