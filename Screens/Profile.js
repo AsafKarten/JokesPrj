@@ -318,6 +318,21 @@ export default function Profile({ navigation, user }) {
         }
     }
 
+    const MoveToProfile = (item) => {
+        //for i follow
+        if (item.Id_user == user.Id_user) {
+            item.Id_user=item.Target_id
+            var route = { user: user, item: item }
+            navigation.navigate("FriendProfile", { navigation: navigation, route: route });
+        }
+        //for follow me
+        else {
+            var route = { user: user, item: item }
+            navigation.navigate("FriendProfile", { navigation: navigation, route: route });
+        }
+
+    }
+
 
     return (
         <View style={styles.container}>
@@ -448,8 +463,8 @@ export default function Profile({ navigation, user }) {
                             renderItem={({ item }) => (
                                 <View style={styles.list}>
                                     <View style={styles.ModalCube}>
-                                        <Image source={{ uri: item.Target_img }} style={styles.ModalUserImg} />
-                                        <Text style={styles.ModalUserName}>{item.Target_username}</Text>
+                                        <Image onPress={()=> MoveToProfile(item)} source={{ uri: item.Target_img }} style={styles.ModalUserImg} />
+                                        <Text onPress={()=> MoveToProfile(item)} style={styles.ModalUserName}>{item.Target_username}</Text>
                                     </View>
                                 </View>
                             )} />
@@ -480,8 +495,8 @@ export default function Profile({ navigation, user }) {
                             renderItem={({ item }) => (
                                 <View style={styles.list}>
                                     <View style={styles.ModalCube}>
-                                        <Image source={{ uri: item.User_img }} style={styles.ModalUserImg} />
-                                        <Text style={styles.ModalUserName}>{item.Username}</Text>
+                                        <Image onPress={()=> MoveToProfile(item)} source={{ uri: item.User_img }} style={styles.ModalUserImg} />
+                                        <Text onPress={()=> MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
                                     </View>
                                 </View>
                             )} />
@@ -525,7 +540,7 @@ const styles = StyleSheet.create({
     profileHolder: {
         flexWrap: 'wrap',
         flex: 1,
-        justifyContent: 'center',
+        // justifyContent: 'center',
         alignItems: 'center',
         padding: 8,
         margin: 8,
