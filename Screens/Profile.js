@@ -34,7 +34,6 @@ export default function Profile({ navigation, user }) {
     const dateTime = date + ' ' + time;
 
     useEffect(() => {
-        const interval = setInterval(() => {
             (async () => {
                 if (user !== undefined) {
                     setUserName(user.Username)
@@ -44,10 +43,6 @@ export default function Profile({ navigation, user }) {
                     LoadJokes(user.Id_user)
                     LoadIFollowList(user.Id_user)
                     LoadFollowMeList(user.Id_user)
-                    console.log(followMeList);
-                    console.log(iFollowList);
-                    console.log(user.Id_user);
-
                 }
                 if (Platform.OS !== 'web') {
                     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -56,14 +51,14 @@ export default function Profile({ navigation, user }) {
                     }
                 }
             })()
-        }, 8000);
-        return () => clearInterval(interval);
     }, [])
 
     useEffect(() => {
         const loaderjokes = navigation.addListener('focus', () => {
             if (user !== undefined) {
                 LoadJokes(user.Id_user)
+                LoadIFollowList(user.Id_user)
+                LoadFollowMeList(user.Id_user)
             }
         });
         return loaderjokes;
