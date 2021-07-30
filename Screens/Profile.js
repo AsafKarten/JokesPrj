@@ -588,8 +588,10 @@ const styles = StyleSheet.create({
     },
     profileFooter: {
 
+        textAlign: 'center',
         margin: 5,
-        padding: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 
     //User posts style
@@ -673,9 +675,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     btnTakePicture: {
-        width: 70,
-        height: 70,
-        bottom: 0,
         borderRadius: 50,
         backgroundColor: '#fff'
     },
