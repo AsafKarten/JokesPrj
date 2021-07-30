@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Alert, Modal,TouchableHighlight, Platform, Button, StyleSheet, Image, Text, TextInput, View, FlatList, TouchableOpacity } from 'react-native';
+import { Alert, Modal, TouchableHighlight, Platform, Button, StyleSheet, Image, Text, TextInput, View, FlatList, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -34,27 +34,30 @@ export default function Profile({ navigation, user }) {
     const dateTime = date + ' ' + time;
 
     useEffect(() => {
-        (async () => {
-            if (user !== undefined) {
-                setUserName(user.Username)
-                if (user.User_img.indexOf("?asid") == -1)
-                    setImage(`${user.User_img}?t=${Date.now()}`)
-                setUserId(user.Id_user)
-                LoadJokes(user.Id_user)
-                 LoadIFollowList(user.Id_user)
-                 LoadFollowMeList(user.Id_user)
-                 console.log(followMeList);
-                 console.log(iFollowList);
-                 console.log(user.Id_user);
-               
-            }
-            if (Platform.OS !== 'web') {
-                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-                if (status !== 'granted') {
-                    Alert.alert('Sorry, we need media permissions to make this work!');
+        const interval = setInterval(() => {
+            (async () => {
+                if (user !== undefined) {
+                    setUserName(user.Username)
+                    if (user.User_img.indexOf("?asid") == -1)
+                        setImage(`${user.User_img}?t=${Date.now()}`)
+                    setUserId(user.Id_user)
+                    LoadJokes(user.Id_user)
+                    LoadIFollowList(user.Id_user)
+                    LoadFollowMeList(user.Id_user)
+                    console.log(followMeList);
+                    console.log(iFollowList);
+                    console.log(user.Id_user);
+
                 }
-            }
-        })()
+                if (Platform.OS !== 'web') {
+                    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                    if (status !== 'granted') {
+                        Alert.alert('Sorry, we need media permissions to make this work!');
+                    }
+                }
+            })()
+        }, 8000);
+        return () => clearInterval(interval);
     }, [])
 
     useEffect(() => {
@@ -276,7 +279,7 @@ export default function Profile({ navigation, user }) {
         console.log(route);
         navigation.navigate("Joke", { navigation: navigation, route: route });
     }
-    
+
     const LoadIFollowList = async (id_user) => {
         try {
             let result = await fetch(url + "api/i/follow", {
@@ -321,7 +324,7 @@ export default function Profile({ navigation, user }) {
     const MoveToProfile = (item) => {
         //for i follow
         if (item.Id_user == user.Id_user) {
-            item.Id_user=item.Target_id
+            item.Id_user = item.Target_id
             var route = { user: user, item: item }
             navigation.navigate("FriendProfile", { navigation: navigation, route: route });
         }
@@ -463,8 +466,8 @@ export default function Profile({ navigation, user }) {
                             renderItem={({ item }) => (
                                 <View style={styles.list}>
                                     <View style={styles.ModalCube}>
-                                        <Image onPress={()=> MoveToProfile(item)} source={{ uri: item.Target_img }} style={styles.ModalUserImg} />
-                                        <Text onPress={()=> MoveToProfile(item)} style={styles.ModalUserName}>{item.Target_username}</Text>
+                                        <Image onPress={() => MoveToProfile(item)} source={{ uri: item.Target_img }} style={styles.ModalUserImg} />
+                                        <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Target_username}</Text>
                                     </View>
                                 </View>
                             )} />
@@ -495,8 +498,8 @@ export default function Profile({ navigation, user }) {
                             renderItem={({ item }) => (
                                 <View style={styles.list}>
                                     <View style={styles.ModalCube}>
-                                        <Image onPress={()=> MoveToProfile(item)} source={{ uri: item.User_img }} style={styles.ModalUserImg} />
-                                        <Text onPress={()=> MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
+                                        <Image onPress={() => MoveToProfile(item)} source={{ uri: item.User_img }} style={styles.ModalUserImg} />
+                                        <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
                                     </View>
                                 </View>
                             )} />
@@ -679,8 +682,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
 
-       //modal style
-       centeredView: {
+    //modal style
+    centeredView: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',

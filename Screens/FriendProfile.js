@@ -14,17 +14,20 @@ export default function FriendProfile({ navigation, route }) {
     const [profileJokes, setList] = useState([
         { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_likes: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
     ]);
-    const [other_user, setOtherUser] = useState({ Id_user: 0, Username: '',Email:'', User_img: default_img, I_follow: 0, Follow_me: 0 });
+    const [other_user, setOtherUser] = useState({ Id_user: 0, Username: '', Email: '', User_img: default_img, I_follow: 0, Follow_me: 0 });
     const [search, onChangeSearch] = useState();
     const friendId = route.params.route.item.Id_user
     const item = route.params.route.item;
     const user = route.params.route.user;
-    useEffect(() => {
-        (async () => {
-            await GetFriendData();
-            await LoadJokes();
-        })()
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            (async () => {
+                await GetFriendData();
+                await LoadJokes();
+            })()
+        }, 9000);
+        return () => clearInterval(interval);
     }, [])
 
     const GetFriendData = async () => {
@@ -39,7 +42,7 @@ export default function FriendProfile({ navigation, route }) {
                     Id_user: item.Id_user
                 })
             });
-            let data = await result.json(); 
+            let data = await result.json();
             setOtherUser(data);
             console.log(data);
         } catch (error) {
@@ -126,7 +129,7 @@ export default function FriendProfile({ navigation, route }) {
     return (
         <View style={styles.container}>
             <View style={styles.container}>
-                
+
                 <View style={styles.search_holder}>
                     <TextInput style={styles.search}
                         onChangeText={onChangeSearch}
