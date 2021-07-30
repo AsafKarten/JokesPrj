@@ -49,6 +49,8 @@ namespace JokesPrj.DAL
             return res;
         }
 
+
+
         private int AddNewFollowToDB(Follow f)
         {
             try
@@ -126,6 +128,40 @@ namespace JokesPrj.DAL
                     }
                     return followList;
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public List<Follow> GetAllFollowersOfUser(int id_user)
+        {
+            try
+            {
+                Follow F = null;
+                List<Follow> Followers = new List<Follow>();
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    string query = $"SELECT * FROM Follow WHERE target_id= @id_user";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@id_user", id_user);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        F = new Follow(
+                            Convert.ToInt32(reader["follow_id"]),
+                            Convert.ToInt32(reader["target_id"]),
+                            Convert.ToString(reader["target_username"]),
+                            Convert.ToString(reader["target_img"])
+
+                            );
+                        Followers.Add(F);
+                    }
+                }
+                return Followers;
             }
             catch (Exception ex)
             {

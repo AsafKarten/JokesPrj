@@ -22,6 +22,16 @@
         public string Salt { get => salt; set => salt = value; }
         public string Id_external { get => id_external; set => id_external = value; }
 
+        public User()
+        {
+
+        }
+
+        public User(string username)
+        {
+            Username = username;
+        }
+
         public User(int id_user, string username, string user_img, int i_follow, int follow_me)
         {
             Id_user = id_user;
