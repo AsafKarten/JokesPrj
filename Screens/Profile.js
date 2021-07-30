@@ -54,11 +54,11 @@ export default function Profile({ navigation, user }) {
     }, [])
 
     useEffect(() => {
-        const loaderjokes = navigation.addListener('focus', () => {
+        const loaderjokes = navigation.addListener('focus',async () => {
             if (user !== undefined) {
-                LoadJokes(user.Id_user)
-                LoadIFollowList(user.Id_user)
-                LoadFollowMeList(user.Id_user)
+               await LoadJokes(user.Id_user)
+               await LoadIFollowList(user.Id_user)
+               await LoadFollowMeList(user.Id_user)
             }
         });
         return loaderjokes;
