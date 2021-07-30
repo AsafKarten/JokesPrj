@@ -27,10 +27,9 @@ namespace JokesPrj.Controllers
             }
         }
 
-
         [HttpPost]
-        [Route("api/your/followers")]
-        public IHttpActionResult GetYourFollowers([FromBody] Follow F)
+        [Route("api/i/follow")]
+        public IHttpActionResult GetIFollowList([FromBody] Follow F)
         {
             try
             {
@@ -38,7 +37,31 @@ namespace JokesPrj.Controllers
                 {
                     return BadRequest("Invalid data.");
                 }
-                List<Follow> Followers_list = Globals.FollowDAL.GetAllFollowersOfUser(F.Id_user);
+                List<Follow> IFollowersList = Globals.FollowDAL.GetAllFollowing(F.Id_user);
+                Created(new Uri(Request.RequestUri.AbsoluteUri + F), IFollowersList);
+                if (IFollowersList != null)
+                {
+                    return Ok(IFollowersList);
+                }
+                throw new Exception("You are no followers anybody");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/your/followers")]
+        public IHttpActionResult GetFollowersMeList([FromBody] Follow F)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Invalid data.");
+                }
+                List<Follow> Followers_list = Globals.FollowDAL.GetFollowersMe(F.Id_user);
                 Created(new Uri(Request.RequestUri.AbsoluteUri + F), Followers_list);
                 if (Followers_list != null)
                 {

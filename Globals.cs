@@ -53,6 +53,8 @@ namespace JokesPrj
         public static Joke Joke { get; set; }
         public static Follow Follow { get; set; }
         public static Comment Comment { get; set; }
+        public static Like Like { get; set; }
+
         #endregion
     }
 }
