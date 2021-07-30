@@ -6,6 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ActionSheet from 'react-native-actionsheet';
 import * as FileSystem from 'expo-file-system';
+import { ScrollView } from 'react-native';
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
@@ -34,31 +35,31 @@ export default function Profile({ navigation, user }) {
     const dateTime = date + ' ' + time;
 
     useEffect(() => {
-            (async () => {
-                if (user !== undefined) {
-                    setUserName(user.Username)
-                    if (user.User_img.indexOf("?asid") == -1)
-                        setImage(`${user.User_img}?t=${Date.now()}`)
-                    setUserId(user.Id_user)
-                    LoadJokes(user.Id_user)
-                    LoadIFollowList(user.Id_user)
-                    LoadFollowMeList(user.Id_user)
+        (async () => {
+            if (user !== undefined) {
+                setUserName(user.Username)
+                if (user.User_img.indexOf("?asid") == -1)
+                    setImage(`${user.User_img}?t=${Date.now()}`)
+                setUserId(user.Id_user)
+                LoadJokes(user.Id_user)
+                LoadIFollowList(user.Id_user)
+                LoadFollowMeList(user.Id_user)
+            }
+            if (Platform.OS !== 'web') {
+                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                if (status !== 'granted') {
+                    Alert.alert('Sorry, we need media permissions to make this work!');
                 }
-                if (Platform.OS !== 'web') {
-                    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-                    if (status !== 'granted') {
-                        Alert.alert('Sorry, we need media permissions to make this work!');
-                    }
-                }
-            })()
+            }
+        })()
     }, [])
 
     useEffect(() => {
-        const loaderjokes = navigation.addListener('focus',async () => {
+        const loaderjokes = navigation.addListener('focus', async () => {
             if (user !== undefined) {
-               await LoadJokes(user.Id_user)
-               await LoadIFollowList(user.Id_user)
-               await LoadFollowMeList(user.Id_user)
+                await LoadJokes(user.Id_user)
+                await LoadIFollowList(user.Id_user)
+                await LoadFollowMeList(user.Id_user)
             }
         });
         return loaderjokes;
@@ -334,180 +335,181 @@ export default function Profile({ navigation, user }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.search_holder}>
-                <TextInput style={styles.search}
-                    onChangeText={onChangeSearch}
-                    value={search}
-                    placeholder="Search friends/jokes" />
-                <FontAwesome style={styles.serach_icon} onPress={() => SearchFunc(search)} name="search" size={24} color="grey" />
-            </View>
-            <View style={styles.profileHolder}>
-                
-                <Text style={styles.username}>{username}</Text>
-          
+            <ScrollView>
+                <View style={styles.search_holder}>
+                    <TextInput style={styles.search}
+                        onChangeText={onChangeSearch}
+                        value={search}
+                        placeholder="Search friends/jokes" />
+                    <FontAwesome style={styles.serach_icon} onPress={() => SearchFunc(search)} name="search" size={24} color="grey" />
+                </View>
+                <View style={styles.profileHolder}>
 
-               
-                <Image style={styles.profile_image} source={{ uri: image }} />
-                <TouchableOpacity
-                    style={styles.buttonStyle}
-                    onPress={checkDevice}>
-                    <Text style={styles.buttonTextStyle}>
-                        <AntDesign style={styles.add_icon} name="camera" size={24} color="grey" fontWeight={'bold'} />
-                    </Text>
-                </TouchableOpacity>
-            
-                <Text style={styles.addText}>Add a funny piture of yourself</Text>
-               
-                <View style={styles.buttonGroup}>
-                    <View style={styles.buttons}>
-                        <Button
-                            title="Jokes you like"
-                            onPress={() => LikeJokes(user)}
-                        /></View>
-                    <View style={styles.buttons}>
-                        <Button
-                            title="Followers"
-                            onPress={() => setFM_ModalVisible(true)}
-                        /></View>
+                    <Text style={styles.username}>{username}</Text>
+
+
+
+                    <Image style={styles.profile_image} source={{ uri: image }} />
+                    <TouchableOpacity
+                        style={styles.buttonStyle}
+                        onPress={checkDevice}>
+                        <Text style={styles.buttonTextStyle}>
+                            <AntDesign style={styles.add_icon} name="camera" size={24} color="grey" fontWeight={'bold'} />
+                        </Text>
+                    </TouchableOpacity>
+
+                    <Text style={styles.addText}>Add a funny piture of yourself</Text>
+
+                    <View style={styles.buttonGroup}>
+                        <View style={styles.buttons}>
+                            <Button
+                                title="Jokes you like"
+                                onPress={() => LikeJokes(user)}
+                            /></View>
+                        <View style={styles.buttons}>
+                            <Button
+                                title="Followers"
+                                onPress={() => setFM_ModalVisible(true)}
+                            /></View>
+                        <View style={styles.buttons}>
+
+                            <Button
+                                title="Following"
+                                onPress={() => setIF_ModalVisible(true)}
+                            /></View>
+
+
+                    </View>
+
+
                     <View style={styles.buttons}>
 
                         <Button
-                            title="Following"
-                            onPress={() => setIF_ModalVisible(true)}
+                            title="Add new Joke"
+                            onPress={() => AddJoke()}
                         /></View>
+
 
 
                 </View>
-
-               
-                <View style={styles.buttons}>
-
-                    <Button
-                        title="Add new Joke"
-                        onPress={() => AddJoke()}
-                    /></View>
-            
-
-
-            </View>
-            <View style={styles.container}>
-                <FlatList
-                    data={profileJokes}
-                    keyExtractor={(item) => item.Id_joke}
-                    renderItem={({ item }) => (
-                        <View style={styles.list}>
-                            <View style={styles.buttonGroup}>
-                                <Image source={{ uri: item.User_img }} style={styles.UserImg} />
-                                <Text style={styles.UserName}>{item.Username}</Text>
-                            </View>
-
-                            <Text style={styles.postTitle}>
-                                {item.Joke_title}
-                            </Text>
-
-                            <Image onPress={() => MoveToJoke(item)} source={{ uri: item.Joke_img }} style={styles.JokeImage} />
-
-                            <Text style={styles.Body} onPress={() => MoveToJoke(item)}>
-                                {item.Joke_body}
-                            </Text>
-                            <View style={styles.buttonGroup}>
-                                <View style={styles.buttons}>
-                                    <Button style={styles.buttons} title={item.Joke_like + " Like"} />
+                <View style={styles.container}>
+                    <FlatList
+                        data={profileJokes}
+                        keyExtractor={(item) => item.Id_joke}
+                        renderItem={({ item }) => (
+                            <View style={styles.list}>
+                                <View style={styles.buttonGroup}>
+                                    <Image source={{ uri: item.User_img }} style={styles.UserImg} />
+                                    <Text style={styles.UserName}>{item.Username}</Text>
                                 </View>
-                                <View style={styles.buttons}>
-                                    <Button onPress={() => AddComment(item.Id_joke)} title="Comment" />
+
+                                <Text style={styles.postTitle}>
+                                    {item.Joke_title}
+                                </Text>
+
+                                <Image onPress={() => MoveToJoke(item)} source={{ uri: item.Joke_img }} style={styles.JokeImage} />
+
+                                <Text style={styles.Body} onPress={() => MoveToJoke(item)}>
+                                    {item.Joke_body}
+                                </Text>
+                                <View style={styles.buttonGroup}>
+                                    <View style={styles.buttons}>
+                                        <Button style={styles.buttons} title={item.Joke_like + " Like"} />
+                                    </View>
+                                    <View style={styles.buttons}>
+                                        <Button onPress={() => AddComment(item.Id_joke)} title="Comment" />
+                                    </View>
                                 </View>
                             </View>
+                        )} />
+                </View>
+                <ActionSheet
+                    ref={actionSheet}
+                    // Title of the Bottom Sheet
+                    title={'Choose from where to upload a funny picture '}
+                    // Options Array to show in bottom sheet
+                    options={optionArray}
+                    // Define cancel button index in the option array
+                    // This will take the cancel option in bottom
+                    // and will highlight it
+                    cancelButtonIndex={2}
+                    // Highlight any specific option
+                    destructiveButtonIndex={1}
+                    onPress={(index) => {
+                        if (index == 0) {
+                            takePicture();
+                        }
+                        else if (index == 1) {
+                            GalleryPicture();
+                        }
+                    }}
+                />
+
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalIFollowVisible}
+                    onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                    }}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalText}>Hello World!</Text>
+                            <TouchableHighlight
+                                style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                onPress={() => {
+                                    setIF_ModalVisible(!modalIFollowVisible);
+                                }}>
+                                <Text style={styles.textStyle}>Hide Modal</Text>
+                            </TouchableHighlight>
+                            <FlatList
+                                data={iFollowList}
+                                keyExtractor={(item) => item.Follow_id}
+                                renderItem={({ item }) => (
+                                    <View style={styles.list}>
+                                        <View style={styles.ModalCube}>
+                                            <Image onPress={() => MoveToProfile(item)} source={{ uri: item.Target_img }} style={styles.ModalUserImg} />
+                                            <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Target_username}</Text>
+                                        </View>
+                                    </View>
+                                )} />
                         </View>
-                    )} />
-            </View>
-            <ActionSheet
-                ref={actionSheet}
-                // Title of the Bottom Sheet
-                title={'Choose from where to upload a funny picture '}
-                // Options Array to show in bottom sheet
-                options={optionArray}
-                // Define cancel button index in the option array
-                // This will take the cancel option in bottom
-                // and will highlight it
-                cancelButtonIndex={2}
-                // Highlight any specific option
-                destructiveButtonIndex={1}
-                onPress={(index) => {
-                    if (index == 0) {
-                        takePicture();
-                    }
-                    else if (index == 1) {
-                        GalleryPicture();
-                    }
-                }}
-            />
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalIFollowVisible}
-                onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
-                }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Hello World!</Text>
-                        <TouchableHighlight
-                            style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                            onPress={() => {
-                                setIF_ModalVisible(!modalIFollowVisible);
-                            }}>
-                            <Text style={styles.textStyle}>Hide Modal</Text>
-                        </TouchableHighlight>
-                        <FlatList
-                            data={iFollowList}
-                            keyExtractor={(item) => item.Follow_id}
-                            renderItem={({ item }) => (
-                                <View style={styles.list}>
-                                    <View style={styles.ModalCube}>
-                                        <Image onPress={() => MoveToProfile(item)} source={{ uri: item.Target_img }} style={styles.ModalUserImg} />
-                                        <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Target_username}</Text>
-                                    </View>
-                                </View>
-                            )} />
                     </View>
-                </View>
-            </Modal>
+                </Modal>
 
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalFollowMeVisible}
-                onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
-                }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Hello World!</Text>
-                        <TouchableHighlight
-                            style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                            onPress={() => {
-                                setFM_ModalVisible(!modalFollowMeVisible);
-                            }}>
-                            <Text style={styles.textStyle}>Hide Modal</Text>
-                        </TouchableHighlight>
-                        <FlatList
-                            data={followMeList}
-                            keyExtractor={(item) => item.Follow_id}
-                            renderItem={({ item }) => (
-                                <View style={styles.list}>
-                                    <View style={styles.ModalCube}>
-                                        <Image onPress={() => MoveToProfile(item)} source={{ uri: item.User_img }} style={styles.ModalUserImg} />
-                                        <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalFollowMeVisible}
+                    onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                    }}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalText}>Hello World!</Text>
+                            <TouchableHighlight
+                                style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                onPress={() => {
+                                    setFM_ModalVisible(!modalFollowMeVisible);
+                                }}>
+                                <Text style={styles.textStyle}>Hide Modal</Text>
+                            </TouchableHighlight>
+                            <FlatList
+                                data={followMeList}
+                                keyExtractor={(item) => item.Follow_id}
+                                renderItem={({ item }) => (
+                                    <View style={styles.list}>
+                                        <View style={styles.ModalCube}>
+                                            <Image onPress={() => MoveToProfile(item)} source={{ uri: item.User_img }} style={styles.ModalUserImg} />
+                                            <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
+                                        </View>
                                     </View>
-                                </View>
-                            )} />
+                                )} />
+                        </View>
                     </View>
-                </View>
-            </Modal>
+                </Modal>
 
-
+            </ScrollView>
         </View>
     )
 }

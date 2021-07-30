@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, StyleSheet, Image, Text, Platform, TextInput, View, FlatList } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { ScrollView } from 'react-native';
 
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
@@ -129,6 +130,7 @@ export default function FriendProfile({ navigation, route }) {
 
     return (
         <View style={styles.container}>
+            <ScrollView>
             {/* <View style={styles.container}> */}
 
                 <View style={styles.search_holder}>
@@ -138,7 +140,7 @@ export default function FriendProfile({ navigation, route }) {
                         placeholder="Search friends/jokes" />
                     <FontAwesome style={styles.serach_icon} onPress={() => SearchFunc(search)} name="search" size={24} color="grey" />
                 </View>
-                {/* <View style={styles.profileHolder}> */}
+                <View style={styles.profileHolder}>
                     {/* <View style={styles.profileHeader}> */}
                         <Text style={styles.username}>{other_user.Username}</Text>
                     {/* </View> */}
@@ -155,7 +157,7 @@ export default function FriendProfile({ navigation, route }) {
                         </View>
                     {/* </View> */}
                     {/* <View style={styles.profileFooter}></View> */}
-                {/* </View> */}
+                </View>
                 <FlatList
                     data={profileJokes}
                     keyExtractor={(item) => item.Id_joke}
@@ -185,7 +187,7 @@ export default function FriendProfile({ navigation, route }) {
                             </View>
                         </View>
                     )} />
-            {/* </View> */}
+            {/* </View> */}</ScrollView>
         </View>
     )
 }
@@ -193,10 +195,11 @@ export default function FriendProfile({ navigation, route }) {
 const styles = StyleSheet.create({
     //main container
     container: {
-        flex: 1,
+        //flex: 1,
         margin: 8,
         justifyContent: 'center',
         alignItems: 'center',
+        textAlign:'center',
     },
     //search holder
     search_holder: {
@@ -220,9 +223,11 @@ const styles = StyleSheet.create({
     //Profile part
     profileHolder: {
         flexWrap: 'wrap',
-        flex: 1,
+        //flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        alignSelf:'center',
+        textAlign:'center',
         padding: 18,
         margin: 8,
         borderWidth: 1,
