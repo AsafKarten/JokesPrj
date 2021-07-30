@@ -276,6 +276,7 @@ export default function Profile({ navigation, user }) {
         console.log(route);
         navigation.navigate("Joke", { navigation: navigation, route: route });
     }
+    
     const LoadIFollowList = async (id_user) => {
         try {
             let result = await fetch(url + "api/i/follow", {
