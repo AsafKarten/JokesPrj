@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Alert, Platform, Button, StyleSheet, Image, Text, TextInput, View, FlatList, TouchableOpacity } from 'react-native';
+import { Alert, Modal,TouchableHighlight, Platform, Button, StyleSheet, Image, Text, TextInput, View, FlatList, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -23,6 +23,10 @@ export default function Profile({ navigation, user }) {
     const [profileJokes, setList] = useState([
         { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_likes: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
     ]);
+    const [iFollowList, setIFollowList] = useState();
+    const [followMeList, setFollowMeList] = useState();
+    const [modalIFollowVisible, setIF_ModalVisible] = useState(false);
+    const [modalFollowMeVisible, setFM_ModalVisible] = useState(false);
 
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -37,6 +41,12 @@ export default function Profile({ navigation, user }) {
                     setImage(`${user.User_img}?t=${Date.now()}`)
                 setUserId(user.Id_user)
                 LoadJokes(user.Id_user)
+                 LoadIFollowList(user.Id_user)
+                 LoadFollowMeList(user.Id_user)
+                 console.log(followMeList);
+                 console.log(iFollowList);
+                 console.log(user.Id_user);
+               
             }
             if (Platform.OS !== 'web') {
                 const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -86,7 +96,7 @@ export default function Profile({ navigation, user }) {
                 aspect: [4, 3],
                 quality: 0.1
             });
-            if (!result.cancelled) {  
+            if (!result.cancelled) {
                 if (Platform.OS !== 'web') {
                     console.log('====================================');
                     console.log("Before convert " + result);
@@ -266,6 +276,47 @@ export default function Profile({ navigation, user }) {
         console.log(route);
         navigation.navigate("Joke", { navigation: navigation, route: route });
     }
+    const LoadIFollowList = async (id_user) => {
+        try {
+            let result = await fetch(url + "api/i/follow", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    Id_user: id_user
+                })
+            });
+            let data = [...await result.json()];
+            setIFollowList(data);
+            console.log(data);
+            console.log(iFollowList);
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const LoadFollowMeList = async (id_user) => {
+        try {
+            let result = await fetch(url + "api/your/followers", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    Id_user: id_user
+                })
+            });
+            let data = [...await result.json()];
+            setFollowMeList(data);
+            console.log(data);
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
 
     return (
         <View style={styles.container}>
@@ -303,13 +354,13 @@ export default function Profile({ navigation, user }) {
                     <View style={styles.buttons}>
                         <Button
                             title="Followers"
-                        //onPress={() => AddJoke()}
+                            onPress={() => setFM_ModalVisible(true)}
                         /></View>
                     <View style={styles.buttons}>
 
                         <Button
                             title="Following"
-                        //onPress={() => AddJoke()}
+                            onPress={() => setIF_ModalVisible(true)}
                         /></View>
 
                 </View>
@@ -320,37 +371,37 @@ export default function Profile({ navigation, user }) {
                     />
                 </View>
             </View>
-<View style={styles.container}>
-            <FlatList
-                data={profileJokes}
-                keyExtractor={(item) => item.Id_joke}
-                renderItem={({ item }) => (
-                    <View style={styles.list}>
-                        <View style={styles.buttonGroup}>
-                            <Image source={{ uri: item.User_img }} style={styles.UserImg} />
-                            <Text style={styles.UserName}>{item.Username}</Text>
-                        </View>
-
-                        <Text style={styles.postTitle}>
-                            {item.Joke_title}
-                        </Text>
-
-                        <Image onPress={() => MoveToJoke(item)} source={{ uri: item.Joke_img }} style={styles.JokeImage} />
-
-                        <Text style={styles.Body} onPress={() => MoveToJoke(item)}>
-                            {item.Joke_body}
-                        </Text>
-                        <View style={styles.buttonGroup}>
-                            <View style={styles.buttons}>
-                                <Button style={styles.buttons} title={item.Joke_like + " Like"} />
+            <View style={styles.container}>
+                <FlatList
+                    data={profileJokes}
+                    keyExtractor={(item) => item.Id_joke}
+                    renderItem={({ item }) => (
+                        <View style={styles.list}>
+                            <View style={styles.buttonGroup}>
+                                <Image source={{ uri: item.User_img }} style={styles.UserImg} />
+                                <Text style={styles.UserName}>{item.Username}</Text>
                             </View>
-                            <View style={styles.buttons}>
-                                <Button onPress={() => AddComment(item.Id_joke)} title="Comment" />
+
+                            <Text style={styles.postTitle}>
+                                {item.Joke_title}
+                            </Text>
+
+                            <Image onPress={() => MoveToJoke(item)} source={{ uri: item.Joke_img }} style={styles.JokeImage} />
+
+                            <Text style={styles.Body} onPress={() => MoveToJoke(item)}>
+                                {item.Joke_body}
+                            </Text>
+                            <View style={styles.buttonGroup}>
+                                <View style={styles.buttons}>
+                                    <Button style={styles.buttons} title={item.Joke_like + " Like"} />
+                                </View>
+                                <View style={styles.buttons}>
+                                    <Button onPress={() => AddComment(item.Id_joke)} title="Comment" />
+                                </View>
                             </View>
                         </View>
-                    </View>
-                )} />
-                </View>
+                    )} />
+            </View>
             <ActionSheet
                 ref={actionSheet}
                 // Title of the Bottom Sheet
@@ -372,6 +423,72 @@ export default function Profile({ navigation, user }) {
                     }
                 }}
             />
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalIFollowVisible}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                }}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Hello World!</Text>
+                        <TouchableHighlight
+                            style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                            onPress={() => {
+                                setIF_ModalVisible(!modalIFollowVisible);
+                            }}>
+                            <Text style={styles.textStyle}>Hide Modal</Text>
+                        </TouchableHighlight>
+                        <FlatList
+                            data={iFollowList}
+                            keyExtractor={(item) => item.Follow_id}
+                            renderItem={({ item }) => (
+                                <View style={styles.list}>
+                                    <View style={styles.ModalCube}>
+                                        <Image source={{ uri: item.Target_img }} style={styles.ModalUserImg} />
+                                        <Text style={styles.ModalUserName}>{item.Target_username}</Text>
+                                    </View>
+                                </View>
+                            )} />
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalFollowMeVisible}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                }}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Hello World!</Text>
+                        <TouchableHighlight
+                            style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                            onPress={() => {
+                                setFM_ModalVisible(!modalFollowMeVisible);
+                            }}>
+                            <Text style={styles.textStyle}>Hide Modal</Text>
+                        </TouchableHighlight>
+                        <FlatList
+                            data={followMeList}
+                            keyExtractor={(item) => item.Follow_id}
+                            renderItem={({ item }) => (
+                                <View style={styles.list}>
+                                    <View style={styles.ModalCube}>
+                                        <Image source={{ uri: item.User_img }} style={styles.ModalUserImg} />
+                                        <Text style={styles.ModalUserName}>{item.Username}</Text>
+                                    </View>
+                                </View>
+                            )} />
+                    </View>
+                </View>
+            </Modal>
+
+
         </View>
     )
 }
@@ -407,10 +524,10 @@ const styles = StyleSheet.create({
     profileHolder: {
         flexWrap: 'wrap',
         flex: 1,
-       justifyContent: 'center',
+        justifyContent: 'center',
         alignItems: 'center',
-       padding: 8,
-      margin: 8,
+        padding: 8,
+        margin: 8,
         borderWidth: 1,
         borderRadius: 9,
         borderColor: 'grey',
@@ -446,7 +563,7 @@ const styles = StyleSheet.create({
 
     },
     addTextHolder: {
-       justifyContent: 'center',
+        justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
     },
@@ -454,7 +571,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     profileFooter: {
-       
+
         margin: 5,
         padding: 5,
     },
@@ -545,6 +662,61 @@ const styles = StyleSheet.create({
         bottom: 0,
         borderRadius: 50,
         backgroundColor: '#fff'
-    }
+    },
+
+       //modal style
+       centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    openButton: {
+        backgroundColor: '#F194FF',
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+    },
+    ModalUserImg: {
+        width: 33,
+        height: 33,
+
+        borderRadius: 100,
+        borderWidth: 2,
+        borderRadius: 90,
+        resizeMode: 'stretch',
+    },
+    ModalUserName: {
+        marginLeft: 5,
+        fontWeight: "bold",
+    },
+    ModalCube: {
+        alignItems: 'flex-start',
+        flexDirection: 'row',
+    },
 
 });

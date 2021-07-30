@@ -14,20 +14,21 @@ export default function FriendProfile({ navigation, route }) {
     const [profileJokes, setList] = useState([
         { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_likes: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
     ]);
-    const [other_user, setOtherUser] = useState([{ Id_user: 0, Username: '', User_img: default_img, I_follow: 0, Follow_me: 0 }]);
+    const [other_user, setOtherUser] = useState({ Id_user: 0, Username: '',Email:'', User_img: default_img, I_follow: 0, Follow_me: 0 });
     const [search, onChangeSearch] = useState();
     const friendId = route.params.route.item.Id_user
     const item = route.params.route.item;
     const user = route.params.route.user;
     useEffect(() => {
         (async () => {
-            await GetFriendData(friendId);
+            await GetFriendData();
             await LoadJokes();
+            await console.log(other_user);
         })()
 
     }, [])
 
-    const GetFriendData = async (friendId) => {
+    const GetFriendData = async () => {
         try {
             let result = await fetch(url + "api/get/user", {
                 method: 'POST',
@@ -36,12 +37,12 @@ export default function FriendProfile({ navigation, route }) {
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    Id_user: friendId
+                    Id_user: item.Id_user
                 })
             });
             let data = await result.json(); 
+            setOtherUser(data);
             console.log(data);
-            await setOtherUser(data);
         } catch (error) {
             console.log(error);
         }
@@ -64,12 +65,12 @@ export default function FriendProfile({ navigation, route }) {
                 'Accept': 'application/json'
             },
             body: JSON.stringify({
-                id_user: route.params.route.user.Id_user,
+                id_user: user.Id_user,
                 Target_id: other_user.Id_user,
                 Target_img: other_user.User_img,
                 Target_username: other_user.Username,
-                User_img: route.params.route.user.User_img,
-                Username: route.params.route.user.Username
+                User_img: user.User_img,
+                Username: user.Username
             })
 
         });
@@ -124,8 +125,9 @@ export default function FriendProfile({ navigation, route }) {
     }
 
     return (
-        <View>
+        <View style={styles.container}>
             <View style={styles.container}>
+                
                 <View style={styles.search_holder}>
                     <TextInput style={styles.search}
                         onChangeText={onChangeSearch}
