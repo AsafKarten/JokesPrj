@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Modal, View, StyleSheet, Pressable, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, Modal, View, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 import * as Facebook from 'expo-facebook';
 import * as Google from 'expo-google-app-auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
+import Loader from '../Components/Loader.js';
 var isaac = require('isaac');
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
@@ -25,6 +26,7 @@ export default function Login({ navigation }) {
     const [exImg, setExImg] = useState();
     const [new_username, onChangeNewUsername] = useState()
     const [Pass, onChangePass] = useState();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -55,7 +57,7 @@ export default function Login({ navigation }) {
 
     const updateLoggedUser = async (username) => {
         try {
-            await clearAsyncStorage();
+            await clearAsyncStorage()
             let result = await fetch(url + "api/user", {
                 method: 'POST',
                 headers: {
@@ -133,12 +135,12 @@ export default function Login({ navigation }) {
 
     const addNewExternalUser = async (id, username, email, img) => {
         try {
-            const id_external = id
-            const username_external = username
-            const email_external = email
-            const img_external = img
-            const new_salt = await bcrypt.genSaltSync(10);
-            const new_hash = await bcrypt.hashSync(id, new_salt);
+            let id_external = id
+            let username_external = username
+            let email_external = email
+            let img_external = img
+            let new_salt = bcrypt.genSaltSync(10);
+            let new_hash = bcrypt.hashSync(id, new_salt);
             let result = await fetch(url + "api/add/user", {
                 method: 'POST',
                 headers: {
@@ -235,16 +237,23 @@ export default function Login({ navigation }) {
                     })
                 });
                 let data = await result.json();
+                setLoading(false);
+                console.log('====================================');
+                console.log(Pass);
+                console.log('====================================');
+                console.log(data.Hash);
+                console.log('====================================');
+                console.log('====================================');
                 var correct = bcrypt.compareSync(Pass, data.Hash)
                 if (!correct) {
                     Alert.alert("Wrong details,check your details");
                     return;
                 }
                 else {
-
                     if (data.User_img.indexOf("?asid") == -1)
                         data.User_img = `${data.User_img}?t=${Date.now()}`;
                     storeData(data);
+
                     navigation.navigate("TabStack", { user: data });
 
                 }
@@ -257,6 +266,7 @@ export default function Login({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <Loader loading={loading} />
             <Input
                 style={styles.input}
                 onChangeText={onChangeUsername}

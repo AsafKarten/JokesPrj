@@ -94,7 +94,7 @@ export default function Home({ navigation, user }) {
             <View >
                 <View style={styles.buttonGroup}>
                     <Image source={{
-                        uri: (user.User_img.indexOf(`?asid`) == -1) ? `${user.User_img}?t=${Date.now()}` : user.User_img
+                        uri: (user.User_img.indexOf(`?asid`) == -1) ? `${user.User_img}?t=${Date.now()}` : `${user.User_img}?t=${Date.now()}`
                     }} style={styles.UserImg} />
                     <Text onPress={() => MoveToProfile(user)} style={styles.UserName}>{user.Username}</Text>
                 </View>
