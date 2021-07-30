@@ -347,11 +347,11 @@ export default function Profile({ navigation, user }) {
                 <FontAwesome style={styles.serach_icon} onPress={() => SearchFunc(search)} name="search" size={24} color="grey" />
             </View>
             <View style={styles.profileHolder}>
-                {/* <View style={styles.profileHeader}> */}
+                
                 <Text style={styles.username}>{username}</Text>
-                {/* </View> */}
+          
 
-                {/* <View style={styles.imageHolder}> */}
+               
                 <Image style={styles.profile_image} source={{ uri: image }} />
                 <TouchableOpacity
                     style={styles.buttonStyle}
@@ -360,10 +360,9 @@ export default function Profile({ navigation, user }) {
                         <AntDesign style={styles.add_icon} name="camera" size={24} color="grey" fontWeight={'bold'} />
                     </Text>
                 </TouchableOpacity>
-                {/* </View> */}
-                {/* <View style={styles.addTextHolder}> */}
+            
                 <Text style={styles.addText}>Add a funny piture of yourself</Text>
-                {/* </View> */}
+               
                 <View style={styles.buttonGroup}>
                     <View style={styles.buttons}>
                         <Button
@@ -385,14 +384,14 @@ export default function Profile({ navigation, user }) {
 
                 </View>
 
-                {/* <View style={styles.profileFooter}> */}
+               
                 <View style={styles.buttons}>
 
                     <Button
                         title="Add new Joke"
                         onPress={() => AddJoke()}
                     /></View>
-                {/* </View> */}
+            
 
 
             </View>

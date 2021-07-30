@@ -129,7 +129,7 @@ export default function FriendProfile({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.container}>
+            {/* <View style={styles.container}> */}
 
                 <View style={styles.search_holder}>
                     <TextInput style={styles.search}
@@ -138,24 +138,24 @@ export default function FriendProfile({ navigation, route }) {
                         placeholder="Search friends/jokes" />
                     <FontAwesome style={styles.serach_icon} onPress={() => SearchFunc(search)} name="search" size={24} color="grey" />
                 </View>
-                <View style={styles.profileHolder}>
-                    <View style={styles.profileHeader}>
+                {/* <View style={styles.profileHolder}> */}
+                    {/* <View style={styles.profileHeader}> */}
+                        
+                    {/* </View> */}
+                    {/* <View style={styles.imageHolder}> */}
                         <Text style={styles.username}>{other_user.username}</Text>
-                    </View>
-                    <View style={styles.imageHolder}>
-
                         <Image style={styles.profile_image} source={{ uri: `${other_user.User_img}?t=${Date.now()}` }} />
-                    </View>
-                    <View style={styles.buttonGroup}>
+                    {/* </View> */}
+                    {/* <View style={styles.buttonGroup}> */}
                         <View style={styles.buttons}>
                             <Button
                                 title={other_user.Follow_me + " Followers"}
                                 onPress={() => FollowUser()}
                             />
                         </View>
-                    </View>
-                    <View style={styles.profileFooter}></View>
-                </View>
+                    {/* </View> */}
+                    {/* <View style={styles.profileFooter}></View> */}
+                {/* </View> */}
                 <FlatList
                     data={profileJokes}
                     keyExtractor={(item) => item.Id_joke}
@@ -185,7 +185,7 @@ export default function FriendProfile({ navigation, route }) {
                             </View>
                         </View>
                     )} />
-            </View>
+            {/* </View> */}
         </View>
     )
 }
