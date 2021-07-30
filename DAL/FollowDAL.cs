@@ -63,7 +63,7 @@ namespace JokesPrj.DAL
                     cmd.Parameters.AddWithValue("@id_user", SqlDbType.Int).Value = f.Id_user;
                     cmd.Parameters.AddWithValue("@target_id", SqlDbType.Int).Value = f.Target_id;
                     cmd.Parameters.AddWithValue("@target_img", SqlDbType.NVarChar).Value = f.Target_img;
-                    cmd.Parameters.AddWithValue("@target_username", SqlDbType.NVarChar).Value = f.Username;
+                    cmd.Parameters.AddWithValue("@target_username", SqlDbType.NVarChar).Value = f.Target_username;
                     cmd.Parameters.AddWithValue("@user_img", SqlDbType.NVarChar).Value = f.User_img;
                     cmd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = f.Username;
                     int res = cmd.ExecuteNonQuery();
