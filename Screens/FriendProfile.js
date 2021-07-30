@@ -23,7 +23,6 @@ export default function FriendProfile({ navigation, route }) {
         (async () => {
             await GetFriendData();
             await LoadJokes();
-            await console.log(other_user);
         })()
 
     }, [])
