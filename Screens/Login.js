@@ -267,21 +267,21 @@ export default function Login({ navigation }) {
     return (
         <View style={styles.container}>
             <Loader loading={loading} />
-            <Input
+            <TextInput
                 style={styles.input}
                 onChangeText={onChangeUsername}
                 value={Username}
                 placeholder="Username"
-                autoFocus={true}
+                onFocus={true}
                 leftIcon={<Icon name='user' size={24} color='black' />}
             />
-            <Input
+            <TextInput
                 style={styles.input}
                 onChangeText={onChangePass}
                 value={Pass}
                 secureTextEntry={true}
                 placeholder="Password"
-                autoFocus={true}
+                onFocus={true}
                 leftIcon={<Icon name='lock' size={24} color='black' />}
             />
             <TouchableOpacity onPress={() => LoginNormal(Username, Pass)}>
