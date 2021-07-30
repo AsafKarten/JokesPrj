@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Alert, Modal, View, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 import * as Facebook from 'expo-facebook';
 import * as Google from 'expo-google-app-auth';
@@ -27,7 +27,6 @@ export default function Login({ navigation }) {
     const [new_username, onChangeNewUsername] = useState()
     const [Pass, onChangePass] = useState();
     const [loading, setLoading] = useState(false);
-    const useraddressInputRef = createRef();
 
 
     useEffect(() => {
@@ -269,27 +268,19 @@ export default function Login({ navigation }) {
     return (
         <View style={styles.container}>
             <Loader loading={loading} />
-            <TextInput
+            <Input
                 style={styles.input}
                 onChangeText={onChangeUsername}
                 value={Username}
                 placeholder="Username"
-                onSubmitEditing={() =>
-                    useraddressInputRef.current &&
-                    useraddressInputRef.current.focus()
-                }
                 leftIcon={<Icon name='user' size={24} color='black' />}
             />
-            <TextInput
+            <Input
                 style={styles.input}
                 onChangeText={onChangePass}
                 value={Pass}
                 secureTextEntry={true}
                 placeholder="Password"
-                onSubmitEditing={() =>
-                    useraddressInputRef.current &&
-                    useraddressInputRef.current.focus()
-                }
                 leftIcon={<Icon name='lock' size={24} color='black' />}
             />
             <TouchableOpacity onPress={() => LoginNormal(Username, Pass)}>
@@ -350,6 +341,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop:"25%"
     },
     input: {
         height: 40,
@@ -357,7 +349,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: 'center',
         alignItems: 'center',
-        margin: 10
+        marginTop: 10
     },
     button_normal: {
         alignItems: 'center',
