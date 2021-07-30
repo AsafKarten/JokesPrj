@@ -22,11 +22,12 @@ export default function FriendProfile({ navigation, route }) {
 
     useEffect(() => {
         const loaderjokes = navigation.addListener('focus', () => {
+            GetFriendData();
             LoadJokes();
         });
         return loaderjokes;
     }, [navigation])
-    
+
     useEffect(() => {
         const interval = setInterval(() => {
             (async () => {
