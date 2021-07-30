@@ -521,7 +521,7 @@ export default function Profile({ navigation, user }) {
 const styles = StyleSheet.create({
     //main container
     container: {
-        //flex: 1,
+        flex: 1,
         margin: 8,
         justifyContent: 'center',
         alignItems: 'center'
