@@ -182,11 +182,13 @@ namespace JokesPrj.DAL
                     while (reader.Read())
                     {
                         F = new Follow(
-                            Convert.ToInt32(reader["follow_id"]),
+                           Convert.ToInt32(reader["follow_id"]),
+                            Convert.ToInt32(reader["id_user"]),
                             Convert.ToInt32(reader["target_id"]),
+                            Convert.ToString(reader["target_img"]),
                             Convert.ToString(reader["target_username"]),
-                            Convert.ToString(reader["target_img"])
-
+                            Convert.ToString(reader["user_img"]),
+                            Convert.ToString(reader["username"])
                             );
                         Followers.Add(F);
                     }

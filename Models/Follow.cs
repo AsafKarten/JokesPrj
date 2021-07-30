@@ -28,14 +28,6 @@ namespace JokesPrj.Models
 
         }
 
-        public Follow(int follow_id, int target_id,string target_username, string target_img)
-        {
-            Follow_id = follow_id;
-            Target_id = target_id;
-            Target_username = target_username;
-            Target_img = target_img;
-        }
-
         public Follow(int follow_id, int id_user, int target_id, string target_img, string target_username, string user_img, string username)
         {
             Follow_id = follow_id;
