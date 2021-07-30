@@ -347,23 +347,23 @@ export default function Profile({ navigation, user }) {
                 <FontAwesome style={styles.serach_icon} onPress={() => SearchFunc(search)} name="search" size={24} color="grey" />
             </View>
             <View style={styles.profileHolder}>
-                <View style={styles.profileHeader}>
-                    <Text style={styles.username}>{username}</Text>
-                </View>
+                {/* <View style={styles.profileHeader}> */}
+                <Text style={styles.username}>{username}</Text>
+                {/* </View> */}
 
-                <View style={styles.imageHolder}>
-                    <Image style={styles.profile_image} source={{ uri: image }} />
-                    <TouchableOpacity
-                        style={styles.buttonStyle}
-                        onPress={checkDevice}>
-                        <Text style={styles.buttonTextStyle}>
-                            <AntDesign style={styles.add_icon} name="camera" size={24} color="grey" fontWeight={'bold'} />
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.addTextHolder}>
-                    <Text style={styles.addText}>Add a funny piture of yourself</Text>
-                </View>
+                {/* <View style={styles.imageHolder}> */}
+                <Image style={styles.profile_image} source={{ uri: image }} />
+                <TouchableOpacity
+                    style={styles.buttonStyle}
+                    onPress={checkDevice}>
+                    <Text style={styles.buttonTextStyle}>
+                        <AntDesign style={styles.add_icon} name="camera" size={24} color="grey" fontWeight={'bold'} />
+                    </Text>
+                </TouchableOpacity>
+                {/* </View> */}
+                {/* <View style={styles.addTextHolder}> */}
+                <Text style={styles.addText}>Add a funny piture of yourself</Text>
+                {/* </View> */}
                 <View style={styles.buttonGroup}>
                     <View style={styles.buttons}>
                         <Button
@@ -382,13 +382,19 @@ export default function Profile({ navigation, user }) {
                             onPress={() => setIF_ModalVisible(true)}
                         /></View>
 
+
                 </View>
-                <View style={styles.profileFooter}>
+
+                {/* <View style={styles.profileFooter}> */}
+                <View style={styles.buttons}>
+
                     <Button
                         title="Add new Joke"
                         onPress={() => AddJoke()}
-                    />
-                </View>
+                    /></View>
+                {/* </View> */}
+
+
             </View>
             <View style={styles.container}>
                 <FlatList
@@ -515,7 +521,7 @@ export default function Profile({ navigation, user }) {
 const styles = StyleSheet.create({
     //main container
     container: {
-        flex: 1,
+        //flex: 1,
         margin: 8,
         justifyContent: 'center',
         alignItems: 'center'
@@ -542,8 +548,8 @@ const styles = StyleSheet.create({
     //Profile part
     profileHolder: {
         flexWrap: 'wrap',
-        flex: 1,
-        // justifyContent: 'center',
+        //flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
         padding: 8,
         margin: 8,
@@ -582,7 +588,7 @@ const styles = StyleSheet.create({
 
     },
     addTextHolder: {
-        justifyContent: 'center',
+        // justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
     },
@@ -591,9 +597,10 @@ const styles = StyleSheet.create({
     },
     profileFooter: {
 
+        alignSelf: 'center',
         textAlign: 'center',
         margin: 5,
-        justifyContent: 'center',
+        //justifyContent: 'center',
         alignItems: 'center',
     },
 
@@ -621,7 +628,7 @@ const styles = StyleSheet.create({
     buttonGroup: {
         //flex: 3,
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
+        // justifyContent: 'space-evenly',
 
     },
     buttons: {

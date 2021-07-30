@@ -28,15 +28,6 @@ export default function FriendProfile({ navigation, route }) {
         return loaderjokes;
     }, [navigation])
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            (async () => {
-                await GetFriendData();
-                await LoadJokes();
-            })()
-        }, 9000);
-        return () => clearInterval(interval);
-    }, [])
 
 
 
