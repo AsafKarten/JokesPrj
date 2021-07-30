@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import { Alert, Modal, View, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 import * as Facebook from 'expo-facebook';
 import * as Google from 'expo-google-app-auth';
@@ -27,6 +27,8 @@ export default function Login({ navigation }) {
     const [new_username, onChangeNewUsername] = useState()
     const [Pass, onChangePass] = useState();
     const [loading, setLoading] = useState(false);
+    const useraddressInputRef = createRef();
+
 
     useEffect(() => {
         (async () => {
@@ -272,7 +274,10 @@ export default function Login({ navigation }) {
                 onChangeText={onChangeUsername}
                 value={Username}
                 placeholder="Username"
-                
+                onSubmitEditing={() =>
+                    useraddressInputRef.current &&
+                    useraddressInputRef.current.focus()
+                }
                 leftIcon={<Icon name='user' size={24} color='black' />}
             />
             <TextInput
@@ -281,7 +286,10 @@ export default function Login({ navigation }) {
                 value={Pass}
                 secureTextEntry={true}
                 placeholder="Password"
-                
+                onSubmitEditing={() =>
+                    useraddressInputRef.current &&
+                    useraddressInputRef.current.focus()
+                }
                 leftIcon={<Icon name='lock' size={24} color='black' />}
             />
             <TouchableOpacity onPress={() => LoginNormal(Username, Pass)}>

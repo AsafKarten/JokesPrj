@@ -24,9 +24,6 @@ export default function Home({ navigation, user }) {
         }
     }
 
-
-
-
     useEffect(() => {
         const interval = setInterval(() => {
             (async () => {
