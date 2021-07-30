@@ -272,6 +272,7 @@ export default function Login({ navigation }) {
                 onChangeText={onChangeUsername}
                 value={Username}
                 placeholder="Username"
+                autoFocus={true}
                 leftIcon={<Icon name='user' size={24} color='black' />}
             />
             <Input
@@ -280,6 +281,7 @@ export default function Login({ navigation }) {
                 value={Pass}
                 secureTextEntry={true}
                 placeholder="Password"
+                autoFocus={true}
                 leftIcon={<Icon name='lock' size={24} color='black' />}
             />
             <TouchableOpacity onPress={() => LoginNormal(Username, Pass)}>
