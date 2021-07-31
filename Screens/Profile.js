@@ -15,8 +15,8 @@ const default_img = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_ic
 
 export default function Profile({ navigation, user }) {
     let actionSheet = useRef();
-    const [shouldShow, setShouldShow] = useState(false);
     var optionArray = ['take a photo', 'choose from a gallery', 'Cancel'];
+    const [shouldShow, setShouldShow] = useState(false);
     const [userId, setUserId] = useState(user.Id_user);
     const [username, setUserName] = useState();
     const [image, setImage] = useState(user.User_img);

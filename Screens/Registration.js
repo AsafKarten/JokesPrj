@@ -27,7 +27,7 @@ export default function RegistrationNewUser({ navigation }) {
         // let usernameValid = rjxUsername.test(Username);
         // let passwordValid = rjxPass.test(Pass);
         if (!emailValid) {
-            alert("Invalid address email");
+            Alert.alert("Invalid address email");
             return;
         }
         // if (!usernameValid) {
@@ -39,11 +39,11 @@ export default function RegistrationNewUser({ navigation }) {
         //     return;
         // }
         if (Username == null || Username == "" || Pass == null || Pass == "" || Email == "" || Email == null || CPass == "" || CPass == null) {
-            alert("Please fill in all details !")
+            Alert.alert("Please fill in all details !")
             return
         }
         if (Pass != CPass) {
-            alert("Password dose not match confirm password!")
+            Alert.alert("Password dose not match confirm password!")
             return
         }
         else {

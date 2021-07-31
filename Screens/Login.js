@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Modal, View, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, Modal, View, StyleSheet, Text, TextInput, TouchableOpacity, Platform } from 'react-native';
 import * as Facebook from 'expo-facebook';
 import * as Google from 'expo-google-app-auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,6 +18,7 @@ bcrypt.setRandomFallback((len) => {
 });
 
 export default function Login({ navigation }) {
+    const [shouldShow, setShouldShow] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [Username, onChangeUsername] = useState()
     const [badUsername, setBadUsername] = useState();
@@ -36,6 +37,9 @@ export default function Login({ navigation }) {
     }, [])
 
     const getData = async () => {
+        if (Platform.OS !== 'web') {
+            setShouldShow(true)
+        }
         const data = await AsyncStorage.getItem('loggedUser')
         if (data !== undefined) {
             let user = JSON.parse(data)
@@ -58,6 +62,7 @@ export default function Login({ navigation }) {
 
     const updateLoggedUser = async (username) => {
         try {
+
             await clearAsyncStorage()
             let result = await fetch(url + "api/user", {
                 method: 'POST',
@@ -222,7 +227,7 @@ export default function Login({ navigation }) {
     const LoginNormal = async (Username, Pass) => {
         try {
             if (Username == null || Username == "" || Pass == null || Pass == "") {
-                alert("Please fill in all details !")
+                Alert.alert("Please fill in all details !")
                 return
             }
             else {
@@ -238,19 +243,13 @@ export default function Login({ navigation }) {
                     })
                 });
                 let data = await result.json();
-                setLoading(false);
-                console.log('====================================');
-                console.log(Pass);
-                console.log('====================================');
-                console.log(data.Hash);
-                console.log('====================================');
-                console.log('====================================');
                 var correct = bcrypt.compareSync(Pass, data.Hash)
                 if (!correct) {
                     Alert.alert("Wrong details,check your details");
                     return;
                 }
                 else {
+                    setLoading(true);
                     if (data.User_img.indexOf("?asid") == -1)
                         data.User_img = `${data.User_img}?t=${Date.now()}`;
                     storeData(data);
@@ -267,7 +266,6 @@ export default function Login({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Loader loading={loading} />
             <Input
                 style={styles.input}
                 onChangeText={onChangeUsername}
@@ -288,6 +286,9 @@ export default function Login({ navigation }) {
                     <Text style={styles.textBtn}>Login</Text>
                 </View>
             </TouchableOpacity>
+            {shouldShow ? (
+                <Loader loading={loading} />
+            ) : null}
             <Text style={styles.text}>Don't have an account yet ?</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Registration')}>
                 <View style={styles.button_normal}>
@@ -306,33 +307,35 @@ export default function Login({ navigation }) {
                     <Text style={styles.textGo}>Google</Text>
                 </View>
             </TouchableOpacity>
-            <View style={styles.centeredView}>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                        setModalVisible(!modalVisible);
-                    }}>
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <Text style={styles.modalText}>The username {badUsername} already exists, please choose another username</Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={onChangeNewUsername}
-                                value={new_username}
-                                placeholder="new username"
-                            />
-                            <TouchableOpacity onPress={() => HideModal()}>
-                                <View style={styles.button_normal}>
-                                    <Text style={styles.textBtn}>Save</Text>
-                                </View>
-                            </TouchableOpacity>
+            {shouldShow ? (
+                <View style={styles.centeredView}>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => {
+                            Alert.alert("Modal has been closed.");
+                            setModalVisible(!modalVisible);
+                        }}>
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalText}>The username {badUsername} already exists, please choose another username</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    onChangeText={onChangeNewUsername}
+                                    value={new_username}
+                                    placeholder="new username"
+                                />
+                                <TouchableOpacity onPress={() => HideModal()}>
+                                    <View style={styles.button_normal}>
+                                        <Text style={styles.textBtn}>Save</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                </Modal>
-            </View>
+                    </Modal>
+                </View>
+            ) : null}
         </View>
     );
 }
@@ -341,7 +344,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop:"25%"
+        marginTop: "25%"
     },
     input: {
         height: 40,
