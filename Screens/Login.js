@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Modal, View, StyleSheet, Text, TextInput, TouchableOpacity, Platform } from 'react-native';
+import { KeyboardAvoidingView,ImageBackground, Alert, Modal, View, StyleSheet, Text, TextInput, TouchableOpacity, Platform } from 'react-native';
 import * as Facebook from 'expo-facebook';
 import * as Google from 'expo-google-app-auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -28,7 +28,7 @@ export default function Login({ navigation }) {
     const [new_username, onChangeNewUsername] = useState()
     const [Pass, onChangePass] = useState();
     const [loading, setLoading] = useState(false);
-
+    const image = { uri: "http://ruppinmobile.tempdomain.co.il/site27/Assets/background.jpg" }
 
     useEffect(() => {
         (async () => {
@@ -264,78 +264,80 @@ export default function Login({ navigation }) {
     }
 
     return (
-        <View style={styles.container}>
-            <Input
-                style={styles.input}
-                onChangeText={onChangeUsername}
-                value={Username}
-                placeholder="Username"
-                leftIcon={<Icon name='user' size={24} color='black' />}
-            />
-            <Input
-                style={styles.input}
-                onChangeText={onChangePass}
-                value={Pass}
-                secureTextEntry={true}
-                placeholder="Password"
-                leftIcon={<Icon name='lock' size={24} color='black' />}
-            />
-            <TouchableOpacity onPress={() => LoginNormal(Username, Pass)}>
-                <View style={styles.button_normal}>
-                    <Text style={styles.textBtn}>Login</Text>
-                </View>
-            </TouchableOpacity>
-            {shouldShow ? (
-                <Loader loading={loading} />
-            ) : null}
-            <Text style={styles.text}>Don't have an account yet ?</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Registration')}>
-                <View style={styles.button_normal}>
-                    <Text style={styles.textBtn}>Sign up!</Text>
-                </View>
-            </TouchableOpacity>
-            <Text style={styles.line} />
-            <Text style={styles.textOption} >Other login options</Text>
-            <TouchableOpacity onPress={() => LogInWithFacebook()}>
-                <View style={styles.buttonFB}>
-                    <Text style={styles.textFB}>Facebook</Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => LogInWithGoogle()} >
-                <View style={styles.buttonGoogle}>
-                    <Text style={styles.textGo}>Google</Text>
-                </View>
-            </TouchableOpacity>
-            {shouldShow ? (
-                <View style={styles.centeredView}>
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={modalVisible}
-                        onRequestClose={() => {
-                            Alert.alert("Modal has been closed.");
-                            setModalVisible(!modalVisible);
-                        }}>
-                        <View style={styles.centeredView}>
-                            <View style={styles.modalView}>
-                                <Text style={styles.modalText}>The username {badUsername} already exists, please choose another username</Text>
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={onChangeNewUsername}
-                                    value={new_username}
-                                    placeholder="new username"
-                                />
-                                <TouchableOpacity onPress={() => HideModal()}>
-                                    <View style={styles.button_normal}>
-                                        <Text style={styles.textBtn}>Save</Text>
-                                    </View>
-                                </TouchableOpacity>
+        <ImageBackground source={image} resizeMode="stretch" style={styles.image}>
+            <View style={styles.container}>
+                <Input
+                    style={styles.input}
+                    onChangeText={onChangeUsername}
+                    value={Username}
+                    placeholder="Username"
+                    leftIcon={<Icon name='user' size={24} color='black' />}
+                />
+                <Input
+                    style={styles.input}
+                    onChangeText={onChangePass}
+                    value={Pass}
+                    secureTextEntry={true}
+                    placeholder="Password"
+                    leftIcon={<Icon name='lock' size={24} color='black' />}
+                />
+                <TouchableOpacity onPress={() => LoginNormal(Username, Pass)}>
+                    <View style={styles.button_normal}>
+                        <Text style={styles.textBtn}>Login</Text>
+                    </View>
+                </TouchableOpacity>
+                {shouldShow ? (
+                    <Loader loading={loading} />
+                ) : null}
+                <Text style={styles.text}>Don't have an account yet ?</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Registration')}>
+                    <View style={styles.button_normal}>
+                        <Text style={styles.textBtn}>Sign up!</Text>
+                    </View>
+                </TouchableOpacity>
+                <Text style={styles.line} />
+                <Text style={styles.textOption} >Other login options</Text>
+                <TouchableOpacity onPress={() => LogInWithFacebook()}>
+                    <View style={styles.buttonFB}>
+                        <Text style={styles.textFB}>Facebook</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => LogInWithGoogle()} >
+                    <View style={styles.buttonGoogle}>
+                        <Text style={styles.textGo}>Google</Text>
+                    </View>
+                </TouchableOpacity>
+                {shouldShow ? (
+                    <View style={styles.centeredView}>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={modalVisible}
+                            onRequestClose={() => {
+                                Alert.alert("Modal has been closed.");
+                                setModalVisible(!modalVisible);
+                            }}>
+                            <View style={styles.centeredView}>
+                                <View style={styles.modalView}>
+                                    <Text style={styles.modalText}>The username {badUsername} already exists, please choose another username</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        onChangeText={onChangeNewUsername}
+                                        value={new_username}
+                                        placeholder="new username"
+                                    />
+                                    <TouchableOpacity onPress={() => HideModal()}>
+                                        <View style={styles.button_normal}>
+                                            <Text style={styles.textBtn}>Save</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                        </View>
-                    </Modal>
-                </View>
-            ) : null}
-        </View>
+                        </Modal>
+                    </View>
+                ) : null}
+            </View>
+        </ImageBackground>
     );
 }
 const styles = StyleSheet.create({
@@ -344,6 +346,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: "25%"
+    },
+    image: {
+        flex: 1,
+        justifyContent: "center"
     },
     input: {
         height: 40,
