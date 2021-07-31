@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Button, StyleSheet, TextInput, View } from 'react-native';
+import { Input } from 'react-native-elements';
 import Loader from '../Components/Loader'
 
 const urlLocal = "http://localhost:52763/"
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 
 const Search = ({ navigation, route }) => {
-    const [searchTitle, onChangeTitle] = useState();
+    const [searchTitle, onChangeTitle] = useState('');
     const user = route.params.route.user
 
     useEffect(() => {
+        console.log(route);
         (async () => {
             if (route.params.route.search !== undefined) {
                 onChangeTitle(route.params.route.search)
+                
             }
-            SearchJoke(searchTitle);
+            //SearchJoke(searchTitle);
         })()
     }, []);
 
@@ -38,6 +41,7 @@ const Search = ({ navigation, route }) => {
                 });
                 let data = [...await result.json()];
                 var route = { user: user, jokeList: data, searchTitle: searchTitle };
+                console.log(route);
                 navigation.navigate("JokeMap", { navigation: navigation, route: route });
             } catch (e) {
                 console.error(e)
@@ -47,7 +51,7 @@ const Search = ({ navigation, route }) => {
 
     return (
         <View>
-            <TextInput
+            <Input
                 style={styles.input}
                 onChangeText={onChangeTitle}
                 value={searchTitle}

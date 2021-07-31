@@ -20,10 +20,9 @@ export default function Profile({ navigation, user }) {
     const [shouldShow, setShouldShow] = useState(false);
     const [loading, setLoading] = useState(false);
     const [userId, setUserId] = useState(user.Id_user);
-    const [username, setUserName] = useState();
+    const [username, setUserName] = useState('');
     const [image, setImage] = useState(user.User_img);
-    const [search, onChangeSearch] = useState();
-    const [comment, onChangeComment] = useState();
+    const [search, onChangeSearch] = useState('');
     const [profileJokes, setList] = useState([
         { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_likes: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
     ]);
@@ -232,7 +231,7 @@ export default function Profile({ navigation, user }) {
         navigation.navigate("Post", { user: user });
     }
 
-    const SearchFunc = (search) => {
+    const SearchFunc = () => {
         var route = { user: user, search: search };
         navigation.navigate("Search", { navigation: navigation, route: route });
     }
@@ -257,30 +256,7 @@ export default function Profile({ navigation, user }) {
         }
 
     }
-    const AddComment = async (Id_joke) => {
-        try {
-            let result = await fetch(url + "api/add/comment", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    Id_joke: Id_joke,
-                    Id_user: userId,
-                    Comment_body: comment,
-                    Comment_Date: dateTime,
-                    User_img: image,
-                    Username: username
-                })
 
-            });
-            let data = await result.json();
-            onChangeComment('');
-        } catch (e) {
-            console.error(e)
-        }
-    }
     const MoveToJoke = (item) => {
         var route = { user: user, item: item }
         console.log(route);
@@ -353,6 +329,8 @@ export default function Profile({ navigation, user }) {
                     <TextInput style={styles.search}
                         onChangeText={onChangeSearch}
                         value={search}
+                        
+                        //onPress={SearchFunc(search)}
                         placeholder="Search friends/jokes" />
                     <FontAwesome style={styles.serach_icon} onPress={() => SearchFunc(search)} name="search" size={24} color="grey" />
                 </View>
@@ -549,22 +527,31 @@ const styles = StyleSheet.create({
     },
     //search holder
     search_holder: {
-        alignItems: 'center',
+        alignItems: 'flex-start',
         margin: 8,
-        flexDirection: 'row-reverse',
-        height: 26,
+        height:46,
+        flexDirection: 'row',
         borderWidth: 1,
         borderRadius: 50,
         borderColor: 'grey',
     },
     search: {
         fontWeight: 'bold',
-        flexDirection: 'row',
-        alignItems: 'stretch',
+        marginRight:12,
+        marginLeft:8,
+        marginTop:6,
+        
+        padding:2 ,
+        width:280,
+        fontSize:20,
+        
 
     },
     serach_icon: {
-
+        padding:2,
+        marginTop:7,
+        marginLeft:12,
+        
     },
     //Profile part
     profileHolder: {
@@ -630,7 +617,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         alignItems: 'flex-start',
         marginTop: 16,
-        padding: 8,
+        padding: 28,
         borderWidth: 1,
         borderRadius: 9,
         borderColor: 'grey',
@@ -656,21 +643,21 @@ const styles = StyleSheet.create({
         margin: 2
     },
     UserImg: {
-        width: 30,
-        height: 30,
+        width: 60,
+        height: 60,
         borderRadius: 100,
-        borderWidth: 2,
         borderRadius: 90,
-        borderColor: 'orange',
         resizeMode: 'stretch',
 
     },
     UserName: {
         marginLeft: 5,
+        paddingTop:12,
+        fontSize: 20,
         fontWeight: "bold",
     },
     JokeImage: {
-        width: 250,
+        width: 300,
         height: 250,
         resizeMode: 'stretch',
 
