@@ -305,8 +305,6 @@ export default function Profile({ navigation, user }) {
             });
             let data = [...await result.json()];
             setIFollowList(data);
-            console.log(data);
-            console.log(iFollowList);
         } catch (e) {
             console.error(e)
         }
