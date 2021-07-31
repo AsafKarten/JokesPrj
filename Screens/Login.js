@@ -86,6 +86,7 @@ export default function Login({ navigation }) {
 
     const RegistrationUser = async (id, username, email, img) => {
         try {
+            setLoading(true);
             let result = await fetch(url + "api/user", {
                 method: 'POST',
                 headers: {
