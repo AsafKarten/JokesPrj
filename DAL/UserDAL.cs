@@ -1,5 +1,6 @@
 ﻿using JokesPrj.Models;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -22,12 +23,12 @@ namespace JokesPrj.DAL
                 {
                     con.Open();
                     User u = null;
-                    string query = $"SELECT * FROM JokesUsers where id_user= @id_user ";
+                    string query = $"SELECT * FROM JokesUsers where id_user= @id_user";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@id_user", id_user);
+                    cmd.Parameters.AddWithValue("@id_user", SqlDbType.Int).Value = id_user;
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
-                        u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]));
+                        u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["email"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
                     return u;
                 }
             }
@@ -45,9 +46,9 @@ namespace JokesPrj.DAL
                 {
                     con.Open();
                     User u = null;
-                    string query = $"SELECT * FROM JokesUsers where id_external= @id_external ";
+                    string query = $"SELECT * FROM JokesUsers where id_external= @id_external";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@id_external", id_external);
+                    cmd.Parameters.AddWithValue("@id_external", SqlDbType.NVarChar).Value = id_external;
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                         u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["email"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
@@ -69,7 +70,7 @@ namespace JokesPrj.DAL
                     con.Open();
                     string query = $"SELECT * FROM JokesUsers where id_user= @id_user";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@id_user", user.Id_user);
+                    cmd.Parameters.AddWithValue("@id_user", SqlDbType.Int).Value = user.Id_user;
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                         user = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["email"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
@@ -81,6 +82,66 @@ namespace JokesPrj.DAL
                 throw new Exception(ex.Message);
             }
         }
+
+        private User UpdateUser(User new_user)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    string query = $"Update JokesUsers Set (username,phash,email,salt) = (@username,@phash,@email,@salt) where id_user= @id_user";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@id_user", SqlDbType.Int).Value = new_user.Id_user;
+                    cmd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = new_user.Username;
+                    cmd.Parameters.AddWithValue("@email", SqlDbType.NVarChar).Value = new_user.Email;
+                    cmd.Parameters.AddWithValue("@salt", SqlDbType.NVarChar).Value = new_user.Salt;
+                    cmd.Parameters.AddWithValue("@phash", SqlDbType.NVarChar).Value = new_user.Hash;
+                    cmd.ExecuteNonQuery();
+                    return new_user;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message + "UpdateUser");
+            }
+
+        }
+
+
+        public User GetUpdatedUser(User new_user)
+        {
+            try
+            {
+                User exist_user = null;
+                exist_user = GetUserByID(new_user.Id_user);
+                if (!(exist_user.Username.Equals(new_user.Username)))
+                {
+                    bool checkUser = CheckUsername(new_user);
+                    if (checkUser == false)
+                    {
+                        new_user = UpdateUser(new_user);
+                        return new_user;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    new_user = UpdateUser(new_user);
+                    return new_user;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message + "GetUpdatedUser");
+            }
+        }
+
 
         public int UpdateIFollow(User logged_user, bool status)
         {
@@ -154,6 +215,41 @@ namespace JokesPrj.DAL
                     while (reader.Read())
                         u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["email"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
                     return u;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public bool CheckUsername(User new_user)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    bool isExist = false;
+                    List<User> userList = null;
+                    User u = null;
+                    string query = $"SELECT * FROM JokesUsers";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["email"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
+                        userList.Add(u);
+                    }
+                    foreach (User user in userList)
+                    {
+                        if (user.Username.Equals(new_user.Username))
+                        {
+                            isExist = true;
+                            break;
+                        }
+
+                    }
+                    return isExist;
                 }
             }
             catch (Exception ex)

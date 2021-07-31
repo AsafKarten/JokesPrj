@@ -93,5 +93,23 @@ namespace JokesPrj.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+        [Route("api/edit/user")]
+        public IHttpActionResult UpdateDetailsUser([FromBody] User user)
+        {
+            try
+            {
+                user = Globals.UserDAL.GetUpdatedUser(user);
+                if (user == null)
+                    return Content(HttpStatusCode.NotFound, $"User was not updated");
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

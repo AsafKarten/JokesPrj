@@ -135,37 +135,7 @@ namespace JokesPrj.DAL
             }
         }
 
-        //public List<Follow> GetIFollowers(int id_user)
-        //{
-        //    try
-        //    {
-        //        Follow F = null;
-        //        List<Follow> Followers = new List<Follow>();
-        //        using (SqlConnection con = new SqlConnection(conStr))
-        //        {
-        //            con.Open();
-        //            string query = $"SELECT * FROM Follow WHERE id_user= @id_user";
-        //            SqlCommand cmd = new SqlCommand(query, con);
-        //            cmd.Parameters.AddWithValue("@id_user", id_user);
-        //            SqlDataReader reader = cmd.ExecuteReader();
-        //            while (reader.Read())
-        //            {
-        //                F = new Follow(
-        //                    Convert.ToInt32(reader["follow_id"]),
-        //                    Convert.ToInt32(reader["target_id"]),
-        //                    Convert.ToString(reader["target_username"]),
-        //                    Convert.ToString(reader["target_img"])
-        //                    );
-        //                Followers.Add(F);
-        //            }
-        //        }
-        //        return Followers;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message);
-        //    }
-        //}
+      
         public List<Follow> GetFollowersMe(int id_user)
         {
             try
