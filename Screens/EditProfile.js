@@ -74,7 +74,13 @@ export default function EditProfile({ navigation, route }) {
             });
             let data = await result.json();
             console.log(data);
-            navigation.navigate("TabStack", { user: data });
+            if(data== null){
+                Alert.alert("User name already exist")
+            }
+            else{
+                navigation.navigate("TabStack", { user: data });
+            }
+
         } catch (e) {
             console.error(e)
         }
