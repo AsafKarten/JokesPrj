@@ -370,7 +370,7 @@ export default function Profile({ navigation, user }) {
                         style={styles.buttonStyle}
                         onPress={Edit}>
                         <Text style={styles.buttonTextStyle}>
-                            <AntDesign style={styles.add_icon} name="pencil" size={24} color="grey" fontWeight={'bold'} />
+                            <AntDesign style={styles.add_icon} name="edit" size={24} color="grey" fontWeight={'bold'} />
                         </Text>
                     </TouchableOpacity>
 
