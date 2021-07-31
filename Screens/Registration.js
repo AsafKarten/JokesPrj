@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert,TouchableOpacity, View, StyleSheet, TextInput, Button, Text } from 'react-native';
+import { Alert, TouchableOpacity, View, StyleSheet, TextInput, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -7,7 +7,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
 
- const defaultImg = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_icon.jpg"
+const defaultImg = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_icon.jpg"
 
 var bcrypt = require('bcryptjs');
 
@@ -26,10 +26,7 @@ export default function RegistrationNewUser({ navigation }) {
         let emailValid = rjxEmail.test(Email);
         // let usernameValid = rjxUsername.test(Username);
         // let passwordValid = rjxPass.test(Pass);
-        if (!emailValid) {
-            Alert.alert("Invalid address email");
-            return;
-        }
+
         // if (!usernameValid) {
         //     alert("Invalid username");
         //     return;
@@ -45,6 +42,10 @@ export default function RegistrationNewUser({ navigation }) {
         if (Pass != CPass) {
             Alert.alert("Password dose not match confirm password!")
             return
+        }
+        if (!emailValid) {
+            Alert.alert("Invalid address email");
+            return;
         }
         else {
             try {
