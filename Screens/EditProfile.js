@@ -27,6 +27,7 @@ export default function EditProfile({ navigation, route }) {
     const [CPass, onChangeCPass] = useState('');
 
     const Edit = async () => {
+        console.log(route.params.route);
         let emailValid = rjxEmail.test(Email);
         // let usernameValid = rjxUsername.test(Username);
         // let passwordValid = rjxPass.test(Pass);
@@ -63,6 +64,7 @@ export default function EditProfile({ navigation, route }) {
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
+                    Id_user:prevDetails.Id_user,
                     Username: Username,
                     Email: Email,
                     Hash: Hash,
@@ -74,7 +76,13 @@ export default function EditProfile({ navigation, route }) {
             });
             let data = await result.json();
             console.log(data);
-            navigation.navigate("TabStack", { user: data });
+            if(data == undefined){
+                Alert.alert("User name already exist")
+            }
+            else{
+                navigation.navigate("TabStack", { user: data });
+            }
+
         } catch (e) {
             console.error(e)
         }
