@@ -100,7 +100,8 @@ namespace JokesPrj.Controllers
         {
             try
             {
-                user = Globals.UserDAL.GetUpdatedUser(user);
+                User update_user = null;
+                update_user = Globals.UserDAL.GetUpdatedUser(user);
                 if (user == null)
                     return Content(HttpStatusCode.NotFound, $"User was not updated");
                 return Ok(user);

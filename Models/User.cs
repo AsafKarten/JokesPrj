@@ -51,5 +51,18 @@
             Follow_me = follow_me;
             Id_external = id_external;
         }
+
+        public User(int id_user, string username, string hash, string email, string user_img, int i_follow, int follow_me,string salt, string id_external)
+        {
+            Id_user = id_user;
+            Username = username;
+            Hash = hash;
+            Email = email;
+            User_img = user_img;
+            I_follow = i_follow;
+            Follow_me = follow_me;
+            Salt = salt;
+            Id_external = id_external;
+        }
     }
 }

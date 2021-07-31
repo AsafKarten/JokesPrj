@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-
+using System.Diagnostics;
 
 namespace JokesPrj.DAL
 {
@@ -90,13 +90,9 @@ namespace JokesPrj.DAL
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     con.Open();
-                    string query = $"Update JokesUsers Set (username,phash,email,salt) = (@username,@phash,@email,@salt) where id_user= @id_user";
+                    string query = $"Update JokesUsers Set username = '{new_user.Username}',phash = '{new_user.Hash}',email = '{new_user.Email}',salt = '{new_user.Salt}' where id_user= @id_user";
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@id_user", SqlDbType.Int).Value = new_user.Id_user;
-                    cmd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = new_user.Username;
-                    cmd.Parameters.AddWithValue("@email", SqlDbType.NVarChar).Value = new_user.Email;
-                    cmd.Parameters.AddWithValue("@salt", SqlDbType.NVarChar).Value = new_user.Salt;
-                    cmd.Parameters.AddWithValue("@phash", SqlDbType.NVarChar).Value = new_user.Hash;
                     cmd.ExecuteNonQuery();
                     return new_user;
                 }
@@ -110,23 +106,37 @@ namespace JokesPrj.DAL
         }
 
 
-        public User GetUpdatedUser(User new_user)
+        public User GetUpdatedUser(User update_user)
         {
+            User new_user = null;
+            User exist_user = null;
+            bool isExist = true;
+            List<User> usersList = null;
             try
             {
-                User exist_user = null;
-                exist_user = GetUserByID(new_user.Id_user);
-                if (!(exist_user.Username.Equals(new_user.Username)))
+                exist_user = GetUserByID(update_user.Id_user);
+                if (!(exist_user.Username.Equals(update_user.Username)))
                 {
-                    bool checkUser = CheckUsername(new_user);
-                    if (checkUser == false)
+                    usersList = GetAllUsers();
+                    if (usersList == null)
                     {
-                        new_user = UpdateUser(new_user);
+                        return update_user;
+                    }
+                    foreach (User u in usersList)
+                    {
+                        if (u.Username.Equals(update_user.Username))
+                        {
+                            isExist = false;
+                        }
+                    }
+                    if (isExist == false)
+                    {
+                        new_user = UpdateUser(update_user);
                         return new_user;
                     }
                     else
                     {
-                        return null;
+                        return update_user;
                     }
                 }
                 else
@@ -138,7 +148,7 @@ namespace JokesPrj.DAL
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message + "GetUpdatedUser");
+                throw new Exception(ex.Message + usersList);
             }
         }
 
@@ -222,39 +232,45 @@ namespace JokesPrj.DAL
                 throw new Exception(ex.Message);
             }
         }
-        public bool CheckUsername(User new_user)
+        public List<User> GetAllUsers()
         {
+            List<User> userList = null;
             try
             {
                 using (SqlConnection con = new SqlConnection(conStr))
                 {
                     con.Open();
-                    bool isExist = false;
-                    List<User> userList = null;
-                    User u = null;
-                    string query = $"SELECT * FROM JokesUsers";
-                    SqlCommand cmd = new SqlCommand(query, con);
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    SqlCommand sql_cmnd = new SqlCommand("GetAllUsers", con);
+                    sql_cmnd.CommandType = CommandType.StoredProcedure;
+                    SqlDataReader reader = sql_cmnd.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["email"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
-                        userList.Add(u);
-                    }
-                    foreach (User user in userList)
-                    {
-                        if (user.Username.Equals(new_user.Username))
+                        while (reader.Read())
                         {
-                            isExist = true;
-                            break;
+                            User u = new User(
+                                Convert.ToInt32(reader["id_user"]),
+                                Convert.ToString(reader["username"]),
+                                Convert.ToString(reader["phash"]),
+                                Convert.ToString(reader["email"]),
+                                Convert.ToString(reader["user_img"]),
+                                Convert.ToInt32(reader["i_follow"]),
+                                Convert.ToInt32(reader["follow_me"]),
+                                Convert.ToString(reader["salt"]),
+                                Convert.ToString(reader["id_external"]));
+                            userList.Add(u);
                         }
-
+                        return userList;
                     }
-                    return isExist;
+                    else
+                    {
+                        Debug.WriteLine("No rows on the table");
+                        return userList;
+                    }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("userList" + userList);
             }
         }
 
