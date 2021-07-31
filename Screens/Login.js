@@ -37,9 +37,6 @@ export default function Login({ navigation }) {
     }, [])
 
     const getData = async () => {
-        if (Platform.OS !== 'web') {
-            setShouldShow(true)
-        }
         const data = await AsyncStorage.getItem('loggedUser')
         if (data !== undefined) {
             let user = JSON.parse(data)
@@ -62,7 +59,9 @@ export default function Login({ navigation }) {
 
     const updateLoggedUser = async (username) => {
         try {
-
+            if (Platform.OS !== 'web') {
+                setShouldShow(true)
+            }
             await clearAsyncStorage()
             let result = await fetch(url + "api/user", {
                 method: 'POST',
