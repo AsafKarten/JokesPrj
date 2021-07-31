@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Alert, TouchableOpacity, View, StyleSheet, TextInput, Button, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
@@ -56,7 +56,6 @@ export default function EditProfile({ navigation, route }) {
         }
 
         try {
-
             let result = await fetch(url + "api/edit/user", {
                 method: 'POST',
                 headers: {
