@@ -13,12 +13,12 @@ export default function Home({ navigation, user }) {
     ]);
 
     useEffect(() => {
-        const interval = setInterval(() => {
+        // const interval = setInterval(() => {
             (async () => {
                 await LoadJokes();
             })()
-        }, 10000);
-        return () => clearInterval(interval);
+        // }, 10000);
+        // return () => clearInterval(interval);
     }, [])
 
     useEffect(() => {
@@ -133,7 +133,6 @@ export default function Home({ navigation, user }) {
     );
 }
 const styles = StyleSheet.create({
-
     container: {
         flex: 1,
         justifyContent: 'center',
@@ -179,7 +178,6 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     JokeImage: {
-
         width: 250,
         height: 250,
         resizeMode: 'stretch',

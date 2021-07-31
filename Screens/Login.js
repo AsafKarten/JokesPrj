@@ -38,7 +38,7 @@ export default function Login({ navigation }) {
 
     const getData = async () => {
         const data = await AsyncStorage.getItem('loggedUser')
-        if (data !== undefined) {
+        if (data !== null) {
             let user = JSON.parse(data)
             await updateLoggedUser(user.Username);
         }
@@ -253,7 +253,6 @@ export default function Login({ navigation }) {
                     if (data.User_img.indexOf("?asid") == -1)
                         data.User_img = `${data.User_img}?t=${Date.now()}`;
                     storeData(data);
-
                     navigation.navigate("TabStack", { user: data });
 
                 }
@@ -359,7 +358,7 @@ const styles = StyleSheet.create({
         margin: 15,
         borderRadius: 8,
         padding: 10,
-        backgroundColor: "orange"
+        backgroundColor: "#633689"
     },
     textBtn: {
         color: "white",
