@@ -11,13 +11,13 @@ export default function Home({ navigation, user }) {
     const [allJokes, setList] = useState([
         { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_like: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
     ]);
-    
+
     useEffect(() => {
         const interval = setInterval(() => {
             (async () => {
                 await LoadJokes();
             })()
-        }, 9000);
+        }, 10000);
         return () => clearInterval(interval);
     }, [])
 
@@ -27,25 +27,22 @@ export default function Home({ navigation, user }) {
                 await LoadJokes();
                 if (user.User_img.indexOf("?asid") == -1)
                     user.User_img = `${user.User_img}?t=${Date.now()}`
-                //navigation.navigate("TabStack", { user: user })
             }
         });
         return loader_jokes;
     }, [navigation])
+
     const LoadJokes = async () => {
         try {
             let result = await fetch(url + "api/feed", {
                 method: 'GET'
             });
             let data = [...await result.json()];
-            setList(data.reverse());
+                setList(data.reverse());
         } catch (error) {
             console.error(error)
         }
     }
-
-
-
 
 
     const MoveToProfile = (item) => {
