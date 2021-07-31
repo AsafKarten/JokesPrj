@@ -280,6 +280,10 @@ export default function Profile({ navigation, user }) {
         console.log(route);
         navigation.navigate("Joke", { navigation: navigation, route: route });
     }
+    const Edit = () => {
+        console.log(user);
+        navigation.navigate("EditProfile", { navigation: navigation, route: user });
+    }
 
     const LoadIFollowList = async (id_user) => {
         try {
@@ -360,6 +364,13 @@ export default function Profile({ navigation, user }) {
                         onPress={checkDevice}>
                         <Text style={styles.buttonTextStyle}>
                             <AntDesign style={styles.add_icon} name="camera" size={24} color="grey" fontWeight={'bold'} />
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.buttonStyle}
+                        onPress={Edit}>
+                        <Text style={styles.buttonTextStyle}>
+                            <AntDesign style={styles.add_icon} name="pencil" size={24} color="grey" fontWeight={'bold'} />
                         </Text>
                     </TouchableOpacity>
 

@@ -15,6 +15,7 @@ import JokeMap from './JokeMap';
 import Joke from '../Screens/Joke';
 import TabNavigation from './TabNavigation';
 import FavoriteJokes from '../Screens/FavoriteJokes';
+import EditProfile from '../Screens/EditProfile';
 
 const Stack = createStackNavigator();
 const StackNavigation = () => {
@@ -26,6 +27,7 @@ const StackNavigation = () => {
                     <Stack.Screen name="Login" component={Login} />
                     <Stack.Screen name="Registration" component={Registration} />
                     <Stack.Screen name="Profile" component={Profile} />
+                    <Stack.Screen name="EditProfile" component={EditProfile} />
                     <Stack.Screen name="FriendProfile" component={FriendProfile} />
                     <Stack.Screen name="Post" component={Post} />
                     <Stack.Screen name="Search" component={Search} />
