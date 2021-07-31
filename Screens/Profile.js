@@ -15,6 +15,7 @@ const default_img = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_ic
 
 export default function Profile({ navigation, user }) {
     let actionSheet = useRef();
+    const [shouldShow, setShouldShow] = useState(false);
     var optionArray = ['take a photo', 'choose from a gallery', 'Cancel'];
     const [userId, setUserId] = useState(user.Id_user);
     const [username, setUserName] = useState();
@@ -29,10 +30,6 @@ export default function Profile({ navigation, user }) {
     const [modalIFollowVisible, setIF_ModalVisible] = useState(false);
     const [modalFollowMeVisible, setFM_ModalVisible] = useState(false);
 
-    var today = new Date();
-    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes();
-    const dateTime = date + ' ' + time;
 
     useEffect(() => {
         (async () => {
@@ -46,6 +43,7 @@ export default function Profile({ navigation, user }) {
                 LoadFollowMeList(user.Id_user)
             }
             if (Platform.OS !== 'web') {
+                setShouldShow(true)
                 const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
                 if (status !== 'granted') {
                     Alert.alert('Sorry, we need media permissions to make this work!');
@@ -64,6 +62,13 @@ export default function Profile({ navigation, user }) {
         });
         return loaderjokes;
     }, [navigation])
+
+    var today = new Date();
+    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes();
+    const dateTime = date + ' ' + time;
+
+
 
     const storeData = async (data) => {
         try {
@@ -423,92 +428,94 @@ export default function Profile({ navigation, user }) {
                             </View>
                         )} />
                 </View>
-                <ActionSheet
-                    ref={actionSheet}
-                    // Title of the Bottom Sheet
-                    title={'Choose from where to upload a funny picture '}
-                    // Options Array to show in bottom sheet
-                    options={optionArray}
-                    // Define cancel button index in the option array
-                    // This will take the cancel option in bottom
-                    // and will highlight it
-                    cancelButtonIndex={2}
-                    // Highlight any specific option
-                    destructiveButtonIndex={1}
-                    onPress={(index) => {
-                        if (index == 0) {
-                            takePicture();
-                        }
-                        else if (index == 1) {
-                            GalleryPicture();
-                        }
-                    }}
-                />
+                {shouldShow ? (
+                    <View>
+                        <ActionSheet
+                            ref={actionSheet}
+                            // Title of the Bottom Sheet
+                            title={'Choose from where to upload a funny picture '}
+                            // Options Array to show in bottom sheet
+                            options={optionArray}
+                            // Define cancel button index in the option array
+                            // This will take the cancel option in bottom
+                            // and will highlight it
+                            cancelButtonIndex={2}
+                            // Highlight any specific option
+                            destructiveButtonIndex={1}
+                            onPress={(index) => {
+                                if (index == 0) {
+                                    takePicture();
+                                }
+                                else if (index == 1) {
+                                    GalleryPicture();
+                                }
+                            }}
+                        />
 
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalIFollowVisible}
-                    onRequestClose={() => {
-                        Alert.alert('Modal has been closed.');
-                    }}>
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Hello World!</Text>
-                            <TouchableHighlight
-                                style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                                onPress={() => {
-                                    setIF_ModalVisible(!modalIFollowVisible);
-                                }}>
-                                <Text style={styles.textStyle}>Hide Modal</Text>
-                            </TouchableHighlight>
-                            <FlatList
-                                data={iFollowList}
-                                keyExtractor={(item) => item.Follow_id}
-                                renderItem={({ item }) => (
-                                    <View style={styles.list}>
-                                        <View style={styles.ModalCube}>
-                                            <Image onPress={() => MoveToProfile(item)} source={{ uri: item.Target_img }} style={styles.ModalUserImg} />
-                                            <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Target_username}</Text>
-                                        </View>
-                                    </View>
-                                )} />
-                        </View>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={modalIFollowVisible}
+                            onRequestClose={() => {
+                                Alert.alert('Modal has been closed.');
+                            }}>
+                            <View style={styles.centeredView}>
+                                <View style={styles.modalView}>
+                                    <Text style={styles.modalText}>Hello World!</Text>
+                                    <TouchableHighlight
+                                        style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                        onPress={() => {
+                                            setIF_ModalVisible(!modalIFollowVisible);
+                                        }}>
+                                        <Text style={styles.textStyle}>Hide Modal</Text>
+                                    </TouchableHighlight>
+                                    <FlatList
+                                        data={iFollowList}
+                                        keyExtractor={(item) => item.Follow_id}
+                                        renderItem={({ item }) => (
+                                            <View style={styles.list}>
+                                                <View style={styles.ModalCube}>
+                                                    <Image onPress={() => MoveToProfile(item)} source={{ uri: item.Target_img }} style={styles.ModalUserImg} />
+                                                    <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Target_username}</Text>
+                                                </View>
+                                            </View>
+                                        )} />
+                                </View>
+                            </View>
+                        </Modal>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={modalFollowMeVisible}
+                            onRequestClose={() => {
+                                Alert.alert('Modal has been closed.');
+                            }}>
+                            <View style={styles.centeredView}>
+                                <View style={styles.modalView}>
+                                    <Text style={styles.modalText}>Hello World!</Text>
+                                    <TouchableHighlight
+                                        style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                        onPress={() => {
+                                            setFM_ModalVisible(!modalFollowMeVisible);
+                                        }}>
+                                        <Text style={styles.textStyle}>Hide Modal</Text>
+                                    </TouchableHighlight>
+                                    <FlatList
+                                        data={followMeList}
+                                        keyExtractor={(item) => item.Follow_id}
+                                        renderItem={({ item }) => (
+                                            <View style={styles.list}>
+                                                <View style={styles.ModalCube}>
+                                                    <Image onPress={() => MoveToProfile(item)} source={{ uri: item.User_img }} style={styles.ModalUserImg} />
+                                                    <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
+                                                </View>
+                                            </View>
+                                        )} />
+                                </View>
+                            </View>
+                        </Modal>
                     </View>
-                </Modal>
-
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalFollowMeVisible}
-                    onRequestClose={() => {
-                        Alert.alert('Modal has been closed.');
-                    }}>
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Hello World!</Text>
-                            <TouchableHighlight
-                                style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                                onPress={() => {
-                                    setFM_ModalVisible(!modalFollowMeVisible);
-                                }}>
-                                <Text style={styles.textStyle}>Hide Modal</Text>
-                            </TouchableHighlight>
-                            <FlatList
-                                data={followMeList}
-                                keyExtractor={(item) => item.Follow_id}
-                                renderItem={({ item }) => (
-                                    <View style={styles.list}>
-                                        <View style={styles.ModalCube}>
-                                            <Image onPress={() => MoveToProfile(item)} source={{ uri: item.User_img }} style={styles.ModalUserImg} />
-                                            <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
-                                        </View>
-                                    </View>
-                                )} />
-                        </View>
-                    </View>
-                </Modal>
-
+                ) : null}
             </ScrollView>
         </View>
     )

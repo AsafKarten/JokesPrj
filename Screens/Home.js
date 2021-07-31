@@ -11,19 +11,7 @@ export default function Home({ navigation, user }) {
     const [allJokes, setList] = useState([
         { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_like: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
     ]);
-
-    const LoadJokes = async () => {
-        try {
-            let result = await fetch(url + "api/feed", {
-                method: 'GET'
-            });
-            let data = [...await result.json()];
-            setList(data.reverse());
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
+    
     useEffect(() => {
         const interval = setInterval(() => {
             (async () => {
@@ -44,6 +32,19 @@ export default function Home({ navigation, user }) {
         });
         return loader_jokes;
     }, [navigation])
+    const LoadJokes = async () => {
+        try {
+            let result = await fetch(url + "api/feed", {
+                method: 'GET'
+            });
+            let data = [...await result.json()];
+            setList(data.reverse());
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+
 
 
 
