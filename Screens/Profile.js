@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ActionSheet from 'react-native-actionsheet';
 import * as FileSystem from 'expo-file-system';
 import { ScrollView } from 'react-native';
+import Loader from '../Components/Loader';
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
@@ -17,6 +18,7 @@ export default function Profile({ navigation, user }) {
     let actionSheet = useRef();
     var optionArray = ['take a photo', 'choose from a gallery', 'Cancel'];
     const [shouldShow, setShouldShow] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [userId, setUserId] = useState(user.Id_user);
     const [username, setUserName] = useState();
     const [image, setImage] = useState(user.User_img);
@@ -129,11 +131,13 @@ export default function Profile({ navigation, user }) {
             });
             if (!result.cancelled) {
                 if (Platform.OS !== 'web') {
+                    setLoading(true);
                     var content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
                     result.uri = content
                     await imageUploadA(result.uri, username)
                 }
                 else {
+                    setLoading(true);
                     await imageUpload(result.uri, username);
                 }
             }
@@ -143,6 +147,7 @@ export default function Profile({ navigation, user }) {
     }
     const imageUpload = async (imgUri, picName) => {
         try {
+
             let res = await fetch(url + "api/uploadpicture", {
                 method: 'POST',
                 headers: {
@@ -160,7 +165,7 @@ export default function Profile({ navigation, user }) {
             if (data.path.indexOf("?asid") == -1)
                 setImage(`${data.path}?t=${Date.now()}`)
             await updateLoggedUser(userId);
-
+            setLoading(false);
         } catch (e) {
             console.error(e);
         }
@@ -186,6 +191,7 @@ export default function Profile({ navigation, user }) {
             //if (data.path.indexOf("?asid") == -1)
             await setImage(`${data.path}?t=${Date.now()}`)
             await updateLoggedUser(userId);
+            setLoading(false);
         } catch (e) {
             console.error(e);
         }
@@ -366,6 +372,9 @@ export default function Profile({ navigation, user }) {
                             <AntDesign style={styles.add_icon} name="camera" size={24} color="grey" fontWeight={'bold'} />
                         </Text>
                     </TouchableOpacity>
+                    {shouldShow ? (
+                        <Loader loading={loading} />
+                    ) : null}
                     <TouchableOpacity
                         style={styles.buttonStyle}
                         onPress={Edit}>

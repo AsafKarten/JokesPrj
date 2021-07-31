@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, StyleSheet, TextInput, View } from 'react-native';
-
+import Loader from '../Components/Loader'
 
 const urlLocal = "http://localhost:52763/"
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
@@ -8,6 +8,7 @@ const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const Search = ({ navigation, route }) => {
     const [searchTitle, onChangeTitle] = useState();
     const user = route.params.route.user
+
     useEffect(() => {
         (async () => {
             if (route.params.route.search !== undefined) {
@@ -18,7 +19,6 @@ const Search = ({ navigation, route }) => {
     }, []);
 
     const LoadSearch = () => {
-        console.log(searchTitle);
         SearchJoke(searchTitle);
     }
 

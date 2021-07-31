@@ -231,6 +231,7 @@ export default function Login({ navigation }) {
                 return
             }
             else {
+                setLoading(true);
                 await clearAsyncStorage();
                 let result = await fetch(url + "api/user", {
                     method: 'POST',
@@ -249,7 +250,6 @@ export default function Login({ navigation }) {
                     return;
                 }
                 else {
-                    setLoading(true);
                     if (data.User_img.indexOf("?asid") == -1)
                         data.User_img = `${data.User_img}?t=${Date.now()}`;
                     storeData(data);
