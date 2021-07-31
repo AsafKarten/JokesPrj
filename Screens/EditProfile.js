@@ -17,12 +17,12 @@ var rjxEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
 
 
 export default function EditProfile({ navigation, route }) {
-    const [prevDetails, setPrev] = useState(route.params.route.user);
-    const [Username, onChangeUsername] = useState(route.params.route.user.Username);
-    const [Email, onChangeEmail] = useState(route.params.route.user.Email);
-    const [Hash, onChangeHash] = useState(route.params.route.user.Hash);
-    const [Salt, onChangeSalt] = useState(route.params.route.user.Salt);
-    const [User_img, onChangeImage] = useState(route.params.route.user.User_img);
+    const [prevDetails, setPrev] = useState(route.params.route);
+    const [Username, onChangeUsername] = useState(route.params.route.Username);
+    const [Email, onChangeEmail] = useState(route.params.route.Email);
+    const [Hash, onChangeHash] = useState(route.params.route.Hash);
+    const [Salt, onChangeSalt] = useState(route.params.route.Salt);
+    const [User_img, onChangeImage] = useState(route.params.route.User_img);
     const [Pass, onChangePass] = useState('');
     const [CPass, onChangeCPass] = useState('');
 
