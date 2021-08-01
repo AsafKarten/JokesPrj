@@ -541,7 +541,7 @@ const styles = StyleSheet.create({
         fontSize:18,
         color: "white",
         fontWeight: "bold",
-        fontFamily: "Sans-serif"
+        fontFamily: "sans-serif"
     },
     search: {
         fontWeight: 'bold',

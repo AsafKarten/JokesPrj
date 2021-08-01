@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     textBtn: {
         color: "white",
         fontWeight: "bold",
-        fontFamily: "Sans-serif"
+        fontFamily: "sans-serif"
     },
     //User posts style
     list: {
