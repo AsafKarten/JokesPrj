@@ -13,12 +13,9 @@ export default function Home({ navigation, user }) {
     ]);
 
     useEffect(() => {
-        // const interval = setInterval(() => {
         (async () => {
             await LoadJokes();
         })()
-        // }, 10000);
-        // return () => clearInterval(interval);
     }, [])
 
     useEffect(() => {
