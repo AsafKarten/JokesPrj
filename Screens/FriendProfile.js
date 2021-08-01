@@ -153,6 +153,20 @@ export default function FriendProfile({ navigation, route }) {
         console.log(data);
         await LoadJokes();
     }
+    const MoveToProfile = (item) => {
+        //for i follow
+        if (item.Id_user == user.Id_user) {
+            //item.Id_user = item.Target_id
+            var route = { user: user, item: item }
+        navigation.navigate("TabStack",{route:user , routeTo:"Profile"});
+        }
+        //for follow me
+        else {
+            var route = { user: user, item: item }
+            navigation.navigate("FriendProfile", { navigation: navigation, route: route });
+        }
+
+    }
 
     return (
         <View style={styles.container}>
