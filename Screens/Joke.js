@@ -20,10 +20,12 @@ export default function Joke({ navigation, route }) {
     const [commentModalVisible, setCommentModalVisible] = useState(false)
     const [comment, onChangeComment] = useState('');
     var today = new Date();
-    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    var date = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
     var time = today.getHours() + ":" + today.getMinutes();
     const dateTime = date + ' ' + time;
+
     const [shouldShow, setShouldShow] = useState(false);
+
 
     useEffect(() => {
         (async () => {
@@ -258,8 +260,6 @@ export default function Joke({ navigation, route }) {
                             </View>
                         </View>
                     </Modal>
-
-
                     <Modal
                         animationType="slide"
                         transparent={true}
@@ -285,15 +285,15 @@ export default function Joke({ navigation, route }) {
                                             <Text style={styles.textBtn}>Comment</Text>
                                         </View>
                                     </TouchableOpacity>
-  
+
                                 </View>
                                 <TouchableHighlight
-                                        style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                                        onPress={() => {
-                                            setCommentModalVisible(!commentModalVisible);
-                                        }}>
-                                        <Text style={styles.textStyle}>Close</Text>
-                                    </TouchableHighlight>
+                                    style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                    onPress={() => {
+                                        setCommentModalVisible(!commentModalVisible);
+                                    }}>
+                                    <Text style={styles.textStyle}>Close</Text>
+                                </TouchableHighlight>
                             </View>
                         </View>
                     </Modal>

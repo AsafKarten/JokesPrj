@@ -64,10 +64,7 @@ export default function Profile({ navigation, user }) {
         return loaderjokes;
     }, [navigation])
 
-    var today = new Date();
-    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes();
-    const dateTime = date + ' ' + time;
+
 
 
 

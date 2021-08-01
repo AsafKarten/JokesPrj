@@ -44,14 +44,13 @@ export default function Post({ navigation, route }) {
                 let data = await result.json();
                 let id_joke = data
                 console.log(data);
-                if (Platform.OS !== 'web')
-                {
+                if (Platform.OS !== 'web') {
                     imageUploadA(id_joke)
                 }
-                else{
+                else {
                     imageUpload(id_joke)
                 }
-                
+
                 //navigation.navigate("TabStack", { user: route.params.user });
             } catch (e) {
                 console.error(e);
@@ -130,10 +129,10 @@ export default function Post({ navigation, route }) {
                     result.uri = content
                     await setImgData(content)
                 }
-                else{
+                else {
                     await setImgData(result.uri)
                 }
-              
+
             }
         } catch (e) {
             console.error(e);
@@ -143,6 +142,7 @@ export default function Post({ navigation, route }) {
 
     return (
         <View style={styles.container}>
+            <Text style={styles.text}>Make a new Joke :) </Text>
             <TextInput
                 style={styles.input}
                 onChangeText={onChangeJokeTitle}
@@ -155,8 +155,8 @@ export default function Post({ navigation, route }) {
                 value={Joke_body}
                 placeholder="Body"
             />
+            <Text style={styles.text}>Add meme :) </Text>
             <View style={styles.imageHolder}>
-                <Text style={styles.text}>Add mem :) </Text>
                 <AntDesign style={styles.add_icon} onPress={GalleryPicture} name="upload" size={24} color="grey" fontWeight={'bold'} />
                 <Image style={styles.post_image} source={{ uri: post_img }} />
             </View>
@@ -176,10 +176,12 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
+        width:260,
         margin: 12,
         borderWidth: 1,
         borderRadius: 8,
         textAlign: 'center',
+        fontWeight: "bold"
     },
     imageHolder: {
         // flexDirection: 'row',
@@ -209,6 +211,10 @@ const styles = StyleSheet.create({
     textBtn: {
         color: "white",
         fontWeight: "normal",
+    },
+    text: {
+        fontWeight: "bold",
+        fontSize: 22
     }
 });
 

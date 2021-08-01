@@ -95,7 +95,7 @@ export default function Home({ navigation, user }) {
                     }} style={styles.UserImg} />
                     <Text onPress={() => MoveToProfile(user)} style={styles.UserName}>{user.Username}</Text>
                 </View>
-                <TextInput onFocus={onFocus} placeholder="What's on your mind ?" />
+                <TextInput onFocus={onFocus} placeholder="What's on your mind ?" style={styles.go_to_post} />
             </View>
             <FlatList
                 data={allJokes}
@@ -142,6 +142,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         margin: 8
+    },
+    go_to_post: {
+        alignSelf: 'center',
+        textAlign: 'center',
+        fontSize:20
     },
     //botton normal
     button_normal: {

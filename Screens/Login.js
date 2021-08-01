@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#3b5998"
     },
     textFB: {
-        fontSize:22,
+        fontSize:20,
         color: "white",
         fontWeight: "bold",
     },
@@ -398,7 +398,7 @@ const styles = StyleSheet.create({
         backgroundColor: "red"
     },
     textGo: {
-        fontSize:22,
+        fontSize:20,
         color: "white",
         fontWeight: "bold",
     },
