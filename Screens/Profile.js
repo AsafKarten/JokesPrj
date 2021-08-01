@@ -31,7 +31,6 @@ export default function Profile({ navigation, user }) {
     const [modalIFollowVisible, setIF_ModalVisible] = useState(false);
     const [modalFollowMeVisible, setFM_ModalVisible] = useState(false);
 
-
     useEffect(() => {
         (async () => {
             if (user !== undefined) {

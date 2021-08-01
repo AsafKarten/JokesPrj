@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, StyleSheet, Image, Text, Platform, TextInput, View, FlatList } from 'react-native';
+import { Button,Modal,TouchableHighlight, StyleSheet, Image,TouchableOpacity, Text, Platform, TextInput, View, FlatList } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { ScrollView } from 'react-native';
 
@@ -20,12 +20,20 @@ export default function FriendProfile({ navigation, route }) {
     const friendId = route.params.route.item.Id_user
     const item = route.params.route.item;
     const user = route.params.route.user;
+    const [followMeList, setFollowMeList] = useState();
+    const [modalFollowMeVisible, setFM_ModalVisible] = useState(false);
+    const [shouldShow, setShouldShow] = useState(false);
 
     useEffect(() => {
         const loaderjokes = navigation.addListener('focus', () => {
             GetFriendData();
             LoadJokes();
+            LoadFollowMeList(other_user.Id_user);
+            if(Platform.OS !== 'web') {
+                setShouldShow(true)
+            }
         });
+        
         return loaderjokes;
     }, [navigation])
 
@@ -49,6 +57,25 @@ export default function FriendProfile({ navigation, route }) {
             console.log(data);
         } catch (error) {
             console.log(error);
+        }
+    }
+    const LoadFollowMeList = async (id_user) => {
+        try {
+            let result = await fetch(url + "api/your/followers", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    Id_user: id_user
+                })
+            });
+            let data = [...await result.json()];
+            setFollowMeList(data);
+            console.log(data);
+        } catch (e) {
+            console.error(e)
         }
     }
 
@@ -131,7 +158,7 @@ export default function FriendProfile({ navigation, route }) {
     return (
         <View style={styles.container}>
             <ScrollView>
-            {/* <View style={styles.container}> */}
+                {/* <View style={styles.container}> */}
 
                 <View style={styles.search_holder}>
                     <TextInput style={styles.search}
@@ -142,19 +169,28 @@ export default function FriendProfile({ navigation, route }) {
                 </View>
                 <View style={styles.profileHolder}>
                     {/* <View style={styles.profileHeader}> */}
-                        <Text style={styles.username}>{other_user.Username}</Text>
+                    <Text style={styles.username}>{other_user.Username}</Text>
                     {/* </View> */}
                     {/* <View style={styles.imageHolder}> */}
-                        
-                        <Image style={styles.profile_image} source={{ uri: `${other_user.User_img}?t=${Date.now()}` }} />
+
+                    <Image style={styles.profile_image} source={{ uri: `${other_user.User_img}?t=${Date.now()}` }} />
                     {/* </View> */}
                     {/* <View style={styles.buttonGroup}> */}
-                        <View style={styles.buttons}>
-                            <Button
-                                title={other_user.Follow_me + " Followers"}
-                                onPress={() => FollowUser()}
-                            />
-                        </View>
+                    <View style={styles.buttons}>
+                        <TouchableOpacity
+                         onLongPress={() => FollowUser()}
+                         onPressIn={()=> setFM_ModalVisible(true)}
+                         >
+                             
+                            <View style={styles.button_normal}>
+                                <Text style={styles.textBtn}>{other_user.Follow_me + " Followers"}</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <Button
+                            title={other_user.Follow_me + " Followers"}
+                            onPress={() => FollowUser()}
+                        />
+                    </View>
                     {/* </View> */}
                     {/* <View style={styles.profileFooter}></View> */}
                 </View>
@@ -187,59 +223,98 @@ export default function FriendProfile({ navigation, route }) {
                             </View>
                         </View>
                     )} />
-            {/* </View> */}</ScrollView>
+                {/* </View> */}
+                {shouldShow ? (
+                 
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={modalFollowMeVisible}
+                            onRequestClose={() => {
+                                Alert.alert('Modal has been closed.');
+                            }}>
+                            <View style={styles.centeredView}>
+                                <View style={styles.modalView}>
+                                    <Text style={styles.modalText}>followers</Text>
+                                    <TouchableHighlight
+                                        style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                        onPress={() => {
+                                            setFM_ModalVisible(!modalFollowMeVisible);
+                                        }}>
+                                        <Text style={styles.textStyle}>Hide Modal</Text>
+                                    </TouchableHighlight>
+                                    <FlatList
+                                        data={followMeList}
+                                        keyExtractor={(item) => item.Follow_id}
+                                        renderItem={({ item }) => (
+                                            <View style={styles.list}>
+                                                <View style={styles.ModalCube}>
+                                                    <Image onPress={() => MoveToProfile(item)} source={{ uri: item.User_img }} style={styles.ModalUserImg} />
+                                                    <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
+                                                </View>
+                                            </View>
+                                        )} />
+                                </View>
+                            </View>
+                        </Modal>
+                  
+                ) : null}
+                </ScrollView>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     //main container
-   //main container
-   container: {
-    flex: 1,
-    margin: 8,
-    justifyContent: 'center',
-    alignItems: 'center'
-},
-//search holder
-search_holder: {
-    alignItems: 'flex-start',
-    margin: 8,
-    height:46,
-    flexDirection: 'row',
-    borderWidth: 1,
-    borderRadius: 50,
-    borderColor: 'grey',
-},
-search: {
-    fontWeight: 'bold',
-    marginRight:12,
-    marginLeft:8,
-    marginTop:6,
-    
-    padding:2 ,
-    width:280,
-    fontSize:20,
-    
+    //main container
+    container: {
+        flex: 1,
+        margin: 8,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    //search holder
+    search_holder: {
+        alignItems: 'flex-start',
+        margin: 8,
+        height: 46,
+        flexDirection: 'row',
+        borderWidth: 1,
+        borderRadius: 50,
+        borderColor: 'grey',
+    },
+    search: {
+        fontWeight: 'bold',
+        marginRight: 12,
+        marginLeft: 8,
+        marginTop: 6,
 
-},
-serach_icon: {
-    padding:2,
-    marginTop:7,
-    marginLeft:12,
-    
-},
+        padding: 2,
+        width: 280,
+        fontSize: 20,
+
+
+    },
+    serach_icon: {
+        padding: 2,
+        marginTop: 7,
+        marginLeft: 12,
+
+    },
     //Profile part
     profileHolder: {
         flexWrap: 'wrap',
         //flex: 1,
-        justifyContent: 'center',
+        //justifyContent: 'center',
+        alignSelf: 'center',
         alignItems: 'center',
-        padding: 8,
+        padding: 30,
+        paddingHorizontal: 90,
         margin: 8,
         borderWidth: 1,
         borderRadius: 9,
         borderColor: 'grey',
+
     },
     profileHeader: {
         textAlign: 'center',
@@ -259,7 +334,7 @@ serach_icon: {
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 8,
-        marginBottom:10,
+        marginBottom: 10,
 
     },
     profile_image: {
@@ -270,7 +345,7 @@ serach_icon: {
         borderRadius: 90,
         // borderColor: 'orange',
         resizeMode: 'stretch',
-        marginBottom:10,
+        marginBottom: 10,
 
     },
     addTextHolder: {
@@ -280,6 +355,14 @@ serach_icon: {
     },
     addText: {
         fontSize: 16,
+    },
+     //botton normal
+     button_normal: {
+        alignItems: 'center',
+        margin: 15,
+        borderRadius: 8,
+        padding: 10,
+        backgroundColor: "#633689"
     },
     profileFooter: {
 
@@ -357,7 +440,7 @@ serach_icon: {
     },
 
     Body: {
-        marginBottom:8,
+        marginBottom: 8,
         fontSize: 16,
     },
     postTitle: {
@@ -373,12 +456,12 @@ serach_icon: {
     },
     buttons: {
         margin: 2,
-        marginLeft:8,
+        marginLeft: 8,
     },
     UserImg: {
         width: 60,
         height: 60,
-       
+
         borderRadius: 100,
         borderRadius: 90,
         resizeMode: 'stretch',
@@ -386,13 +469,13 @@ serach_icon: {
     },
     UserName: {
         marginLeft: 5,
-        paddingTop:12,
+        paddingTop: 12,
         fontSize: 20,
         fontWeight: "bold",
     },
     JokeImage: {
-        marginBottom:8,
-        marginTop:8,
+        marginBottom: 8,
+        marginTop: 8,
         width: 300,
         height: 250,
         resizeMode: 'stretch',
@@ -403,4 +486,60 @@ serach_icon: {
         padding: 10,
         marginTop: 5,
     },
+      //modal style
+      centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    openButton: {
+        backgroundColor: '#F194FF',
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+    },
+    ModalUserImg: {
+        width: 33,
+        height: 33,
+
+        borderRadius: 100,
+        borderWidth: 2,
+        borderRadius: 90,
+        resizeMode: 'stretch',
+    },
+    ModalUserName: {
+        marginLeft: 5,
+        fontWeight: "bold",
+    },
+    ModalCube: {
+        alignItems: 'flex-start',
+        flexDirection: 'row',
+    },
+
+   
 });
