@@ -27,6 +27,7 @@ export default function EditProfile({ navigation, route }) {
     const [CPass, onChangeCPass] = useState('');
     const [shouldShow, setShouldShow] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+    const [badUsername, setBadUsername] = useState();
 
     const CheckUsername = async () => {
         try {
@@ -51,6 +52,7 @@ export default function EditProfile({ navigation, route }) {
             }
             if(data.Username == prevDetails.Username && data.Id_user !== prevDetails.Id_user){
                 console.log("name is taken!")
+                setBadUsername(Username)
                 setModalVisible(true)
             }
             else{
@@ -195,8 +197,8 @@ export default function EditProfile({ navigation, route }) {
                                     <Text style={styles.modalText}>The username {badUsername} already exists, please choose another username</Text>
                                     <TextInput
                                         style={styles.input}
-                                        onChangeText={onChangeNewUsername}
-                                        value={new_username}
+                                        onChangeText={onChangeUsername()}
+                                        value={Username}
                                         placeholder="new username"
                                     />
                                     <TouchableOpacity onPress={() => HideModal()}>
