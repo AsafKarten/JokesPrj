@@ -370,7 +370,7 @@ export default function Profile({ navigation, user }) {
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => setIF_ModalVisible(true)}>
                             <View style={styles.button_normal}>
-                                <Text style={styles.textBtn}>Followers</Text>
+                                <Text style={styles.textBtn}>Following</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

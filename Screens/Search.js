@@ -50,7 +50,7 @@ const Search = ({ navigation, route }) => {
     }
 
     return (
-        <View>
+        <View style={styles.container}>
             <Input
                 style={styles.input}
                 onChangeText={onChangeTitle}
@@ -78,19 +78,33 @@ const Search = ({ navigation, route }) => {
 }
 const styles = StyleSheet.create({
     container: {
+        alignSelf:'center',
+        width:350,
+        maxWidth:400,
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        textAlign:'center',
+        marginHorizontal:30,
+        //justifyContent: 'center',
     },
     input: {
+        //justifyContent:'center',
+        marginTop:20,
+        alignSelf:'center',
+        width:200,
+        maxWidth:400,
         height: 40,
-        margin: 12,
+        margin: 5,
+        padding: 10,
         borderWidth: 1,
         borderRadius: 8,
         textAlign: 'center',
     },
     //botton normal
     button_normal: {
+        alignSelf:'center',
+        width:200,
+        
         alignItems: 'center',
         margin: 5,
         borderRadius: 8,
