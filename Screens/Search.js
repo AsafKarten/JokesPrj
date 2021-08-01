@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, StyleSheet, View,Text } from 'react-native';
 import { Input } from 'react-native-elements';
-import Loader from '../Components/Loader'
 
 const urlLocal = "http://localhost:52763/"
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
@@ -15,9 +14,7 @@ const Search = ({ navigation, route }) => {
         (async () => {
             if (route.params.route.search !== undefined) {
                 onChangeTitle(route.params.route.search)
-
             }
-            //SearchJoke(searchTitle);
         })()
     }, []);
 
@@ -57,17 +54,6 @@ const Search = ({ navigation, route }) => {
                 value={searchTitle}
                 placeholder="Search"
             />
-            {/* <Text>Filter by :</Text> */}
-            {/* <View>
-                <ButtonGroup
-                    buttons={buttons}
-                    onPress={updateIndex()}
-                    selectedIndex={}
-                    containerStyle={{ height: 40 }}
-                    buttonContainerStyle={{ backgroundColor: 'cadetblue' }}
-                    textStyle={{ color: '#fff' }}
-                />
-            </View> */}
             <TouchableOpacity onPress={() => LoadSearch(searchTitle)}>
                 <View style={styles.button_normal}>
                     <Text style={styles.textBtn}>Search</Text>
