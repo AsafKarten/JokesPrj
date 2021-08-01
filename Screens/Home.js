@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextInput, StyleSheet, Text, FlatList, View, Image, Button } from 'react-native';
+import { TextInput, StyleSheet, Text, FlatList, View, Image, TouchableOpacity } from 'react-native';
 
 
 const urlLocal = "http://localhost:52763/"
@@ -14,9 +14,9 @@ export default function Home({ navigation, user }) {
 
     useEffect(() => {
         // const interval = setInterval(() => {
-            (async () => {
-                await LoadJokes();
-            })()
+        (async () => {
+            await LoadJokes();
+        })()
         // }, 10000);
         // return () => clearInterval(interval);
     }, [])
@@ -38,7 +38,7 @@ export default function Home({ navigation, user }) {
                 method: 'GET'
             });
             let data = [...await result.json()];
-                setList(data.reverse());
+            setList(data.reverse());
         } catch (error) {
             console.error(error)
         }
@@ -121,10 +121,18 @@ export default function Home({ navigation, user }) {
                         </Text>
                         <View style={styles.buttonGroup}>
                             <View style={styles.buttons}>
-                                <Button onPress={() => AddLike(item)} style={styles.buttons} title={item.Joke_like + " Like"} />
+                                <TouchableOpacity onPress={() => AddLike(item)}>
+                                    <View style={styles.button_normal}>
+                                        <Text style={styles.textBtn}>{item.Joke_like + " Like"}</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                             <View style={styles.buttons}>
-                                <Button onPress={() => MoveToJoke(item)} title={item.Comment_count + " Comment"} />
+                                <TouchableOpacity onPress={() => MoveToJoke(item)}>
+                                    <View style={styles.button_normal}>
+                                        <Text style={styles.textBtn}>{item.Comment_count + " Comment"}</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
@@ -139,52 +147,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         margin: 8
     },
-
-    // list: {
-    //     flexWrap: 'wrap',
-    //     alignItems: 'flex-start',
-    //     marginTop: 16,
-    //     padding: 8,
-    //     borderWidth: 1,
-    //     borderRadius: 9,
-    //     borderColor: 'grey',
-    //     backgroundColor: "white",
-    //     color: "black",
-    // },
-
-    // Body: {
-    //     fontSize: 16,
-    // },
-    // postTitle: {
-    //     fontSize: 30,
-    //     fontWeight: "bold",
-    //     textAlign: 'left'
-    // },
-    // buttonGroup: {
-    //     alignItems: 'flex-start',
-    //     flexDirection: 'row',
-    // },
-    // buttons: {
-    //     padding: 5,
-    // },
-    // UserImg: {
-    //     width: 30,
-    //     height: 30,
-    //     borderWidth: 2,
-    //     borderRadius: 110,
-    //     resizeMode: 'stretch',
-    // },
-    // UserName: {
-    //     marginLeft: 5,
-    //     fontWeight: "bold",
-    // },
-    // JokeImage: {
-    //     width: 250,
-    //     height: 250,
-    //     resizeMode: 'stretch',
-    // },
-      //User posts style
-      list: {
+    //botton normal
+    button_normal: {
+        alignItems: 'center',
+        margin: 5,
+        borderRadius: 8,
+        padding: 10,
+        backgroundColor: "#942bed"
+    },
+    //txt botton normal
+    textBtn: {
+        color: "white",
+        fontWeight: "bold",
+        fontFamily: "Sans-serif"
+    },
+    //User posts style
+    list: {
         flexWrap: 'wrap',
         alignItems: 'flex-start',
         marginTop: 16,
@@ -197,7 +175,7 @@ const styles = StyleSheet.create({
     },
 
     Body: {
-        marginBottom:8,
+        marginBottom: 8,
         fontSize: 16,
     },
     postTitle: {
@@ -213,12 +191,12 @@ const styles = StyleSheet.create({
     },
     buttons: {
         margin: 2,
-        marginLeft:8,
+        marginLeft: 8,
     },
     UserImg: {
         width: 60,
         height: 60,
-       
+
         borderRadius: 100,
         borderRadius: 90,
         resizeMode: 'stretch',
@@ -226,13 +204,13 @@ const styles = StyleSheet.create({
     },
     UserName: {
         marginLeft: 5,
-        paddingTop:12,
+        paddingTop: 12,
         fontSize: 20,
         fontWeight: "bold",
     },
     JokeImage: {
-        marginBottom:8,
-        marginTop:8,
+        marginBottom: 8,
+        marginTop: 8,
         width: 300,
         height: 250,
         resizeMode: 'stretch',
