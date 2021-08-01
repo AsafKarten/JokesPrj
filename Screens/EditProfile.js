@@ -25,6 +25,7 @@ export default function EditProfile({ navigation, route }) {
     const [User_img, onChangeImage] = useState(route.params.route.User_img);
     const [Pass, onChangePass] = useState('');
     const [CPass, onChangeCPass] = useState('');
+    const [shouldShow, setShouldShow] = useState(false);
 
     const CheckUsername = async () => {
         try {
