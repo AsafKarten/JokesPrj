@@ -70,6 +70,16 @@ export default function FavoriteJokes({ navigation, route }) {
         console.log(data);
         GetlikesJokes();
     }
+    const MoveToProfile = (item) => {
+        if (item.Id_user == user.Id_user) {
+            navigation.navigate("TabStack", { user: user });
+        }
+        else {
+            var route = { user: user, item: item }
+            navigation.navigate("FriendProfile", { navigation: navigation, route: route });
+        }
+
+    }
 
 
     return (
@@ -82,7 +92,7 @@ export default function FavoriteJokes({ navigation, route }) {
                     <View style={styles.list}>
                         <View style={styles.buttonGroup}>
                             <Image source={{ uri: item.User_img }} style={styles.UserImg} />
-                            <Text style={styles.UserName}>{item.Username}</Text>
+                            <Text onPress={()=>MoveToProfile(item)} style={styles.UserName}>{item.Username}</Text>
                         </View>
                         <Text style={styles.postTitle}>
                             {item.Joke_title}

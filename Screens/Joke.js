@@ -33,12 +33,12 @@ export default function Joke({ navigation, route }) {
 
 
 
-    const MoveToProfile = () => {
-        if (joke.Id_user == user.Id_user) {
+    const MoveToProfile = (item) => {
+        if (item.Id_user == user.Id_user) {
             navigation.navigate("TabStack", { user: user });
         }
         else {
-            var route = { user: user, item: joke }
+            var route = { user: user, item: item }
             navigation.navigate("FriendProfile", { navigation: navigation, route: route });
         }
 
@@ -164,8 +164,8 @@ export default function Joke({ navigation, route }) {
         <View style={styles.container}>
             <View style={styles.list}>
                 <View style={styles.buttonGroup}>
-                    <Image onPress={() => MoveToProfile()} source={{ uri: joke.User_img }} style={styles.UserImg} />
-                    <Text onPress={() => MoveToProfile()} style={styles.UserName}>{joke.Username}</Text>
+                    <Image onPress={() => MoveToProfile(joke)} source={{ uri: joke.User_img }} style={styles.UserImg} />
+                    <Text onPress={() => MoveToProfile(joke)} style={styles.UserName}>{joke.Username}</Text>
                 </View>
 
                 <Text style={styles.postTitle}>
@@ -237,7 +237,7 @@ export default function Joke({ navigation, route }) {
                                 <View style={styles.list}>
                                     <View style={styles.LikeCubes}>
                                         <Image source={{ uri: item.User_img }} style={styles.ModalUserImg} />
-                                        <Text style={styles.ModalUserName}>{item.Username}</Text>
+                                        <Text onPress={()=>MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
                                     </View>
                                 </View>
                             )} />
@@ -292,8 +292,9 @@ const styles = StyleSheet.create({
         marginRight: 8,
     },
     input: {
+        marginTop:1,
         marginLeft: 8,
-        height: 20,
+        height: 30,
         width: 120,
         fontSize: 16,
         //padding: 8,
