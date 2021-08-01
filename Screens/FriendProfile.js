@@ -16,7 +16,7 @@ export default function FriendProfile({ navigation, route }) {
         { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_likes: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
     ]);
     const [other_user, setOtherUser] = useState({ Id_user: 0, Username: '', Email: '', User_img: default_img, I_follow: 0, Follow_me: 0 });
-    const [search, onChangeSearch] = useState();
+    const [search, onChangeSearch] = useState("");
     const friendId = route.params.route.item.Id_user
     const item = route.params.route.item;
     const user = route.params.route.user;
@@ -80,11 +80,9 @@ export default function FriendProfile({ navigation, route }) {
     }
 
     const SearchFunc = (search) => {
-        if (search != "") {
-            navigation.navigate("Search", { user: user, search: search });
-            return;
-        }
-        navigation.navigate("Search", { user: user, search: search });
+
+        var route = { user: user, search: search };
+        navigation.navigate("Search", { navigation: navigation, route: route });
     }
 
 
@@ -162,7 +160,8 @@ export default function FriendProfile({ navigation, route }) {
 
                 <View style={styles.search_holder}>
                     <TextInput style={styles.search}
-                        onChangeText={onChangeSearch}
+                        //onChangeText={onChangeSearch}
+                        onFocus={()=>SearchFunc(search)}
                         value={search}
                         placeholder="Search friends/jokes" />
                     <FontAwesome style={styles.serach_icon} onPress={() => SearchFunc(search)} name="search" size={24} color="grey" />
