@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Modal, TextInput, TouchableHighlight, StyleSheet, Text, FlatList, View, Image, Button } from 'react-native';
-
+import { Input } from 'react-native-elements';
 
 const urlLocal = "http://localhost:52763/"
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
@@ -131,30 +131,29 @@ export default function Joke({ navigation, route }) {
 
     const AddComment = async () => {
         try {
-            if(comment=="")
-            {
+            if (comment == "") {
                 Alert.alert("cant submit an empty comment")
             }
-            else{
-            let result = await fetch(url + "api/add/comment", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    Id_joke: joke.Id_joke,
-                    Id_user: user.Id_user,
-                    Comment_body: comment,
-                    Comment_Date: dateTime,
-                    User_img: user.User_img,
-                    Username: user.Username
-                })
-            });
-            let data = await result.json();
-            LoadComments();
-            onChangeComment("")
-        }
+            else {
+                let result = await fetch(url + "api/add/comment", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json; charset=UTF-8',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        Id_joke: joke.Id_joke,
+                        Id_user: user.Id_user,
+                        Comment_body: comment,
+                        Comment_Date: dateTime,
+                        User_img: user.User_img,
+                        Username: user.Username
+                    })
+                });
+                let data = await result.json();
+                LoadComments();
+                onChangeComment("")
+            }
         } catch (e) {
             console.error(e)
         }
@@ -179,24 +178,23 @@ export default function Joke({ navigation, route }) {
                     {joke.Joke_body}
                 </Text>
                 <View style={styles.buttonGroup}>
-                    <View style={styles.buttons}>
-                        <Text onPress={() => { setModalVisible(true) }}>{joke.Joke_like}</Text>
-                        <Button onPress={() => AddLike(joke)} style={styles.buttons} title="Like" />
-                    </View>
+                    {/* <View style={styles.buttons}> */}
+                    <Text style={styles.LikeText} onPress={() => { setModalVisible(true) }}>View likes</Text>
+                    <Button onPress={() => AddLike(joke)} style={styles.buttons} title={joke.Joke_like + " Like"} />
+                    {/* </View> */}
                     <TextInput
                         style={styles.input}
                         onChangeText={onChangeComment}
                         value={comment}
                         placeholder="comment"
                     />
-                    <View style={styles.buttons}>
-                        <Text >comments</Text>
-                        <Button onPress={() => AddComment()} title="Comment" />
-                    </View>
+                    {/* <View style={styles.buttons}> */}
+                    <Button onPress={() => AddComment()} title="Comment" />
+                    {/* </View> */}
 
                 </View>
             </View>
-   
+
             <FlatList
                 data={allComments}
                 keyExtractor={(item) => item.Comment_id}
@@ -215,7 +213,7 @@ export default function Joke({ navigation, route }) {
                         </Text>
                     </View>
                 )} />
-                         <Modal
+            <Modal
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
@@ -224,7 +222,7 @@ export default function Joke({ navigation, route }) {
                 }}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Hello World!</Text>
+                        <Text style={styles.modalText}>Like list</Text>
                         <TouchableHighlight
                             style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
                             onPress={() => {
@@ -237,17 +235,18 @@ export default function Joke({ navigation, route }) {
                             keyExtractor={(item) => item.Like_id}
                             renderItem={({ item }) => (
                                 <View style={styles.list}>
-                                    <View style={styles.buttonGroup}>
-                                        <Image source={{ uri: item.User_img }} style={styles.UserImg} />
-                                        <Text style={styles.UserName}>{item.Username}</Text>
+                                    <View style={styles.LikeCubes}>
+                                        <Image source={{ uri: item.User_img }} style={styles.ModalUserImg} />
+                                        <Text style={styles.ModalUserName}>{item.Username}</Text>
                                     </View>
                                 </View>
                             )} />
+
                     </View>
                 </View>
             </Modal>
         </View>
-        
+
     );
 }
 const styles = StyleSheet.create({
@@ -270,7 +269,7 @@ const styles = StyleSheet.create({
     },
 
     Body: {
-        fontSize: 16,
+        fontSize: 20,
     },
     postTitle: {
         fontSize: 30,
@@ -278,15 +277,30 @@ const styles = StyleSheet.create({
         textAlign: 'right'
     },
     buttonGroup: {
-        alignItems: 'flex-start',
+        //alignItems: 'flex-start',
         flexDirection: 'row',
+        //justifyContent:'space-evenly',
     },
     buttons: {
         padding: 5,
+        marginLeft: 8,
+    },
+    LikeText: {
+        color: 'grey',
+        fontSize: 16,
+        marginLeft: 8,
+        marginRight: 8,
+    },
+    input: {
+        marginLeft: 8,
+        height: 20,
+        width: 120,
+        fontSize: 16,
+        //padding: 8,
     },
     UserImg: {
-        width: 33,
-        height: 33,
+        width: 60,
+        height: 60,
 
         borderRadius: 100,
         borderWidth: 2,
@@ -295,25 +309,28 @@ const styles = StyleSheet.create({
     },
     UserName: {
         marginLeft: 5,
+        paddingTop: 12,
+        fontSize: 20,
         fontWeight: "bold",
     },
     JokeImage: {
-        width: 250,
-        height: 250,
+        width: 350,
+        height: 300,
         resizeMode: 'stretch',
     },
     //modal style
     centeredView: {
         flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
         marginTop: 22,
     },
     modalView: {
+
         margin: 20,
+        marginBottom: 100,
         backgroundColor: 'white',
         borderRadius: 20,
-        padding: 35,
+        padding: 12,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
@@ -337,7 +354,33 @@ const styles = StyleSheet.create({
     },
     modalText: {
         marginBottom: 15,
+        fontSize: 20,
         textAlign: 'center',
+    },
+    LikeCubes: {
+        //alignItems: 'flex-start',
+        flexDirection: 'row',
+        width: 200,
+
+        //justifyContent:'space-evenly',
+    },
+    ModalUserName: {
+        marginLeft: 35,
+        marginRight: 5,
+        paddingTop: 12,
+        fontSize: 20,
+        fontWeight: "bold",
+    },
+    ModalUserImg: {
+        width: 60,
+        height: 60,
+        marginRight: 10,
+        marginLeft: 8,
+
+        borderRadius: 100,
+        borderWidth: 2,
+        borderRadius: 90,
+        resizeMode: 'stretch',
     },
 
 

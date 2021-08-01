@@ -139,11 +139,56 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         margin: 8
     },
-    list: {
+
+    // list: {
+    //     flexWrap: 'wrap',
+    //     alignItems: 'flex-start',
+    //     marginTop: 16,
+    //     padding: 8,
+    //     borderWidth: 1,
+    //     borderRadius: 9,
+    //     borderColor: 'grey',
+    //     backgroundColor: "white",
+    //     color: "black",
+    // },
+
+    // Body: {
+    //     fontSize: 16,
+    // },
+    // postTitle: {
+    //     fontSize: 30,
+    //     fontWeight: "bold",
+    //     textAlign: 'left'
+    // },
+    // buttonGroup: {
+    //     alignItems: 'flex-start',
+    //     flexDirection: 'row',
+    // },
+    // buttons: {
+    //     padding: 5,
+    // },
+    // UserImg: {
+    //     width: 30,
+    //     height: 30,
+    //     borderWidth: 2,
+    //     borderRadius: 110,
+    //     resizeMode: 'stretch',
+    // },
+    // UserName: {
+    //     marginLeft: 5,
+    //     fontWeight: "bold",
+    // },
+    // JokeImage: {
+    //     width: 250,
+    //     height: 250,
+    //     resizeMode: 'stretch',
+    // },
+      //User posts style
+      list: {
         flexWrap: 'wrap',
         alignItems: 'flex-start',
         marginTop: 16,
-        padding: 8,
+        padding: 28,
         borderWidth: 1,
         borderRadius: 9,
         borderColor: 'grey',
@@ -152,6 +197,7 @@ const styles = StyleSheet.create({
     },
 
     Body: {
+        marginBottom:8,
         fontSize: 16,
     },
     postTitle: {
@@ -160,27 +206,42 @@ const styles = StyleSheet.create({
         textAlign: 'left'
     },
     buttonGroup: {
-        alignItems: 'flex-start',
+        //flex: 3,
         flexDirection: 'row',
+        // justifyContent: 'space-evenly',
+
     },
     buttons: {
-        padding: 5,
+        margin: 2,
+        marginLeft:8,
     },
     UserImg: {
-        width: 30,
-        height: 30,
-        borderWidth: 2,
-        borderRadius: 110,
+        width: 60,
+        height: 60,
+       
+        borderRadius: 100,
+        borderRadius: 90,
         resizeMode: 'stretch',
+
     },
     UserName: {
         marginLeft: 5,
+        paddingTop:12,
+        fontSize: 20,
         fontWeight: "bold",
     },
     JokeImage: {
-        width: 250,
+        marginBottom:8,
+        marginTop:8,
+        width: 300,
         height: 250,
         resizeMode: 'stretch',
-    }
+
+    },
+    buttonStyle: {
+        height: 30,
+        padding: 10,
+        marginTop: 5,
+    },
 });
 

@@ -194,41 +194,48 @@ export default function FriendProfile({ navigation, route }) {
 
 const styles = StyleSheet.create({
     //main container
-    container: {
-        //flex: 1,
-        margin: 8,
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign:'center',
-    },
-    //search holder
-    search_holder: {
-        alignItems: 'center',
-        margin: 8,
-        flexDirection: 'row-reverse',
-        height: 26,
-        borderWidth: 1,
-        borderRadius: 50,
-        borderColor: 'grey',
-    },
-    search: {
-        fontWeight: 'bold',
-        flexDirection: 'row',
-        alignItems: 'stretch',
+   //main container
+   container: {
+    flex: 1,
+    margin: 8,
+    justifyContent: 'center',
+    alignItems: 'center'
+},
+//search holder
+search_holder: {
+    alignItems: 'flex-start',
+    margin: 8,
+    height:46,
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderRadius: 50,
+    borderColor: 'grey',
+},
+search: {
+    fontWeight: 'bold',
+    marginRight:12,
+    marginLeft:8,
+    marginTop:6,
+    
+    padding:2 ,
+    width:280,
+    fontSize:20,
+    
 
-    },
-    serach_icon: {
-
-    },
+},
+serach_icon: {
+    padding:2,
+    marginTop:7,
+    marginLeft:12,
+    
+},
     //Profile part
     profileHolder: {
         flexWrap: 'wrap',
         //flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        alignSelf:'center',
-        textAlign:'center',
-        padding: 18,
+        padding: 8,
         margin: 8,
         borderWidth: 1,
         borderRadius: 9,
@@ -244,13 +251,15 @@ const styles = StyleSheet.create({
         color: 'orange',
         fontSize: 25,
         fontWeight: 'bold',
+        padding: 10,
     },
     imageHolder: {
-        // flexDirection: 'row',
-        // alignItems: 'flex-end'
+        flexDirection: 'row',
+        alignItems: 'flex-end',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 8
+        marginTop: 8,
+        marginBottom:10,
 
     },
     profile_image: {
@@ -259,11 +268,13 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         borderWidth: 2,
         borderRadius: 90,
+        // borderColor: 'orange',
         resizeMode: 'stretch',
+        marginBottom:10,
 
     },
     addTextHolder: {
-        justifyContent: 'center',
+        // justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
     },
@@ -271,16 +282,73 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     profileFooter: {
-        margin: 5,
-        padding: 5,
-    },
 
-    //User posts style
+        alignSelf: 'center',
+        textAlign: 'center',
+        margin: 5,
+        //justifyContent: 'center',
+        alignItems: 'center',
+    },
+    //Profile part
+    // profileHolder: {
+    //     flexWrap: 'wrap',
+    //     //flex: 1,
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //     alignSelf:'center',
+    //     textAlign:'center',
+    //     padding: 18,
+    //     margin: 8,
+    //     borderWidth: 1,
+    //     borderRadius: 9,
+    //     borderColor: 'grey',
+    // },
+    // profileHeader: {
+    //     textAlign: 'center',
+    //     margin: 5,
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    // },
+    // username: {
+    //     color: 'orange',
+    //     fontSize: 25,
+    //     fontWeight: 'bold',
+    // },
+    // imageHolder: {
+    //     // flexDirection: 'row',
+    //     // alignItems: 'flex-end'
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //     marginTop: 8
+
+    // },
+    // profile_image: {
+    //     width: 120,
+    //     height: 120,
+    //     borderRadius: 100,
+    //     borderWidth: 2,
+    //     borderRadius: 90,
+    //     resizeMode: 'stretch',
+
+    // },
+    // addTextHolder: {
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //     textAlign: 'center',
+    // },
+    // addText: {
+    //     fontSize: 16,
+    // },
+    // profileFooter: {
+    //     margin: 5,
+    //     padding: 5,
+    // },
+
     list: {
         flexWrap: 'wrap',
         alignItems: 'flex-start',
         marginTop: 16,
-        padding: 8,
+        padding: 28,
         borderWidth: 1,
         borderRadius: 9,
         borderColor: 'grey',
@@ -289,6 +357,7 @@ const styles = StyleSheet.create({
     },
 
     Body: {
+        marginBottom:8,
         fontSize: 16,
     },
     postTitle: {
@@ -297,31 +366,41 @@ const styles = StyleSheet.create({
         textAlign: 'left'
     },
     buttonGroup: {
-        flex: 3,
+        //flex: 3,
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
+        // justifyContent: 'space-evenly',
 
     },
     buttons: {
-        margin: 2
+        margin: 2,
+        marginLeft:8,
     },
     UserImg: {
-        width: 30,
-        height: 30,
+        width: 60,
+        height: 60,
+       
         borderRadius: 100,
-        borderWidth: 2,
         borderRadius: 90,
         resizeMode: 'stretch',
 
     },
     UserName: {
         marginLeft: 5,
+        paddingTop:12,
+        fontSize: 20,
         fontWeight: "bold",
     },
     JokeImage: {
-        width: 250,
+        marginBottom:8,
+        marginTop:8,
+        width: 300,
         height: 250,
         resizeMode: 'stretch',
 
-    }
+    },
+    buttonStyle: {
+        height: 30,
+        padding: 10,
+        marginTop: 5,
+    },
 });

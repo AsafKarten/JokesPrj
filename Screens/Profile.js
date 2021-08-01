@@ -457,7 +457,7 @@ export default function Profile({ navigation, user }) {
                             }}>
                             <View style={styles.centeredView}>
                                 <View style={styles.modalView}>
-                                    <Text style={styles.modalText}>Hello World!</Text>
+                                    <Text style={styles.modalText}>people you follow</Text>
                                     <TouchableHighlight
                                         style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
                                         onPress={() => {
@@ -488,7 +488,7 @@ export default function Profile({ navigation, user }) {
                             }}>
                             <View style={styles.centeredView}>
                                 <View style={styles.modalView}>
-                                    <Text style={styles.modalText}>Hello World!</Text>
+                                    <Text style={styles.modalText}>followers</Text>
                                     <TouchableHighlight
                                         style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
                                         onPress={() => {
@@ -626,6 +626,7 @@ const styles = StyleSheet.create({
     },
 
     Body: {
+        marginBottom:8,
         fontSize: 16,
     },
     postTitle: {
@@ -640,11 +641,13 @@ const styles = StyleSheet.create({
 
     },
     buttons: {
-        margin: 2
+        margin: 2,
+        marginLeft:8,
     },
     UserImg: {
         width: 60,
         height: 60,
+       
         borderRadius: 100,
         borderRadius: 90,
         resizeMode: 'stretch',
@@ -657,6 +660,8 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     JokeImage: {
+        marginBottom:8,
+        marginTop:8,
         width: 300,
         height: 250,
         resizeMode: 'stretch',
