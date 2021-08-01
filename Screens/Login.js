@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: "25%"
+        marginTop: "35%"
     },
     image: {
         flex: 1,
@@ -359,6 +359,7 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     button_normal: {
+        
         alignItems: 'center',
         margin: 15,
         borderRadius: 8,
@@ -366,14 +367,16 @@ const styles = StyleSheet.create({
         backgroundColor: "#633689"
     },
     textBtn: {
+        fontSize:22,
         color: "white",
         fontWeight: "bold",
     },
     text: {
-        color: "brown",
+        color: "orange",
         fontWeight: "bold",
         alignItems: 'center',
         textAlign: 'center',
+        fontSize: 18
     },
     buttonFB: {
         alignItems: 'center',
@@ -383,6 +386,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#3b5998"
     },
     textFB: {
+        fontSize:22,
         color: "white",
         fontWeight: "bold",
     },
@@ -394,6 +398,7 @@ const styles = StyleSheet.create({
         backgroundColor: "red"
     },
     textGo: {
+        fontSize:22,
         color: "white",
         fontWeight: "bold",
     },
@@ -406,7 +411,8 @@ const styles = StyleSheet.create({
     },
     textOption: {
         margin: 5,
-        color: "brown",
+        color: "orange",
+        fontSize: 20,
         fontWeight: "bold",
         alignItems: 'center',
         textAlign: 'center',

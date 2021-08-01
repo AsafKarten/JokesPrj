@@ -84,7 +84,7 @@ export default function FavoriteJokes({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Text>Favorite Jokes screen!</Text>
+            <Text style={styles.Title}>Favorite Jokes :)</Text>
             <FlatList
                 data={listJokes}
                 keyExtractor={(item) => item.Id_joke}
@@ -132,6 +132,11 @@ const styles = StyleSheet.create({
         margin: 8,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    Title:{
+        fontSize:24,
+        color: 'orange',
+        fontWeight: 'bold',
     },
     //User posts style
     list: {

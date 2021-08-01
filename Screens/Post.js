@@ -121,7 +121,7 @@ export default function Post({ navigation, route }) {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
                 allowsEditing: true,
-                aspect: [4, 3],
+                aspect: [1, 1],
                 quality: 0.7
             });
             if (!result.cancelled) {
@@ -191,8 +191,8 @@ const styles = StyleSheet.create({
     },
     post_image: {
         marginTop: 20,
-        width: 300,
-        height: 300,
+        width: 200,
+        height: 200,
         borderRadius: 100,
         borderWidth: 2,
         borderRadius: 50,

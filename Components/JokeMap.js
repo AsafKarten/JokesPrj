@@ -94,7 +94,7 @@ export default function JokeMap({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Text>Favorite Jokes screen!</Text>
+            <Text style={styles.Title}>Search Results</Text>
             <FlatList
                 data={listJokes}
                 keyExtractor={(item) => item.Id_joke}
@@ -142,6 +142,11 @@ const styles = StyleSheet.create({
         margin: 8,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    Title:{
+        fontSize:24,
+        color: 'orange',
+        fontWeight: 'bold',
     },
     //User posts style
     list: {
