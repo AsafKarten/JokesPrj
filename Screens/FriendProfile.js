@@ -156,9 +156,7 @@ export default function FriendProfile({ navigation, route }) {
     const MoveToProfile = (item) => {
         //for i follow
         if (item.Id_user == user.Id_user) {
-            //item.Id_user = item.Target_id
-            var route = { user: user, item: item }
-        navigation.navigate("TabStack",{route:user , routeTo:"Profile"});
+        navigation.navigate("TabStack",{route:user});
         }
         //for follow me
         else {

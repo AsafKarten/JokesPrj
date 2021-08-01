@@ -12,12 +12,10 @@ const Tab = createMaterialTopTabNavigator();
 export default function TabStack({ route }) {
     const [search_route, setSearch] = useState();
     const user = route.params.user
-    const[routeTo, setRout]= useState(route.params.routeTo)
     useEffect(() => {
         (async () => {
-            await SerachRoute(route.params.routeTo);
-            console.log(routeTo)
-            setRout(route.params.routeTo)
+            await SerachRoute();
+           
         })()
     }, [])
 
@@ -33,7 +31,7 @@ export default function TabStack({ route }) {
 
     return (
         <Tab.Navigator
-            initialRouteName={routeTo}
+            initialRouteName="Home"
             tabBarOptions={{
                 activeTintColor: '#FFFFFF',
                 inactiveTintColor: '#F8F8F8',
