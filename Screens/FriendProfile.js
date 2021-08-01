@@ -161,7 +161,7 @@ export default function FriendProfile({ navigation, route }) {
                 <View style={styles.search_holder}>
                     <TextInput style={styles.search}
                         //onChangeText={onChangeSearch}
-                        onFocus={SearchFunc(search)}
+                        onFocus={()=>SearchFunc(search)}
                         value={search}
                         placeholder="Search friends/jokes" />
                     <FontAwesome style={styles.serach_icon} onPress={() => SearchFunc(search)} name="search" size={24} color="grey" />
