@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, TouchableOpacity, View, StyleSheet, TextInput, Button, Text } from 'react-native';
+import { Alert,Modal, TouchableOpacity, View, StyleSheet, TextInput, Button, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -26,6 +26,34 @@ export default function EditProfile({ navigation, route }) {
     const [Pass, onChangePass] = useState('');
     const [CPass, onChangeCPass] = useState('');
 
+    const CheckUsername = async () => {
+        try {
+            if (Platform.OS !== 'web') {
+                setShouldShow(true)
+            }
+            await clearAsyncStorage()
+            let result = await fetch(url + "api/user", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    Username: Username
+                })
+            });
+            let data = await result.json();
+            if (data == undefined) {
+                Edit()
+            }
+
+
+
+
+        } catch (e) {
+            console.error(e);
+        }
+    }
     const Edit = async () => {
         console.log(route.params.route);
         let emailValid = rjxEmail.test(Email);
@@ -73,17 +101,30 @@ export default function EditProfile({ navigation, route }) {
                 })
 
             });
-            let data = await result.json();
-            console.log(data);
-            if (data == undefined) {
-                Alert.alert("User name already exist")
-            }
-            else {
+              let data = await result.json();
+              console.log(data);
+                storeData(data);
                 navigation.navigate("TabStack", { user: data });
-            }
+
 
         } catch (e) {
             console.error(e)
+        }
+    }
+    const storeData = async (data) => {
+        try {
+            const loggedUser = JSON.stringify(data);
+            await AsyncStorage.setItem('loggedUser', loggedUser)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+    const clearAsyncStorage = async () => {
+        try {
+            await AsyncStorage.clear();
+            console.log('Done');
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -121,11 +162,42 @@ export default function EditProfile({ navigation, route }) {
                 placeholder="Confirm password"
                 leftIcon={<Icon name='lock' size={24} color='black' />}
             />
-            <TouchableOpacity onPress={() => Edit()}>
+            <TouchableOpacity onPress={() => CheckUsername()}>
                 <View style={styles.button}>
                     <Text style={styles.textBtn}>Save</Text>
                 </View>
             </TouchableOpacity>
+
+
+            {shouldShow ? (
+                    <View style={styles.centeredView}>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={modalVisible}
+                            onRequestClose={() => {
+                                Alert.alert("Modal has been closed.");
+                                setModalVisible(!modalVisible);
+                            }}>
+                            <View style={styles.centeredView}>
+                                <View style={styles.modalView}>
+                                    <Text style={styles.modalText}>The username {badUsername} already exists, please choose another username</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        onChangeText={onChangeNewUsername}
+                                        value={new_username}
+                                        placeholder="new username"
+                                    />
+                                    <TouchableOpacity onPress={() => HideModal()}>
+                                        <View style={styles.button_normal}>
+                                            <Text style={styles.textBtn}>Save</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </Modal>
+                    </View>
+                ) : null}
         </View>
     );
 
