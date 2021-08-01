@@ -18,6 +18,7 @@ export default function Joke({ navigation, route }) {
     const joke = route.params.route.item
     const user = route.params.route.user
     const [modalVisible, setModalVisible] = useState(false);
+    const [commentModalVisible, setCommentModalVisible] = useState(false)
     const [comment, onChangeComment] = useState('');
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -165,6 +166,7 @@ export default function Joke({ navigation, route }) {
 
 
     return (
+
         <View style={styles.container}>
             <View style={styles.list}>
                 <View style={styles.buttonGroup}>
@@ -188,12 +190,13 @@ export default function Joke({ navigation, route }) {
                             <Text style={styles.textBtn}>{joke.Joke_like + " Like"}</Text>
                         </View>
                     </TouchableOpacity>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={onChangeComment}
-                        value={comment}
-                        placeholder="comment"
-                    />
+                    <Text style={styles.input} onPress={() => { setCommentModalVisible(true) }}>
+                            comment
+                        </Text>
+                        
+                        
+                        
+                    
                     <TouchableOpacity onPress={() => AddComment()}>
                         <View style={styles.button_normal}>
                             <Text style={styles.textBtn}>Comment</Text>
@@ -222,6 +225,8 @@ export default function Joke({ navigation, route }) {
                 )} />
 
             {shouldShow ? (
+                <View>
+                
                 <Modal
                     animationType="slide"
                     transparent={true}
@@ -254,6 +259,48 @@ export default function Joke({ navigation, route }) {
                         </View>
                     </View>
                 </Modal>
+
+                
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={commentModalVisible}
+                    onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                    }}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalText}>Like list</Text>
+                            <TouchableHighlight
+                                style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                onPress={() => {
+                                    setCommentModalVisible(!commentModalVisible);
+                                }}>
+                                <Text style={styles.textStyle}>Hide Modal</Text>
+                            </TouchableHighlight>
+                                <View>
+                               
+                    <TextInput
+                        style={styles.inputModal}
+                        //onFocus={() => { setCommentModalVisible(true) }}
+                        onChangeText={onChangeComment}
+                        value={comment}
+                        placeholder="comment"
+                    />
+                    <TouchableOpacity onPress={() => AddComment()}>
+                        <View style={styles.button_normal}>
+                            <Text style={styles.textBtn}>Comment</Text>
+                        </View>
+                    </TouchableOpacity>
+                                </View>
+
+                        </View>
+                    </View>
+                </Modal>
+
+
+
+                                        </View>
             ) : null}
         </View>
 
@@ -317,6 +364,7 @@ const styles = StyleSheet.create({
         marginRight: 8,
     },
     input: {
+        color:'grey',
         marginTop: 1,
         marginLeft: 8,
         height: 30,
@@ -406,6 +454,15 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 90,
         resizeMode: 'stretch',
+    },
+    inputModal:{
+        marginTop:16,
+        marginBottom:16,
+        fontSize:20,
+        textAlign:'center',
+        width:300,
+       //maxWidth:200,
+        height:40,
     },
 
 
