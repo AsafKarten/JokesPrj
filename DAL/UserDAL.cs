@@ -83,7 +83,7 @@ namespace JokesPrj.DAL
             }
         }
 
-        private User UpdateUser(User new_user)
+        public User UpdateUser(User new_user)
         {
             try
             {
@@ -104,54 +104,6 @@ namespace JokesPrj.DAL
             }
 
         }
-
-
-        public User GetUpdatedUser(User update_user)
-        {
-            User new_user = null;
-            User exist_user = null;
-            bool isExist = true;
-            List<User> usersList = null;
-            try
-            {
-                exist_user = GetUserByID(update_user.Id_user);
-                if (!(exist_user.Username.Equals(update_user.Username)))
-                {
-                    usersList = GetAllUsers();
-                    if (usersList == null)
-                    {
-                        return update_user;
-                    }
-                    foreach (User u in usersList)
-                    {
-                        if (u.Username.Equals(update_user.Username))
-                        {
-                            isExist = false;
-                        }
-                    }
-                    if (isExist == false)
-                    {
-                        new_user = UpdateUser(update_user);
-                        return new_user;
-                    }
-                    else
-                    {
-                        return update_user;
-                    }
-                }
-                else
-                {
-                    new_user = UpdateUser(new_user);
-                    return new_user;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message + usersList);
-            }
-        }
-
 
         public int UpdateIFollow(User logged_user, bool status)
         {
@@ -232,47 +184,7 @@ namespace JokesPrj.DAL
                 throw new Exception(ex.Message);
             }
         }
-        public List<User> GetAllUsers()
-        {
-            List<User> userList = null;
-            try
-            {
-                using (SqlConnection con = new SqlConnection(conStr))
-                {
-                    con.Open();
-                    SqlCommand sql_cmnd = new SqlCommand("GetAllUsers", con);
-                    sql_cmnd.CommandType = CommandType.StoredProcedure;
-                    SqlDataReader reader = sql_cmnd.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            User u = new User(
-                                Convert.ToInt32(reader["id_user"]),
-                                Convert.ToString(reader["username"]),
-                                Convert.ToString(reader["phash"]),
-                                Convert.ToString(reader["email"]),
-                                Convert.ToString(reader["user_img"]),
-                                Convert.ToInt32(reader["i_follow"]),
-                                Convert.ToInt32(reader["follow_me"]),
-                                Convert.ToString(reader["salt"]),
-                                Convert.ToString(reader["id_external"]));
-                            userList.Add(u);
-                        }
-                        return userList;
-                    }
-                    else
-                    {
-                        Debug.WriteLine("No rows on the table");
-                        return userList;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw new Exception("userList" + userList);
-            }
-        }
+        
 
         public int SaveNewUserToDB(User u)
         {
