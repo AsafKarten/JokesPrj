@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { TextInput, StyleSheet, Text, FlatList, View, Image, TouchableOpacity } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 
 const urlLocal = "http://localhost:52763/"
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
@@ -16,7 +14,6 @@ export default function Home({ navigation, user }) {
     useEffect(() => {
         (async () => {
             await LoadJokes();
-            await getData();
         })()
     }, [])
 
@@ -31,15 +28,6 @@ export default function Home({ navigation, user }) {
         })
     }, [navigation])
 
-    const getData = async () => {
-        const data = await AsyncStorage.getItem('loggedUser')
-        if (data !== null) {
-            let user = JSON.parse(data)
-        }
-        else {
-            navigation.navigate("Login");
-        }
-    }
     const LoadJokes = async () => {
         try {
             let result = await fetch(url + "api/feed", {

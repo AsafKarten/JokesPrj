@@ -3,6 +3,7 @@ import { Alert, Modal, Platform, TouchableOpacity, View, StyleSheet, TextInput, 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
 import { MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
@@ -28,6 +29,24 @@ export default function EditProfile({ navigation, route }) {
     const [shouldShow, setShouldShow] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [badUsername, setBadUsername] = useState();
+
+    const storeData = async (data) => {
+        try {
+            const loggedUser = JSON.stringify(data);
+            await AsyncStorage.setItem('loggedUser', loggedUser)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const clearAsyncStorage = async () => {
+        try {
+            await AsyncStorage.clear();
+            console.log('delete old logged user');
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const CheckUsername = async () => {
         try {
@@ -62,8 +81,8 @@ export default function EditProfile({ navigation, route }) {
             console.error(e);
         }
     }
+
     const Edit = async () => {
-        console.log(route.params.route);
         let emailValid = rjxEmail.test(Email);
         // let usernameValid = rjxUsername.test(Username);
         // let passwordValid = rjxPass.test(Pass);
@@ -85,12 +104,12 @@ export default function EditProfile({ navigation, route }) {
                 var hash = await bcrypt.hashSync(Pass, salt);
                 onChangeHash(hash)
                 onChangeSalt(salt)
+                await clearAsyncStorage()
             }
             else {
                 Alert.alert("password dos not match confirm password!")
             }
         }
-
         try {
             let result = await fetch(url + "api/edit/user", {
                 method: 'POST',
@@ -110,30 +129,12 @@ export default function EditProfile({ navigation, route }) {
 
             });
             let data = await result.json();
-            await clearAsyncStorage()
-            storeData(data);
+            await storeData(data);
             navigation.navigate("TabStack", { user: data });
         } catch (e) {
             console.error(e)
         }
     }
-    const storeData = async (data) => {
-        try {
-            const loggedUser = JSON.stringify(data);
-            await AsyncStorage.setItem('loggedUser', loggedUser)
-        } catch (e) {
-            console.error(e)
-        }
-    }
-    const clearAsyncStorage = async () => {
-        try {
-            await AsyncStorage.clear();
-            console.log('delete old logged user');
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
 
 
     return (
@@ -173,8 +174,6 @@ export default function EditProfile({ navigation, route }) {
                     <Text style={styles.textBtn}>Save</Text>
                 </View>
             </TouchableOpacity>
-
-
             {shouldShow ? (
                 <View style={styles.centeredView}>
                     <Modal
@@ -192,7 +191,7 @@ export default function EditProfile({ navigation, route }) {
                                     style={styles.input}
                                     onChangeText={onChangeUsername()}
                                     value={Username}
-                                    placeholder="new username"
+                                    placeholder="username"
                                 />
                                 <TouchableOpacity onPress={() => HideModal()}>
                                     <View style={styles.button_normal}>

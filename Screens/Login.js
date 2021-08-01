@@ -36,13 +36,6 @@ export default function Login({ navigation }) {
         })()
     }, [])
 
-    useEffect(() => {
-        const loaderjokes = navigation.addListener('focus', () => {
-            getData();
-        });
-        return loaderjokes;
-    }, [navigation])
-
     const getData = async () => {
         const data = await AsyncStorage.getItem('loggedUser')
         if (data !== null) {
@@ -53,7 +46,6 @@ export default function Login({ navigation }) {
             navigation.navigate("Login");
         }
     }
-
 
     const storeData = async (data) => {
         try {
