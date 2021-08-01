@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TextInput, StyleSheet, Text, FlatList, View, Image, TouchableOpacity } from 'react-native';
 
-
 const urlLocal = "http://localhost:52763/"
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 
@@ -25,8 +24,8 @@ export default function Home({ navigation, user }) {
                 if (user.User_img.indexOf("?asid") == -1)
                     user.User_img = `${user.User_img}?t=${Date.now()}`
             }
-        });
-        return loader_jokes;
+            return loader_jokes;
+        })
     }, [navigation])
 
     const LoadJokes = async () => {

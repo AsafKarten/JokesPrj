@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Alert,Modal,Platform, TouchableOpacity, View, StyleSheet, TextInput, Text } from 'react-native';
+import { Alert, Modal, Platform, TouchableOpacity, View, StyleSheet, TextInput, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
 import { MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
@@ -29,6 +30,24 @@ export default function EditProfile({ navigation, route }) {
     const [modalVisible, setModalVisible] = useState(false);
     const [badUsername, setBadUsername] = useState();
 
+    const storeData = async (data) => {
+        try {
+            const loggedUser = JSON.stringify(data);
+            await AsyncStorage.setItem('loggedUser', loggedUser)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const clearAsyncStorage = async () => {
+        try {
+            await AsyncStorage.clear();
+            console.log('delete old logged user');
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const CheckUsername = async () => {
         try {
             if (Platform.OS !== 'web') {
@@ -48,26 +67,22 @@ export default function EditProfile({ navigation, route }) {
             let data = await result.json();
             console.log(data);
             if (data.Id_user == prevDetails.Id_user) {
-              Edit() 
+                Edit()
             }
-            if(data.Username == prevDetails.Username && data.Id_user !== prevDetails.Id_user){
+            if (data.Username == prevDetails.Username && data.Id_user !== prevDetails.Id_user) {
                 console.log("name is taken!")
                 setBadUsername(Username)
                 setModalVisible(true)
             }
-            else{
-                Edit() 
+            else {
+                Edit()
             }
-            
-
-
-
         } catch (e) {
             console.error(e);
         }
     }
+
     const Edit = async () => {
-        console.log(route.params.route);
         let emailValid = rjxEmail.test(Email);
         // let usernameValid = rjxUsername.test(Username);
         // let passwordValid = rjxPass.test(Pass);
@@ -89,14 +104,13 @@ export default function EditProfile({ navigation, route }) {
                 var hash = await bcrypt.hashSync(Pass, salt);
                 onChangeHash(hash)
                 onChangeSalt(salt)
+                await clearAsyncStorage()
             }
             else {
                 Alert.alert("password dos not match confirm password!")
             }
         }
-
         try {
-            await clearAsyncStorage()
             let result = await fetch(url + "api/edit/user", {
                 method: 'POST',
                 headers: {
@@ -114,33 +128,13 @@ export default function EditProfile({ navigation, route }) {
                 })
 
             });
-              let data = await result.json();
-              console.log(data);
-                storeData(data);
-                navigation.navigate("TabStack", { user: data });
-
-
+            let data = await result.json();
+            await storeData(data);
+            navigation.navigate("TabStack", { user: data });
         } catch (e) {
             console.error(e)
         }
     }
-    const storeData = async (data) => {
-        try {
-            const loggedUser = JSON.stringify(data);
-            await AsyncStorage.setItem('loggedUser', loggedUser)
-        } catch (e) {
-            console.error(e)
-        }
-    }
-    const clearAsyncStorage = async () => {
-        try {
-            await AsyncStorage.clear();
-            console.log('Done');
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
 
 
     return (
@@ -180,37 +174,35 @@ export default function EditProfile({ navigation, route }) {
                     <Text style={styles.textBtn}>Save</Text>
                 </View>
             </TouchableOpacity>
-
-
             {shouldShow ? (
-                    <View style={styles.centeredView}>
-                        <Modal
-                            animationType="slide"
-                            transparent={true}
-                            visible={modalVisible}
-                            onRequestClose={() => {
-                                Alert.alert("Modal has been closed.");
-                                setModalVisible(!modalVisible);
-                            }}>
-                            <View style={styles.centeredView}>
-                                <View style={styles.modalView}>
-                                    <Text style={styles.modalText}>The username {badUsername} already exists, please choose another username</Text>
-                                    <TextInput
-                                        style={styles.input}
-                                        onChangeText={onChangeUsername()}
-                                        value={Username}
-                                        placeholder="new username"
-                                    />
-                                    <TouchableOpacity onPress={() => HideModal()}>
-                                        <View style={styles.button_normal}>
-                                            <Text style={styles.textBtn}>Save</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
+                <View style={styles.centeredView}>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => {
+                            Alert.alert("Modal has been closed.");
+                            setModalVisible(!modalVisible);
+                        }}>
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalText}>The username {badUsername} already exists, please choose another username</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    onChangeText={onChangeUsername()}
+                                    value={Username}
+                                    placeholder="username"
+                                />
+                                <TouchableOpacity onPress={() => HideModal()}>
+                                    <View style={styles.button_normal}>
+                                        <Text style={styles.textBtn}>Save</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
-                        </Modal>
-                    </View>
-                ) : null}
+                        </View>
+                    </Modal>
+                </View>
+            ) : null}
         </View>
     );
 
