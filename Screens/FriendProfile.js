@@ -171,7 +171,16 @@ export default function FriendProfile({ navigation, route }) {
                     <View style={styles.buttons}>
                         <TouchableOpacity
                             onLongPress={() => FollowUser()}
-                            onPressIn={() => setFM_ModalVisible(true)}>
+                            // onPressIn={() => setFM_ModalVisible(true)}
+                            >
+                            <View style={styles.button_normal}>
+                                <Text style={styles.textBtn}> Follow</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onLongPress={() => setFM_ModalVisible(true)}
+                            // onPressIn={() => setFM_ModalVisible(true)}
+                            >
                             <View style={styles.button_normal}>
                                 <Text style={styles.textBtn}>{other_user.Follow_me + " Followers"}</Text>
                             </View>
