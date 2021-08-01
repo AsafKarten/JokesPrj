@@ -28,7 +28,7 @@ export default function FriendProfile({ navigation, route }) {
         const loaderjokes = navigation.addListener('focus', () => {
             GetFriendData();
             LoadJokes();
-            LoadFollowMeList(other_user.Id_user);
+            
             if (Platform.OS !== 'web') {
                 setShouldShow(true)
             }
@@ -74,6 +74,7 @@ export default function FriendProfile({ navigation, route }) {
             let data = [...await result.json()];
             setFollowMeList(data);
             console.log(data);
+            setFM_ModalVisible(true)
         } catch (e) {
             console.error(e)
         }
@@ -170,7 +171,7 @@ export default function FriendProfile({ navigation, route }) {
                     <Image style={styles.profile_image} source={{ uri: `${other_user.User_img}?t=${Date.now()}` }} />
                     <View style={styles.buttons}>
                         <TouchableOpacity
-                            onLongPress={() => FollowUser()}
+                            onPress={() => FollowUser()}
                             // onPressIn={() => setFM_ModalVisible(true)}
                             >
                             <View style={styles.button_normal}>
@@ -178,7 +179,7 @@ export default function FriendProfile({ navigation, route }) {
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            onLongPress={() => setFM_ModalVisible(true)}
+                            onPress={() => LoadFollowMeList(other_user.Id_user)}
                             // onPressIn={() => setFM_ModalVisible(true)}
                             >
                             <View style={styles.button_normal}>
