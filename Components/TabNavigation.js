@@ -56,15 +56,15 @@ export default function TabStack({ route }) {
                 {props => <Home {...props} user={route.params.user} />}
             </Tab.Screen>
             <Tab.Screen
-                name="Notifications"
-                component={Notifications}
+                name="Search"
                 options={{
-                    tabBarLabel: 'Updates',
+                    tabBarLabel: 'Search',
                     tabBarIcon: ({ color }) => (
-                        <MaterialIcons name="bell" color={color} size={24} />
+                        <MaterialIcons name="search" color={color} size={24} />
                     ),
-                }}
-            />
+                }}>
+                {props => <Search {...props} route={search_route} />}
+            </Tab.Screen>
             <Tab.Screen
                 name="Profile"
                 options={{
@@ -74,16 +74,6 @@ export default function TabStack({ route }) {
                     ),
                 }}>
                 {props => <Profile {...props} user={route.params.user} />}
-            </Tab.Screen>
-            <Tab.Screen
-                name="Search"
-                options={{
-                    tabBarLabel: 'Search',
-                    tabBarIcon: ({ color }) => (
-                        <MaterialIcons name="search" color={color} size={24} />
-                    ),
-                }}>
-                {props => <Search {...props} route={search_route} />}
             </Tab.Screen>
 
         </Tab.Navigator>
