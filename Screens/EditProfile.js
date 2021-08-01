@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert,Modal, TouchableOpacity, View, StyleSheet, TextInput, Button, Text } from 'react-native';
+import { Alert,Modal,Platform, TouchableOpacity, View, StyleSheet, TextInput, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -46,12 +46,15 @@ export default function EditProfile({ navigation, route }) {
             });
             let data = await result.json();
             console.log(data);
-            if (data !== undefined) {
-               console.log("fail");
-               setModalVisible(true)
+            if (data.Id_user == prevDetails.Id_user) {
+              Edit() 
+            }
+            if(data.Username == prevDetails.Username && data.Id_user !== prevDetails.Id_user){
+                console.log("name is taken!")
+                setModalVisible(true)
             }
             else{
-                Edit()
+                Edit() 
             }
             
 
