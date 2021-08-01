@@ -55,6 +55,7 @@ export default function Profile({ navigation, user }) {
     useEffect(() => {
         const loaderjokes = navigation.addListener('focus', async () => {
             if (user !== undefined) {
+                await setUserName(user.Username)
                 await LoadJokes(user.Id_user)
                 await LoadIFollowList(user.Id_user)
                 await LoadFollowMeList(user.Id_user)
