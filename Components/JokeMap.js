@@ -136,22 +136,27 @@ export default function JokeMap({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
+      //main container
+      container: {
         flex: 1,
+        margin: 8,
         justifyContent: 'center',
         alignItems: 'center'
     },
+    //User posts style
     list: {
         flexWrap: 'wrap',
         alignItems: 'flex-start',
         marginTop: 16,
-        padding: 8,
+        // marginRight:10,
+        padding: 28,
         borderWidth: 1,
         borderRadius: 9,
         borderColor: 'grey',
         backgroundColor: "white",
         color: "black",
     },
+    //botton normal
     button_normal: {
         alignItems: 'center',
         margin: 5,
@@ -161,12 +166,13 @@ const styles = StyleSheet.create({
     },
     //txt botton normal
     textBtn: {
-        fontSize: 16,
+        fontSize: 18,
         color: "white",
         fontWeight: "bold",
         fontFamily: "sans-serif"
     },
     Body: {
+        marginBottom: 8,
         fontSize: 16,
     },
     postTitle: {
@@ -175,22 +181,41 @@ const styles = StyleSheet.create({
         textAlign: 'left'
     },
     buttonGroup: {
-        alignItems: 'flex-start',
+        //flex: 3,
         flexDirection: 'row',
+        // justifyContent: 'space-evenly',
+
+    },
+    buttons: {
+        margin: 2,
+        marginLeft: 8,
     },
     UserImg: {
-        width: 30,
-        height: 30,
+        width: 60,
+        height: 60,
+
         borderRadius: 100,
-        borderWidth: 2,
         borderRadius: 90,
+        resizeMode: 'stretch',
+
     },
     UserName: {
         marginLeft: 5,
+        paddingTop: 12,
+        fontSize: 20,
         fontWeight: "bold",
     },
     JokeImage: {
-        width: 250,
-        height: 150,
-    }
+        marginBottom: 8,
+        marginTop: 8,
+        width: 300,
+        height: 250,
+        resizeMode: 'stretch',
+
+    },
+    buttonStyle: {
+        height: 30,
+        padding: 10,
+        marginTop: 5,
+    },
 })
