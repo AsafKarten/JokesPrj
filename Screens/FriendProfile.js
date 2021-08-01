@@ -80,11 +80,9 @@ export default function FriendProfile({ navigation, route }) {
     }
 
     const SearchFunc = (search) => {
-        if (search != "") {
-            navigation.navigate("Search", { user: user, search: search });
-            return;
-        }
-        navigation.navigate("Search", { user: user, search: search });
+
+        var route = { user: user, search: search };
+        navigation.navigate("Search", { navigation: navigation, route: route });
     }
 
 
@@ -162,7 +160,8 @@ export default function FriendProfile({ navigation, route }) {
 
                 <View style={styles.search_holder}>
                     <TextInput style={styles.search}
-                        onChangeText={onChangeSearch}
+                        //onChangeText={onChangeSearch}
+                        onFocus={SearchFunc(search)}
                         value={search}
                         placeholder="Search friends/jokes" />
                     <FontAwesome style={styles.serach_icon} onPress={() => SearchFunc(search)} name="search" size={24} color="grey" />
