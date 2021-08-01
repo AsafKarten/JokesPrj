@@ -26,13 +26,14 @@ export default function EditProfile({ navigation, route }) {
     const [Pass, onChangePass] = useState('');
     const [CPass, onChangeCPass] = useState('');
     const [shouldShow, setShouldShow] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const CheckUsername = async () => {
         try {
             if (Platform.OS !== 'web') {
                 setShouldShow(true)
             }
-            await clearAsyncStorage()
+
             let result = await fetch(url + "api/user", {
                 method: 'POST',
                 headers: {
@@ -44,10 +45,15 @@ export default function EditProfile({ navigation, route }) {
                 })
             });
             let data = await result.json();
-            if (data == undefined) {
+            console.log(data);
+            if (data !== undefined) {
+               console.log("fail");
+               setModalVisible(true)
+            }
+            else{
                 Edit()
             }
-
+            
 
 
 
@@ -85,6 +91,7 @@ export default function EditProfile({ navigation, route }) {
         }
 
         try {
+            await clearAsyncStorage()
             let result = await fetch(url + "api/edit/user", {
                 method: 'POST',
                 headers: {
