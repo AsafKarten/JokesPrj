@@ -85,7 +85,6 @@ export default function FriendProfile({ navigation, route }) {
             let data = [...await result.json()];
             setFollowMeList(data);
             console.log(data);
-            //setFM_ModalVisible(true)
         } catch (e) {
             console.error(e)
         }
@@ -264,7 +263,7 @@ export default function FriendProfile({ navigation, route }) {
                                     onPress={() => {
                                         setFM_ModalVisible(!modalFollowMeVisible);
                                     }}>
-                                    <Text style={styles.textStyle}>Hide Modal</Text>
+                                    <Text style={styles.textStyle}>Close</Text>
                                 </TouchableHighlight>
                                 <FlatList
                                     data={followMeList}

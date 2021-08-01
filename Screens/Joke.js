@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Platform, Modal, TextInput, TouchableHighlight, StyleSheet, Text, FlatList, View, Image, TouchableOpacity } from 'react-native';
-import { Input } from 'react-native-elements';
 
 const urlLocal = "http://localhost:52763/"
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
@@ -191,12 +190,12 @@ export default function Joke({ navigation, route }) {
                         </View>
                     </TouchableOpacity>
                     <Text style={styles.input} onPress={() => { setCommentModalVisible(true) }}>
-                            comment
-                        </Text>
-                        
-                        
-                        
-                    
+                        comment
+                    </Text>
+
+
+
+
                     <TouchableOpacity onPress={() => AddComment()}>
                         <View style={styles.button_normal}>
                             <Text style={styles.textBtn}>Comment</Text>
@@ -226,81 +225,79 @@ export default function Joke({ navigation, route }) {
 
             {shouldShow ? (
                 <View>
-                
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                        Alert.alert('Modal has been closed.');
-                    }}>
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Like list</Text>
-                            <TouchableHighlight
-                                style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                                onPress={() => {
-                                    setModalVisible(!modalVisible);
-                                }}>
-                                <Text style={styles.textStyle}>Hide Modal</Text>
-                            </TouchableHighlight>
-                            <FlatList
-                                data={allLikes}
-                                keyExtractor={(item) => item.Like_id}
-                                renderItem={({ item }) => (
-                                    <View style={styles.list}>
-                                        <View style={styles.LikeCubes}>
-                                            <Image source={{ uri: item.User_img }} style={styles.ModalUserImg} />
-                                            <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
+
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => {
+                            Alert.alert('Modal has been closed.');
+                        }}>
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalText}>Like list</Text>
+                                <TouchableHighlight
+                                    style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                    onPress={() => {
+                                        setModalVisible(!modalVisible);
+                                    }}>
+                                    <Text style={styles.textStyle}>Hide Modal</Text>
+                                </TouchableHighlight>
+                                <FlatList
+                                    data={allLikes}
+                                    keyExtractor={(item) => item.Like_id}
+                                    renderItem={({ item }) => (
+                                        <View style={styles.list}>
+                                            <View style={styles.LikeCubes}>
+                                                <Image source={{ uri: item.User_img }} style={styles.ModalUserImg} />
+                                                <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
+                                            </View>
                                         </View>
-                                    </View>
-                                )} />
+                                    )} />
 
+                            </View>
                         </View>
-                    </View>
-                </Modal>
+                    </Modal>
 
-                
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={commentModalVisible}
-                    onRequestClose={() => {
-                        Alert.alert('Modal has been closed.');
-                    }}>
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Like list</Text>
-                            <TouchableHighlight
-                                style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                                onPress={() => {
-                                    setCommentModalVisible(!commentModalVisible);
-                                }}>
-                                <Text style={styles.textStyle}>Hide Modal</Text>
-                            </TouchableHighlight>
+
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={commentModalVisible}
+                        onRequestClose={() => {
+                            Alert.alert('Modal has been closed.');
+                        }}>
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalText}>Add Comment</Text>
+
                                 <View>
-                               
-                    <TextInput
-                        style={styles.inputModal}
-                        //onFocus={() => { setCommentModalVisible(true) }}
-                        onChangeText={onChangeComment}
-                        value={comment}
-                        placeholder="comment"
-                    />
-                    <TouchableOpacity onPress={() => AddComment()}>
-                        <View style={styles.button_normal}>
-                            <Text style={styles.textBtn}>Comment</Text>
-                        </View>
-                    </TouchableOpacity>
-                                </View>
 
-                        </View>
-                    </View>
-                </Modal>
-
-
-
+                                    <TextInput
+                                        style={styles.inputModal}
+                                        //onFocus={() => { setCommentModalVisible(true) }}
+                                        onChangeText={onChangeComment}
+                                        value={comment}
+                                        placeholder="comment"
+                                    />
+                                    <TouchableOpacity onPress={() => AddComment()}>
+                                        <View style={styles.button_normal}>
+                                            <Text style={styles.textBtn}>Comment</Text>
                                         </View>
+                                    </TouchableOpacity>
+  
+                                </View>
+                                <TouchableHighlight
+                                        style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                        onPress={() => {
+                                            setCommentModalVisible(!commentModalVisible);
+                                        }}>
+                                        <Text style={styles.textStyle}>Close</Text>
+                                    </TouchableHighlight>
+                            </View>
+                        </View>
+                    </Modal>
+                </View>
             ) : null}
         </View>
 
@@ -364,7 +361,7 @@ const styles = StyleSheet.create({
         marginRight: 8,
     },
     input: {
-        color:'grey',
+        color: 'grey',
         marginTop: 1,
         marginLeft: 8,
         height: 30,
@@ -429,6 +426,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         fontSize: 20,
         textAlign: 'center',
+        fontWeight: 'bold'
     },
     LikeCubes: {
         //alignItems: 'flex-start',
@@ -438,7 +436,7 @@ const styles = StyleSheet.create({
         //justifyContent:'space-evenly',
     },
     ModalUserName: {
-        marginLeft:8,
+        marginLeft: 8,
         marginRight: 5,
         paddingTop: 12,
         fontSize: 20,
@@ -455,14 +453,14 @@ const styles = StyleSheet.create({
         borderRadius: 90,
         resizeMode: 'stretch',
     },
-    inputModal:{
-        marginTop:16,
-        marginBottom:16,
-        fontSize:20,
-        textAlign:'center',
-        width:300,
-       //maxWidth:200,
-        height:40,
+    inputModal: {
+        marginTop: 16,
+        marginBottom: 16,
+        fontSize: 20,
+        textAlign: 'center',
+        width: 300,
+        //maxWidth:200,
+        height: 40,
     },
 
 

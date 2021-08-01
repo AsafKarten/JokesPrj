@@ -183,7 +183,6 @@ export default function Profile({ navigation, user }) {
                 })
             });
             let data = await res.json();
-            console.log(data);
             //if (data.path.indexOf("?asid") == -1)
             await setImage(`${data.path}?t=${Date.now()}`)
             await updateLoggedUser(userId);
@@ -209,7 +208,6 @@ export default function Profile({ navigation, user }) {
             if (data.User_img.indexOf("?asid") == -1)
                 data.User_img = `${data.User_img}?t=${Date.now()}`;
             storeData(data);
-            console.log(data);
         } catch (e) {
             console.error(e);
         }
@@ -256,11 +254,9 @@ export default function Profile({ navigation, user }) {
 
     const MoveToJoke = (item) => {
         var route = { user: user, item: item }
-        console.log(route);
         navigation.navigate("Joke", { navigation: navigation, route: route });
     }
     const Edit = () => {
-        console.log(user);
         navigation.navigate("EditProfile", { navigation: navigation, route: user });
     }
 
@@ -297,7 +293,6 @@ export default function Profile({ navigation, user }) {
             });
             let data = [...await result.json()];
             setFollowMeList(data);
-            console.log(data);
         } catch (e) {
             console.error(e)
         }
@@ -450,7 +445,7 @@ export default function Profile({ navigation, user }) {
                                         onPress={() => {
                                             setIF_ModalVisible(!modalIFollowVisible);
                                         }}>
-                                        <Text style={styles.textStyle}>Hide Modal</Text>
+                                        <Text style={styles.textStyle}>Close</Text>
                                     </TouchableHighlight>
                                     <FlatList
                                         data={iFollowList}
@@ -481,7 +476,7 @@ export default function Profile({ navigation, user }) {
                                         onPress={() => {
                                             setFM_ModalVisible(!modalFollowMeVisible);
                                         }}>
-                                        <Text style={styles.textStyle}>Hide Modal</Text>
+                                        <Text style={styles.textStyle}>Close</Text>
                                     </TouchableHighlight>
                                     <FlatList
                                         data={followMeList}

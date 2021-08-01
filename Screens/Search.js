@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, StyleSheet, View,Text } from 'react-native';
+import { Alert } from 'react-native';
+import { TouchableOpacity, StyleSheet, View, Text } from 'react-native';
 import { Input } from 'react-native-elements';
 
 const urlLocal = "http://localhost:52763/"
@@ -7,11 +8,13 @@ const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 
 const Search = ({ navigation, route }) => {
     const [searchTitle, onChangeTitle] = useState('');
+    const [allJokes, setAllJokes] = useState('');
     const user = route.params.route.user
 
     useEffect(() => {
         console.log(route);
         (async () => {
+            await LoadJokes();
             if (route.params.route.search !== undefined) {
                 onChangeTitle(route.params.route.search)
             }
@@ -22,24 +25,32 @@ const Search = ({ navigation, route }) => {
         SearchJoke(searchTitle);
     }
 
+    const LoadJokes = async () => {
+        try {
+            let result = await fetch(url + "api/feed", {
+                method: 'GET'
+            });
+            let data = [...await result.json()];
+            setAllJokes(data.reverse());
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     const SearchJoke = async (searchTitle) => {
         if (searchTitle == null) { return; }
         else {
             try {
-                let result = await fetch(url + "api/search/jokes", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json; charset=UTF-8',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        Joke_title: searchTitle
-                    })
-                });
-                let data = [...await result.json()];
-                var route = { user: user, jokeList: data, searchTitle: searchTitle };
-                console.log(route);
-                navigation.navigate("JokeMap", { navigation: navigation, route: route });
+                let filteredData = allJokes.filter(joke =>
+                    String(joke.Joke_title).includes(searchTitle) ||
+                    String(joke.Joke_body).includes(searchTitle));
+                if (filteredData.length === 0) {
+                    Alert.alert("No Jokes found :(...")
+                }
+                else {
+                    var route = { user: user, jokeList: filteredData, searchTitle: searchTitle };
+                    navigation.navigate("JokeMap", { navigation: navigation, route: route });
+                }
             } catch (e) {
                 console.error(e)
             }
@@ -64,21 +75,19 @@ const Search = ({ navigation, route }) => {
 }
 const styles = StyleSheet.create({
     container: {
-        alignSelf:'center',
-        width:350,
-        maxWidth:400,
+        alignSelf: 'center',
+        width: 350,
+        maxWidth: 400,
         flex: 1,
         alignItems: 'center',
-        textAlign:'center',
-        marginHorizontal:30,
-        //justifyContent: 'center',
+        textAlign: 'center',
+        marginHorizontal: 30,
     },
     input: {
-        //justifyContent:'center',
-        marginTop:20,
-        alignSelf:'center',
-        width:200,
-        maxWidth:400,
+        marginTop: 20,
+        alignSelf: 'center',
+        width: 200,
+        maxWidth: 400,
         height: 40,
         margin: 5,
         padding: 10,
@@ -88,9 +97,9 @@ const styles = StyleSheet.create({
     },
     //botton normal
     button_normal: {
-        alignSelf:'center',
-        width:200,
-        
+        alignSelf: 'center',
+        width: 200,
+
         alignItems: 'center',
         margin: 5,
         borderRadius: 8,
