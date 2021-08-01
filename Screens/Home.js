@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TextInput, StyleSheet, Text, FlatList, View, Image, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const urlLocal = "http://localhost:52763/"
@@ -15,6 +16,7 @@ export default function Home({ navigation, user }) {
     useEffect(() => {
         (async () => {
             await LoadJokes();
+            await getData();
         })()
     }, [])
 
@@ -25,10 +27,19 @@ export default function Home({ navigation, user }) {
                 if (user.User_img.indexOf("?asid") == -1)
                     user.User_img = `${user.User_img}?t=${Date.now()}`
             }
-        });
-        return loader_jokes;
+            return loader_jokes;
+        })
     }, [navigation])
 
+    const getData = async () => {
+        const data = await AsyncStorage.getItem('loggedUser')
+        if (data !== null) {
+            let user = JSON.parse(data)
+        }
+        else {
+            navigation.navigate("Login");
+        }
+    }
     const LoadJokes = async () => {
         try {
             let result = await fetch(url + "api/feed", {

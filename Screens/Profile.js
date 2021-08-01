@@ -53,12 +53,12 @@ export default function Profile({ navigation, user }) {
     }, [])
 
     useEffect(() => {
-        const loaderjokes = navigation.addListener('focus', async () => {
+        const loaderjokes = navigation.addListener('focus', () => {
             if (user !== undefined) {
-                await setUserName(user.Username)
-                await LoadJokes(user.Id_user)
-                await LoadIFollowList(user.Id_user)
-                await LoadFollowMeList(user.Id_user)
+                setUserName(user.Username)
+                LoadJokes(user.Id_user)
+                LoadIFollowList(user.Id_user)
+                LoadFollowMeList(user.Id_user)
             }
         });
         return loaderjokes;
@@ -103,9 +103,6 @@ export default function Profile({ navigation, user }) {
             });
             if (!result.cancelled) {
                 if (Platform.OS !== 'web') {
-                    console.log('====================================');
-                    console.log("Before convert " + result);
-                    console.log('====================================');
                     const content = await FileSystem.readAsStringAsync(result.uri, { encoding: FileSystem.EncodingType.Base64 });
                     result.uri = content
                     await imageUploadA(result.uri, username)

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { KeyboardAvoidingView,ImageBackground, Alert, Modal, View, StyleSheet, Text, TextInput, TouchableOpacity, Platform } from 'react-native';
+import { KeyboardAvoidingView, ImageBackground, Alert, Modal, View, StyleSheet, Text, TextInput, TouchableOpacity, Platform } from 'react-native';
 import * as Facebook from 'expo-facebook';
 import * as Google from 'expo-google-app-auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -35,6 +35,13 @@ export default function Login({ navigation }) {
             await getData();
         })()
     }, [])
+
+    useEffect(() => {
+        const loaderjokes = navigation.addListener('focus', () => {
+            getData();
+        });
+        return loaderjokes;
+    }, [navigation])
 
     const getData = async () => {
         const data = await AsyncStorage.getItem('loggedUser')
