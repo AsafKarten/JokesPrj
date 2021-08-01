@@ -17,8 +17,8 @@ export default function FriendProfile({ navigation, route }) {
     ]);
     const [other_user, setOtherUser] = useState({ Id_user: 0, Username: '', Email: '', User_img: default_img, I_follow: 0, Follow_me: 0 });
     const [search, onChangeSearch] = useState("");
-    const friendId = route.params.route.item.Id_user
-    const item = route.params.route.item;
+    const [friendId, setFriendId] = useState(route.params.route.item.Id_user)
+    const [item, setItem] = useState(route.params.route.item);
     const user = route.params.route.user;
     const [followMeList, setFollowMeList] = useState();
     const [modalFollowMeVisible, setFM_ModalVisible] = useState(false);
@@ -28,7 +28,8 @@ export default function FriendProfile({ navigation, route }) {
         const loaderjokes = navigation.addListener('focus', () => {
             GetFriendData();
             LoadJokes();
-            
+            LoadFollowMeList(route.params.route.item.Id_user)
+
             if (Platform.OS !== 'web') {
                 setShouldShow(true)
             }
@@ -37,6 +38,15 @@ export default function FriendProfile({ navigation, route }) {
         return loaderjokes;
     }, [navigation])
 
+    const LoadNewUser = async (item) => {
+        await setItem(item)
+        await setFriendId(item.Id_user)
+        await GetFriendData()
+        await LoadJokes()
+        await LoadFollowMeList(item.Id_user)
+        await setOtherUser(GetFriendData())
+
+    }
 
 
 
@@ -55,6 +65,7 @@ export default function FriendProfile({ navigation, route }) {
             let data = await result.json();
             setOtherUser(data);
             console.log(data);
+            return data
         } catch (error) {
             console.log(error);
         }
@@ -74,7 +85,7 @@ export default function FriendProfile({ navigation, route }) {
             let data = [...await result.json()];
             setFollowMeList(data);
             console.log(data);
-            setFM_ModalVisible(true)
+            //setFM_ModalVisible(true)
         } catch (e) {
             console.error(e)
         }
@@ -153,6 +164,17 @@ export default function FriendProfile({ navigation, route }) {
         console.log(data);
         await LoadJokes();
     }
+    const MoveToProfile = (item) => {
+
+        if (item.Id_user !== user.Id_user) {
+            LoadNewUser(item)
+        }
+        else {
+            navigation.navigate("TabStack", { route: user });
+
+        }
+
+    }
 
     return (
         <View style={styles.container}>
@@ -172,16 +194,16 @@ export default function FriendProfile({ navigation, route }) {
                     <View style={styles.buttons}>
                         <TouchableOpacity
                             onPress={() => FollowUser()}
-                            // onPressIn={() => setFM_ModalVisible(true)}
-                            >
+                        // onPressIn={() => setFM_ModalVisible(true)}
+                        >
                             <View style={styles.button_normal}>
                                 <Text style={styles.textBtn}> Follow</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            onPress={() => LoadFollowMeList(other_user.Id_user)}
-                            // onPressIn={() => setFM_ModalVisible(true)}
-                            >
+                            onPress={() => setFM_ModalVisible(true)}
+                        // onPressIn={() => setFM_ModalVisible(true)}
+                        >
                             <View style={styles.button_normal}>
                                 <Text style={styles.textBtn}>{other_user.Follow_me + " Followers"}</Text>
                             </View>
@@ -252,7 +274,9 @@ export default function FriendProfile({ navigation, route }) {
                                             <View style={styles.ModalCube}>
                                                 <Image onPress={() => MoveToProfile(item)} source={{ uri: item.User_img }} style={styles.ModalUserImg} />
                                                 <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
+                                               
                                             </View>
+                                             <Text onPress={() => MoveToProfile(item)} style={styles.doubleTap}>double tap me</Text>
                                         </View>
                                     )} />
                             </View>
@@ -492,6 +516,11 @@ const styles = StyleSheet.create({
     ModalCube: {
         alignItems: 'flex-start',
         flexDirection: 'row',
+    },
+    doubleTap: {
+        color: 'grey',
+        fontSize: 16,
+
     },
 
 

@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
         //justifyContent:'space-evenly',
     },
     ModalUserName: {
-        marginLeft: 35,
+        marginLeft:8,
         marginRight: 5,
         paddingTop: 12,
         fontSize: 20,

@@ -15,8 +15,10 @@ export default function TabStack({ route }) {
     useEffect(() => {
         (async () => {
             await SerachRoute();
+           
         })()
     }, [])
+
 
     const SerachRoute = () => {
         let search = '';
