@@ -35,7 +35,7 @@ export default function FavoriteJokes({ navigation, route }) {
 
             });
             let data = [...await result.json()];
-            setList(data);
+            setList(data.reverse());
         } catch (e) {
             console.error(e);
         }

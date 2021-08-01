@@ -326,6 +326,7 @@ export default function Profile({ navigation, user }) {
             <ScrollView>
                 <View style={styles.search_holder}>
                     <TextInput style={styles.search}
+                    onFocus={()=>SearchFunc(search)}
                         onChangeText={onChangeSearch}
                         value={search}
                         

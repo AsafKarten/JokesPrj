@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Modal, TextInput, TouchableHighlight, StyleSheet, Text, FlatList, View, Image, Button } from 'react-native';
+import { Alert,Platform, Modal, TextInput, TouchableHighlight, StyleSheet, Text, FlatList, View, Image, Button } from 'react-native';
 import { Input } from 'react-native-elements';
 
 const urlLocal = "http://localhost:52763/"
@@ -23,11 +23,15 @@ export default function Joke({ navigation, route }) {
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     var time = today.getHours() + ":" + today.getMinutes();
     const dateTime = date + ' ' + time;
+    const [shouldShow, setShouldShow] = useState(false);
 
     useEffect(() => {
         (async () => {
             await LoadLikes();
             await LoadComments()
+            if(Platform.OS !== 'web') {
+                setShouldShow(true)
+            }
         })()
     }, [])
 
@@ -213,6 +217,8 @@ export default function Joke({ navigation, route }) {
                         </Text>
                     </View>
                 )} />
+
+{shouldShow ? (
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -245,6 +251,7 @@ export default function Joke({ navigation, route }) {
                     </View>
                 </View>
             </Modal>
+            ) : null}
         </View>
 
     );
