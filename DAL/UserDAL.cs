@@ -94,16 +94,124 @@ namespace JokesPrj.DAL
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@id_user", SqlDbType.Int).Value = new_user.Id_user;
                     cmd.ExecuteNonQuery();
+                    int rows = UpdateUsernameOnComments(new_user);
+                    rows += UpdateUsernameOnLikes(new_user);
+                    rows += UpdateUsernameOnJokes(new_user);
+                    rows += UpdateUsernameOnIFollow(new_user);
+                    rows += UpdateUsernameOnFollowMe(new_user);
                     return new_user;
                 }
 
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message + "UpdateUser");
+                throw new Exception(ex.Message);
             }
 
         }
+        public int UpdateUsernameOnComments(User new_user)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    string query = $"Update JokesComments Set username=@username where id_user=@id";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = new_user.Username;
+                    cmd.Parameters.AddWithValue("@id", SqlDbType.Int).Value = new_user.Id_user;
+                    int res = cmd.ExecuteNonQuery();
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public int UpdateUsernameOnLikes(User new_user)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    string query = $"Update JokesLikes Set username=@username where id_user=@id";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = new_user.Username;
+                    cmd.Parameters.AddWithValue("@id", SqlDbType.Int).Value = new_user.Id_user;
+                    int res = cmd.ExecuteNonQuery();
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public int UpdateUsernameOnJokes(User new_user)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    string query = $"Update Jokes Set username=@username where id_user=@id";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = new_user.Username;
+                    cmd.Parameters.AddWithValue("@id", SqlDbType.Int).Value = new_user.Id_user;
+                    int res = cmd.ExecuteNonQuery();
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public int UpdateUsernameOnIFollow(User new_user)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    string query = $"Update Follow Set username=@username where id_user=@id";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = new_user.Username;
+                    cmd.Parameters.AddWithValue("@id", SqlDbType.Int).Value = new_user.Id_user;
+                    int res = cmd.ExecuteNonQuery();
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public int UpdateUsernameOnFollowMe(User new_user)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conStr))
+                {
+                    con.Open();
+                    string query = $"Update Follow Set target_username=@target_username where target_id=@id";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@target_username", SqlDbType.NVarChar).Value = new_user.Username;
+                    cmd.Parameters.AddWithValue("@id", SqlDbType.Int).Value = new_user.Id_user;
+                    int res = cmd.ExecuteNonQuery();
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
 
         public int UpdateIFollow(User logged_user, bool status)
         {
@@ -122,7 +230,7 @@ namespace JokesPrj.DAL
                     }
                     string query = $"Update JokesUsers Set i_follow=@i_follow where id_user=@id_user";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@i_follow ", SqlDbType.NVarChar).Value = logged_user.I_follow;
+                    cmd.Parameters.AddWithValue("@i_follow", SqlDbType.NVarChar).Value = logged_user.I_follow;
                     cmd.Parameters.AddWithValue("@id_user", SqlDbType.Int).Value = logged_user.Id_user;
                     int res = cmd.ExecuteNonQuery();
                     return res;
@@ -151,7 +259,7 @@ namespace JokesPrj.DAL
                     }
                     string query = $"Update JokesUsers Set follow_me=@follow_me where id_user=@id_user";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@follow_me ", SqlDbType.NVarChar).Value = target_user.Follow_me;
+                    cmd.Parameters.AddWithValue("@follow_me", SqlDbType.NVarChar).Value = target_user.Follow_me;
                     cmd.Parameters.AddWithValue("@id_user", SqlDbType.Int).Value = target_user.Id_user;
                     int res = cmd.ExecuteNonQuery();
                     return res;
@@ -184,7 +292,7 @@ namespace JokesPrj.DAL
                 throw new Exception(ex.Message);
             }
         }
-        
+
 
         public int SaveNewUserToDB(User u)
         {
@@ -223,7 +331,7 @@ namespace JokesPrj.DAL
                     con.Open();
                     string query = $"Update Jokes Set user_img=@user_img where id_user=@id";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@user_img ", SqlDbType.NVarChar).Value = path;
+                    cmd.Parameters.AddWithValue("@user_img", SqlDbType.NVarChar).Value = path;
                     cmd.Parameters.AddWithValue("@id", SqlDbType.Int).Value = id;
                     int res = cmd.ExecuteNonQuery();
                     return res;
@@ -244,7 +352,7 @@ namespace JokesPrj.DAL
                     con.Open();
                     string query = $"Update JokesLikes Set user_img=@user_img where id_user=@id";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@user_img ", SqlDbType.NVarChar).Value = path;
+                    cmd.Parameters.AddWithValue("@user_img", SqlDbType.NVarChar).Value = path;
                     cmd.Parameters.AddWithValue("@id", SqlDbType.Int).Value = id;
                     int res = cmd.ExecuteNonQuery();
                     return res;
@@ -264,7 +372,7 @@ namespace JokesPrj.DAL
                     con.Open();
                     string query = $"Update JokesComments Set user_img=@user_img where id_user=@id";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@user_img ", SqlDbType.NVarChar).Value = path;
+                    cmd.Parameters.AddWithValue("@user_img", SqlDbType.NVarChar).Value = path;
                     cmd.Parameters.AddWithValue("@id", SqlDbType.Int).Value = id;
                     int res = cmd.ExecuteNonQuery();
                     return res;
@@ -285,7 +393,7 @@ namespace JokesPrj.DAL
                     con.Open();
                     string query = $"Update Follow Set user_img=@user_img where id_user=@id";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@user_img ", SqlDbType.NVarChar).Value = path;
+                    cmd.Parameters.AddWithValue("@user_img", SqlDbType.NVarChar).Value = path;
                     cmd.Parameters.AddWithValue("@id", SqlDbType.Int).Value = id;
                     int res = cmd.ExecuteNonQuery();
                     return res;
@@ -305,7 +413,7 @@ namespace JokesPrj.DAL
                     con.Open();
                     string query = $"Update Follow Set target_img=@target_img where target_id=@id";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@target_img ", SqlDbType.NVarChar).Value = path;
+                    cmd.Parameters.AddWithValue("@target_img", SqlDbType.NVarChar).Value = path;
                     cmd.Parameters.AddWithValue("@id", SqlDbType.Int).Value = id;
                     int res = cmd.ExecuteNonQuery();
                     return res;
@@ -325,7 +433,7 @@ namespace JokesPrj.DAL
                     con.Open();
                     string query = $"Update JokesUsers Set user_img=@user_img where id_user=@id";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@user_img ", SqlDbType.NVarChar).Value = path;
+                    cmd.Parameters.AddWithValue("@user_img", SqlDbType.NVarChar).Value = path;
                     cmd.Parameters.AddWithValue("@id", SqlDbType.Int).Value = id;
                     int rows = UpdateUserImageOnPosts(path, id);
                     rows = UpdateUserImageOnPosts(path, id);
