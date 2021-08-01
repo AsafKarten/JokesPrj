@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, StyleSheet, TextInput, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, View,Text } from 'react-native';
 import { Input } from 'react-native-elements';
 import Loader from '../Components/Loader'
 
@@ -15,7 +15,7 @@ const Search = ({ navigation, route }) => {
         (async () => {
             if (route.params.route.search !== undefined) {
                 onChangeTitle(route.params.route.search)
-                
+
             }
             //SearchJoke(searchTitle);
         })()
@@ -68,10 +68,11 @@ const Search = ({ navigation, route }) => {
                     textStyle={{ color: '#fff' }}
                 />
             </View> */}
-            <Button
-                title="search"
-                onPress={() => LoadSearch(searchTitle)}
-            />
+            <TouchableOpacity onPress={() => LoadSearch(searchTitle)}>
+                <View style={styles.button_normal}>
+                    <Text style={styles.textBtn}>Search</Text>
+                </View>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -88,7 +89,21 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         textAlign: 'center',
     },
-
+    //botton normal
+    button_normal: {
+        alignItems: 'center',
+        margin: 5,
+        borderRadius: 8,
+        padding: 10,
+        backgroundColor: "#942bed"
+    },
+    //txt botton normal
+    textBtn: {
+        fontSize: 18,
+        color: "white",
+        fontWeight: "bold",
+        fontFamily: "sans-serif"
+    },
 });
 
 export default Search;

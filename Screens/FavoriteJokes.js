@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, FlatList, View, Image, Button } from 'react-native';
+import { StyleSheet, Text, FlatList, View, Image, TouchableOpacity } from 'react-native';
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
@@ -92,7 +92,7 @@ export default function FavoriteJokes({ navigation, route }) {
                     <View style={styles.list}>
                         <View style={styles.buttonGroup}>
                             <Image source={{ uri: item.User_img }} style={styles.UserImg} />
-                            <Text onPress={()=>MoveToProfile(item)} style={styles.UserName}>{item.Username}</Text>
+                            <Text onPress={() => MoveToProfile(item)} style={styles.UserName}>{item.Username}</Text>
                         </View>
                         <Text style={styles.postTitle}>
                             {item.Joke_title}
@@ -105,10 +105,18 @@ export default function FavoriteJokes({ navigation, route }) {
                         </Text>
                         <View style={styles.buttonGroup}>
                             <View style={styles.buttons}>
-                                <Button style={styles.buttons} onPress={() => AddLike(item)} title={item.Joke_like + " Like"} />
+                                <TouchableOpacity onPress={() => AddLike(item)}>
+                                    <View style={styles.button_normal}>
+                                        <Text style={styles.textBtn}>{item.Joke_like + " Like"}</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                             <View style={styles.buttons}>
-                                <Button onPress={() => MoveToJoke(item)} title={item.Comment_count + " Comment"} />
+                                <TouchableOpacity onPress={() => MoveToJoke(item)}>
+                                    <View style={styles.button_normal}>
+                                        <Text style={styles.textBtn}>{item.Comment_count + " Comment"}</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
@@ -138,9 +146,23 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         color: "black",
     },
-
+    //botton normal
+    button_normal: {
+        alignItems: 'center',
+        margin: 5,
+        borderRadius: 8,
+        padding: 10,
+        backgroundColor: "#942bed"
+    },
+    //txt botton normal
+    textBtn: {
+        fontSize: 18,
+        color: "white",
+        fontWeight: "bold",
+        fontFamily: "sans-serif"
+    },
     Body: {
-        marginBottom:8,
+        marginBottom: 8,
         fontSize: 16,
     },
     postTitle: {
@@ -156,12 +178,12 @@ const styles = StyleSheet.create({
     },
     buttons: {
         margin: 2,
-        marginLeft:8,
+        marginLeft: 8,
     },
     UserImg: {
         width: 60,
         height: 60,
-       
+
         borderRadius: 100,
         borderRadius: 90,
         resizeMode: 'stretch',
@@ -169,13 +191,13 @@ const styles = StyleSheet.create({
     },
     UserName: {
         marginLeft: 5,
-        paddingTop:12,
+        paddingTop: 12,
         fontSize: 20,
         fontWeight: "bold",
     },
     JokeImage: {
-        marginBottom:8,
-        marginTop:8,
+        marginBottom: 8,
+        marginTop: 8,
         width: 300,
         height: 250,
         resizeMode: 'stretch',

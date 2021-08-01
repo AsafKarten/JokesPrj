@@ -360,7 +360,6 @@ export default function Profile({ navigation, user }) {
                     <Text style={styles.addText}>Add a funny piture of yourself</Text>
 
                     <View style={styles.buttonGroup}>
-                        {/* <View style={styles.buttons}> */}
                         <TouchableOpacity onPress={() => LikeJokes(user)}>
                             <View style={styles.button_normal}>
                                 <Text style={styles.textBtn}>Jokes you like</Text>
@@ -371,15 +370,12 @@ export default function Profile({ navigation, user }) {
                                 <Text style={styles.textBtn}>Followers</Text>
                             </View>
                         </TouchableOpacity>
-
-                        {/* </View> */}
-
-                    </View>
-                    <TouchableOpacity onPress={() => setIF_ModalVisible(true)}>
+                        <TouchableOpacity onPress={() => setIF_ModalVisible(true)}>
                             <View style={styles.button_normal}>
                                 <Text style={styles.textBtn}>Followers</Text>
                             </View>
                         </TouchableOpacity>
+                    </View>
                     <TouchableOpacity onPress={() => AddJoke()}>
                         <View style={styles.button_normal}>
                             <Text style={styles.textBtn}>Add new Joke</Text>
@@ -538,7 +534,7 @@ const styles = StyleSheet.create({
     },
     //txt botton normal
     textBtn: {
-        fontSize:18,
+        fontSize: 16,
         color: "white",
         fontWeight: "bold",
         fontFamily: "sans-serif"
@@ -548,12 +544,9 @@ const styles = StyleSheet.create({
         marginRight: 12,
         marginLeft: 8,
         marginTop: 6,
-
         padding: 2,
         width: 280,
-        fontSize: 20,
-
-
+        fontSize: 20
     },
     serach_icon: {
         padding: 2,
@@ -685,13 +678,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     camera: {
-        // position: 'absolute',
-        // bottom: 0,
-        // flexDirection: 'row',
-        // flex: 1,
-        // width: '100%',
-        // padding: 20,
-        // justifyContent: 'space-between'
         flex: 1
     },
     buttonContainer: {

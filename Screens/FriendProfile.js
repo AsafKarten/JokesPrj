@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button,Modal,TouchableHighlight, StyleSheet, Image,TouchableOpacity, Text, Platform, TextInput, View, FlatList } from 'react-native';
+import { TouchableOpacity, Modal, TouchableHighlight, StyleSheet, Image, Text, Platform, TextInput, View, FlatList } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { ScrollView } from 'react-native';
 
@@ -29,11 +29,11 @@ export default function FriendProfile({ navigation, route }) {
             GetFriendData();
             LoadJokes();
             LoadFollowMeList(other_user.Id_user);
-            if(Platform.OS !== 'web') {
+            if (Platform.OS !== 'web') {
                 setShouldShow(true)
             }
         });
-        
+
         return loaderjokes;
     }, [navigation])
 
@@ -156,42 +156,27 @@ export default function FriendProfile({ navigation, route }) {
     return (
         <View style={styles.container}>
             <ScrollView>
-                {/* <View style={styles.container}> */}
 
                 <View style={styles.search_holder}>
                     <TextInput style={styles.search}
-                        //onChangeText={onChangeSearch}
-                        onFocus={()=>SearchFunc(search)}
+                        onFocus={() => SearchFunc(search)}
                         value={search}
                         placeholder="Search friends/jokes" />
                     <FontAwesome style={styles.serach_icon} onPress={() => SearchFunc(search)} name="search" size={24} color="grey" />
                 </View>
                 <View style={styles.profileHolder}>
-                    {/* <View style={styles.profileHeader}> */}
                     <Text style={styles.username}>{other_user.Username}</Text>
-                    {/* </View> */}
-                    {/* <View style={styles.imageHolder}> */}
 
                     <Image style={styles.profile_image} source={{ uri: `${other_user.User_img}?t=${Date.now()}` }} />
-                    {/* </View> */}
-                    {/* <View style={styles.buttonGroup}> */}
                     <View style={styles.buttons}>
                         <TouchableOpacity
-                         onLongPress={() => FollowUser()}
-                         onPressIn={()=> setFM_ModalVisible(true)}
-                         >
-                             
+                            onLongPress={() => FollowUser()}
+                            onPressIn={() => setFM_ModalVisible(true)}>
                             <View style={styles.button_normal}>
                                 <Text style={styles.textBtn}>{other_user.Follow_me + " Followers"}</Text>
                             </View>
                         </TouchableOpacity>
-                        <Button
-                            title={other_user.Follow_me + " Followers"}
-                            onPress={() => FollowUser()}
-                        />
                     </View>
-                    {/* </View> */}
-                    {/* <View style={styles.profileFooter}></View> */}
                 </View>
                 <FlatList
                     data={profileJokes}
@@ -214,51 +199,58 @@ export default function FriendProfile({ navigation, route }) {
                             </Text>
                             <View style={styles.buttonGroup}>
                                 <View style={styles.buttons}>
-                                    <Button onPress={() => AddLike(item)} style={styles.buttons} title={item.Joke_like + " Like"} />
+                                    <TouchableOpacity onPress={() => AddLike(item)}>
+                                        <View style={styles.button_normal}>
+                                            <Text style={styles.textBtn}>{item.Joke_like + " Like"}</Text>
+                                        </View>
+                                    </TouchableOpacity>
                                 </View>
                                 <View style={styles.buttons}>
-                                    <Button onPress={() => MoveToJoke(item)} title="Comment" />
+                                    <TouchableOpacity onPress={() => MoveToJoke(item)} >
+                                        <View style={styles.button_normal}>
+                                            <Text style={styles.textBtn}>Comment</Text>
+                                        </View>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </View>
                     )} />
-                {/* </View> */}
                 {shouldShow ? (
-                 
-                        <Modal
-                            animationType="slide"
-                            transparent={true}
-                            visible={modalFollowMeVisible}
-                            onRequestClose={() => {
-                                Alert.alert('Modal has been closed.');
-                            }}>
-                            <View style={styles.centeredView}>
-                                <View style={styles.modalView}>
-                                    <Text style={styles.modalText}>followers</Text>
-                                    <TouchableHighlight
-                                        style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                                        onPress={() => {
-                                            setFM_ModalVisible(!modalFollowMeVisible);
-                                        }}>
-                                        <Text style={styles.textStyle}>Hide Modal</Text>
-                                    </TouchableHighlight>
-                                    <FlatList
-                                        data={followMeList}
-                                        keyExtractor={(item) => item.Follow_id}
-                                        renderItem={({ item }) => (
-                                            <View style={styles.list}>
-                                                <View style={styles.ModalCube}>
-                                                    <Image onPress={() => MoveToProfile(item)} source={{ uri: item.User_img }} style={styles.ModalUserImg} />
-                                                    <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
-                                                </View>
+
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalFollowMeVisible}
+                        onRequestClose={() => {
+                            Alert.alert('Modal has been closed.');
+                        }}>
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalText}>followers</Text>
+                                <TouchableHighlight
+                                    style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                    onPress={() => {
+                                        setFM_ModalVisible(!modalFollowMeVisible);
+                                    }}>
+                                    <Text style={styles.textStyle}>Hide Modal</Text>
+                                </TouchableHighlight>
+                                <FlatList
+                                    data={followMeList}
+                                    keyExtractor={(item) => item.Follow_id}
+                                    renderItem={({ item }) => (
+                                        <View style={styles.list}>
+                                            <View style={styles.ModalCube}>
+                                                <Image onPress={() => MoveToProfile(item)} source={{ uri: item.User_img }} style={styles.ModalUserImg} />
+                                                <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
                                             </View>
-                                        )} />
-                                </View>
+                                        </View>
+                                    )} />
                             </View>
-                        </Modal>
-                  
+                        </View>
+                    </Modal>
+
                 ) : null}
-                </ScrollView>
+            </ScrollView>
         </View>
     )
 }
@@ -355,13 +347,20 @@ const styles = StyleSheet.create({
     addText: {
         fontSize: 16,
     },
-     //botton normal
-     button_normal: {
+    //botton normal
+    button_normal: {
         alignItems: 'center',
-        margin: 15,
+        margin: 5,
         borderRadius: 8,
         padding: 10,
-        backgroundColor: "#633689"
+        backgroundColor: "#942bed"
+    },
+    //txt botton normal
+    textBtn: {
+        fontSize: 16,
+        color: "white",
+        fontWeight: "bold",
+        fontFamily: "sans-serif"
     },
     profileFooter: {
 
@@ -371,61 +370,6 @@ const styles = StyleSheet.create({
         //justifyContent: 'center',
         alignItems: 'center',
     },
-    //Profile part
-    // profileHolder: {
-    //     flexWrap: 'wrap',
-    //     //flex: 1,
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    //     alignSelf:'center',
-    //     textAlign:'center',
-    //     padding: 18,
-    //     margin: 8,
-    //     borderWidth: 1,
-    //     borderRadius: 9,
-    //     borderColor: 'grey',
-    // },
-    // profileHeader: {
-    //     textAlign: 'center',
-    //     margin: 5,
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    // },
-    // username: {
-    //     color: 'orange',
-    //     fontSize: 25,
-    //     fontWeight: 'bold',
-    // },
-    // imageHolder: {
-    //     // flexDirection: 'row',
-    //     // alignItems: 'flex-end'
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    //     marginTop: 8
-
-    // },
-    // profile_image: {
-    //     width: 120,
-    //     height: 120,
-    //     borderRadius: 100,
-    //     borderWidth: 2,
-    //     borderRadius: 90,
-    //     resizeMode: 'stretch',
-
-    // },
-    // addTextHolder: {
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    //     textAlign: 'center',
-    // },
-    // addText: {
-    //     fontSize: 16,
-    // },
-    // profileFooter: {
-    //     margin: 5,
-    //     padding: 5,
-    // },
-
     list: {
         flexWrap: 'wrap',
         alignItems: 'flex-start',
@@ -485,8 +429,8 @@ const styles = StyleSheet.create({
         padding: 10,
         marginTop: 5,
     },
-      //modal style
-      centeredView: {
+    //modal style
+    centeredView: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
@@ -540,5 +484,5 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
 
-   
+
 });

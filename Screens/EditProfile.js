@@ -63,7 +63,7 @@ export default function EditProfile({ navigation, route }) {
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    Id_user:prevDetails.Id_user,
+                    Id_user: prevDetails.Id_user,
                     Username: Username,
                     Email: Email,
                     Hash: Hash,
@@ -75,10 +75,10 @@ export default function EditProfile({ navigation, route }) {
             });
             let data = await result.json();
             console.log(data);
-            if(data == undefined){
+            if (data == undefined) {
                 Alert.alert("User name already exist")
             }
-            else{
+            else {
                 navigation.navigate("TabStack", { user: data });
             }
 
@@ -89,45 +89,45 @@ export default function EditProfile({ navigation, route }) {
 
 
 
-return (
-    <View style={styles.container}>
-        <Input
-            style={styles.input}
-            onChangeText={onChangeUsername}
-            value={Username}
-            placeholder="Username"
-            leftIcon={<Icon name='user' size={24} color='black' />}
-        />
-        <Input
-            style={styles.input}
-            onChangeText={onChangeEmail}
-            value={Email}
-            placeholder="Email"
-            leftIcon={<MaterialIcons name="email" size={24} color="black" />}
-        />
-        <Input
-            style={styles.input}
-            onChangeText={onChangePass}
-            value={Pass}
-            secureTextEntry={true}
-            placeholder="Password"
-            leftIcon={<Icon name='lock' size={24} color='black' />}
-        />
-        <Input
-            style={styles.input}
-            onChangeText={onChangeCPass}
-            secureTextEntry={true}
-            value={CPass}
-            placeholder="Confirm password"
-            leftIcon={<Icon name='lock' size={24} color='black' />}
-        />
-        <TouchableOpacity onPress={() => Edit()}>
-            <View style={styles.button}>
-                <Text style={styles.textBtn}>Save</Text>
-            </View>
-        </TouchableOpacity>
-    </View>
-);
+    return (
+        <View style={styles.container}>
+            <Input
+                style={styles.input}
+                onChangeText={onChangeUsername}
+                value={Username}
+                placeholder="Username"
+                leftIcon={<Icon name='user' size={24} color='black' />}
+            />
+            <Input
+                style={styles.input}
+                onChangeText={onChangeEmail}
+                value={Email}
+                placeholder="Email"
+                leftIcon={<MaterialIcons name="email" size={24} color="black" />}
+            />
+            <Input
+                style={styles.input}
+                onChangeText={onChangePass}
+                value={Pass}
+                secureTextEntry={true}
+                placeholder="Password"
+                leftIcon={<Icon name='lock' size={24} color='black' />}
+            />
+            <Input
+                style={styles.input}
+                onChangeText={onChangeCPass}
+                secureTextEntry={true}
+                value={CPass}
+                placeholder="Confirm password"
+                leftIcon={<Icon name='lock' size={24} color='black' />}
+            />
+            <TouchableOpacity onPress={() => Edit()}>
+                <View style={styles.button}>
+                    <Text style={styles.textBtn}>Save</Text>
+                </View>
+            </TouchableOpacity>
+        </View>
+    );
 
 }
 const styles = StyleSheet.create({
@@ -145,15 +145,16 @@ const styles = StyleSheet.create({
         margin: 15
     },
     textBtn: {
+        fontSize: 18,
         color: "white",
         fontWeight: "bold",
-        fontSize: 20
+        fontFamily: "sans-serif"
     },
     button: {
         alignItems: 'center',
-        margin: 15,
+        margin: 5,
         borderRadius: 8,
         padding: 10,
-        backgroundColor: "orange"
+        backgroundColor: "#942bed"
     },
 });

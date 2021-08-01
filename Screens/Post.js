@@ -143,7 +143,6 @@ export default function Post({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Text></Text>
             <TextInput
                 style={styles.input}
                 onChangeText={onChangeJokeTitle}

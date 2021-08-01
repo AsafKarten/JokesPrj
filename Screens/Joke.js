@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert,Platform, Modal, TextInput, TouchableHighlight, StyleSheet, Text, FlatList, View, Image, Button } from 'react-native';
+import { Alert, Platform, Modal, TextInput, TouchableHighlight, StyleSheet, Text, FlatList, View, Image, TouchableOpacity } from 'react-native';
 import { Input } from 'react-native-elements';
 
 const urlLocal = "http://localhost:52763/"
@@ -29,7 +29,7 @@ export default function Joke({ navigation, route }) {
         (async () => {
             await LoadLikes();
             await LoadComments()
-            if(Platform.OS !== 'web') {
+            if (Platform.OS !== 'web') {
                 setShouldShow(true)
             }
         })()
@@ -182,20 +182,23 @@ export default function Joke({ navigation, route }) {
                     {joke.Joke_body}
                 </Text>
                 <View style={styles.buttonGroup}>
-                    {/* <View style={styles.buttons}> */}
                     <Text style={styles.LikeText} onPress={() => { setModalVisible(true) }}>View likes</Text>
-                    <Button onPress={() => AddLike(joke)} style={styles.buttons} title={joke.Joke_like + " Like"} />
-                    {/* </View> */}
+                    <TouchableOpacity onPress={() => AddLike(joke)}>
+                        <View style={styles.button_normal}>
+                            <Text style={styles.textBtn}>{joke.Joke_like + " Like"}</Text>
+                        </View>
+                    </TouchableOpacity>
                     <TextInput
                         style={styles.input}
                         onChangeText={onChangeComment}
                         value={comment}
                         placeholder="comment"
                     />
-                    {/* <View style={styles.buttons}> */}
-                    <Button onPress={() => AddComment()} title="Comment" />
-                    {/* </View> */}
-
+                    <TouchableOpacity onPress={() => AddComment()}>
+                        <View style={styles.button_normal}>
+                            <Text style={styles.textBtn}>Comment</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </View>
 
@@ -218,39 +221,39 @@ export default function Joke({ navigation, route }) {
                     </View>
                 )} />
 
-{shouldShow ? (
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
-                }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Like list</Text>
-                        <TouchableHighlight
-                            style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                            onPress={() => {
-                                setModalVisible(!modalVisible);
-                            }}>
-                            <Text style={styles.textStyle}>Hide Modal</Text>
-                        </TouchableHighlight>
-                        <FlatList
-                            data={allLikes}
-                            keyExtractor={(item) => item.Like_id}
-                            renderItem={({ item }) => (
-                                <View style={styles.list}>
-                                    <View style={styles.LikeCubes}>
-                                        <Image source={{ uri: item.User_img }} style={styles.ModalUserImg} />
-                                        <Text onPress={()=>MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
+            {shouldShow ? (
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                    }}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalText}>Like list</Text>
+                            <TouchableHighlight
+                                style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                onPress={() => {
+                                    setModalVisible(!modalVisible);
+                                }}>
+                                <Text style={styles.textStyle}>Hide Modal</Text>
+                            </TouchableHighlight>
+                            <FlatList
+                                data={allLikes}
+                                keyExtractor={(item) => item.Like_id}
+                                renderItem={({ item }) => (
+                                    <View style={styles.list}>
+                                        <View style={styles.LikeCubes}>
+                                            <Image source={{ uri: item.User_img }} style={styles.ModalUserImg} />
+                                            <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
+                                        </View>
                                     </View>
-                                </View>
-                            )} />
+                                )} />
 
+                        </View>
                     </View>
-                </View>
-            </Modal>
+                </Modal>
             ) : null}
         </View>
 
@@ -262,6 +265,21 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    //botton normal
+    button_normal: {
+        alignItems: 'center',
+        margin: 5,
+        borderRadius: 8,
+        padding: 10,
+        backgroundColor: "#942bed"
+    },
+    //txt botton normal
+    textBtn: {
+        fontSize: 16,
+        color: "white",
+        fontWeight: "bold",
+        fontFamily: "sans-serif"
     },
     list: {
         flexWrap: 'wrap',
@@ -276,10 +294,10 @@ const styles = StyleSheet.create({
     },
 
     Body: {
-        fontSize: 20,
+        fontSize: 18,
     },
     postTitle: {
-        fontSize: 30,
+        fontSize: 28,
         fontWeight: "bold",
         textAlign: 'right'
     },
@@ -299,7 +317,7 @@ const styles = StyleSheet.create({
         marginRight: 8,
     },
     input: {
-        marginTop:1,
+        marginTop: 1,
         marginLeft: 8,
         height: 30,
         width: 120,
@@ -309,7 +327,6 @@ const styles = StyleSheet.create({
     UserImg: {
         width: 60,
         height: 60,
-
         borderRadius: 100,
         borderWidth: 2,
         borderRadius: 90,
