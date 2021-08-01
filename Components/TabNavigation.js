@@ -34,7 +34,7 @@ export default function TabStack({ route }) {
                 activeTintColor: '#FFFFFF',
                 inactiveTintColor: '#F8F8F8',
                 style: {
-                    backgroundColor: '#633689',
+                    backgroundColor: '#942bed',
                 },
                 labelStyle: {
                     textAlign: 'center',
