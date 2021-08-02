@@ -1,5 +1,5 @@
 import React, { useState, } from 'react';
-import { Alert,Platform, StyleSheet, Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { Alert, Platform, StyleSheet, Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
@@ -20,7 +20,7 @@ export default function Post({ navigation, route }) {
 
     const PostJoke = async () => {
         if (Joke_title == "" || Joke_body == "") {
-            Alert.alert("Empty fields","Please fill in all details !")
+            Alert.alert("Empty fields", "Please fill in all details !")
             return
         }
         else {
@@ -131,7 +131,7 @@ export default function Post({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Make a new Joke :) </Text>
+            <Text style={styles.title}>Make a new Joke :) </Text>
             <TextInput
                 style={styles.input}
                 onChangeText={onChangeJokeTitle}
@@ -144,11 +144,13 @@ export default function Post({ navigation, route }) {
                 value={Joke_body}
                 placeholder="Body"
             />
-            <Text style={styles.text}>Add meme :) </Text>
-            <View style={styles.imageHolder}>
-                <AntDesign style={styles.add_icon} onPress={GalleryPicture} name="upload" size={24} color="grey" fontWeight={'bold'} />
-                <Image style={styles.post_image} source={{ uri: post_img }} />
+            <View style={styles.meme}>
+                <Text style={styles.text}>Add meme   </Text>
+                <View style={styles.imageHolder}>
+                    <AntDesign style={styles.add_icon} onPress={GalleryPicture} name="upload" size={24} color="grey" fontWeight={'bold'} />
+                </View>
             </View>
+            <Image style={styles.post_image} source={{ uri: post_img }} />
             <TouchableOpacity onPress={() => PostJoke()}>
                 <View style={styles.button}>
                     <Text style={styles.textBtn}>Post</Text>
@@ -162,6 +164,16 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: '#ffffe5'
+    },
+    title: {
+        margin: 30,
+        color: '#4d5b70',
+        fontWeight: "bold",
+        fontSize: 22
+    },
+    meme: {
+        flexDirection:'row',
     },
     input: {
         height: 40,
@@ -175,7 +187,7 @@ const styles = StyleSheet.create({
     imageHolder: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 10
+        marginTop: 30
 
     },
     post_image: {
@@ -192,15 +204,16 @@ const styles = StyleSheet.create({
         marginTop: 20,
         borderRadius: 4,
         padding: 10,
-        backgroundColor: "#942bed",
+        backgroundColor: "#4d5b70",
     },
     textBtn: {
         color: "white",
-        fontWeight:'bold',
-        fontSize:22,
+        fontWeight: 'bold',
+        fontSize: 22,
     },
     text: {
-        color: '#942bed',
+        marginTop: 30,
+        color: '#4d5b70',
         fontWeight: "bold",
         fontSize: 22
     }

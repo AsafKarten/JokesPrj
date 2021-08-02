@@ -272,7 +272,7 @@ export default function FriendProfile({ navigation, route }) {
                                         </View>
                                     )} />
                                 <TouchableHighlight
-                                    style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                    style={{ ...styles.openButton, backgroundColor: '#4d5b70' }}
                                     onPress={() => {
                                         setFM_ModalVisible(!modalFollowMeVisible);
                                     }}>
@@ -290,12 +290,12 @@ export default function FriendProfile({ navigation, route }) {
 
 const styles = StyleSheet.create({
     //main container
-    //main container
     container: {
         flex: 1,
         margin: 8,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#ffffe5'
     },
     //search holder
     search_holder: {
@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
         margin: 5,
         borderRadius: 8,
         padding: 10,
-        backgroundColor: "#942bed"
+        backgroundColor: "#4d5b70"
     },
     //txt botton normal
     textBtn: {

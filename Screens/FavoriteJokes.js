@@ -84,7 +84,6 @@ export default function FavoriteJokes({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.Title}>Favorite Jokes :)</Text>
             <FlatList
                 data={listJokes}
                 keyExtractor={(item) => item.Id_joke}
@@ -131,12 +130,8 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 8,
         justifyContent: 'center',
-        alignItems: 'center'
-    },
-    Title: {
-        fontSize: 24,
-        color: 'orange',
-        fontWeight: 'bold',
+        alignItems: 'center',
+        backgroundColor: '#c8cfc8',
     },
     //User posts style
     list: {
@@ -148,7 +143,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 9,
         borderColor: 'grey',
-        backgroundColor: "white",
+        backgroundColor: "#fcfff9",
         color: "black",
     },
     //botton normal
@@ -157,7 +152,7 @@ const styles = StyleSheet.create({
         margin: 5,
         borderRadius: 8,
         padding: 10,
-        backgroundColor: "#942bed"
+        backgroundColor: "#4d5b70"
     },
     //txt botton normal
     textBtn: {

@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         textAlign: 'center',
         marginHorizontal: 30,
+        backgroundColor: '#ffffe5'
     },
     input: {
         marginTop: 20,
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
         margin: 5,
         borderRadius: 8,
         padding: 10,
-        backgroundColor: "#942bed"
+        backgroundColor: "#4d5b70"
     },
     //txt botton normal
     textBtn: {

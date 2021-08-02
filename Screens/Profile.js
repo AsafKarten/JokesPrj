@@ -329,6 +329,7 @@ export default function Profile({ navigation, user }) {
                     <Text style={styles.username}>{username}</Text>
 
                     <Image style={styles.profile_image} source={{ uri: image }} />
+                    <Text style={styles.addText}>Add a funny piture of yourself</Text>
                     <TouchableOpacity
                         style={styles.buttonStyle}
                         onPress={checkDevice}>
@@ -336,6 +337,7 @@ export default function Profile({ navigation, user }) {
                             <AntDesign style={styles.add_icon} name="camera" size={24} color="grey" fontWeight={'bold'} />
                         </Text>
                     </TouchableOpacity>
+
                     {shouldShow ? (
                         <Loader loading={loading} />
                     ) : null}
@@ -347,7 +349,6 @@ export default function Profile({ navigation, user }) {
                         </Text>
                     </TouchableOpacity>
 
-                    <Text style={styles.addText}>Add a funny piture of yourself</Text>
 
                     <View style={styles.buttonGroup}>
                         <TouchableOpacity onPress={() => LikeJokes(user)}>
@@ -394,10 +395,18 @@ export default function Profile({ navigation, user }) {
                                 </Text>
                                 <View style={styles.buttonGroup}>
                                     <View style={styles.buttons}>
-                                        <Button style={styles.buttons} title={item.Joke_like + " Like"} />
+                                        <TouchableOpacity>
+                                            <View style={styles.button_normal}>
+                                                <Text style={styles.textBtn}>{item.Joke_like + " Like"}</Text>
+                                            </View>
+                                        </TouchableOpacity>
                                     </View>
                                     <View style={styles.buttons}>
-                                        <Button onPress={() => AddComment(item.Id_joke)} title="Comment" />
+                                        <TouchableOpacity onPress={() => AddComment(item.Id_joke)}>
+                                            <View style={styles.button_normal}>
+                                                <Text style={styles.textBtn}>Comment</Text>
+                                            </View>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             </View>
@@ -436,14 +445,7 @@ export default function Profile({ navigation, user }) {
                             }}>
                             <View style={styles.centeredView}>
                                 <View style={styles.modalView}>
-                                    <Text style={styles.modalText}>people you follow</Text>
-                                    <TouchableHighlight
-                                        style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                                        onPress={() => {
-                                            setIF_ModalVisible(!modalIFollowVisible);
-                                        }}>
-                                        <Text style={styles.textStyle}>Close</Text>
-                                    </TouchableHighlight>
+                                    <Text style={styles.modalText}>People you follow</Text>
                                     <FlatList
                                         data={iFollowList}
                                         keyExtractor={(item) => item.Follow_id}
@@ -455,6 +457,13 @@ export default function Profile({ navigation, user }) {
                                                 </View>
                                             </View>
                                         )} />
+                                    <TouchableHighlight
+                                        style={{ ...styles.openButton, backgroundColor: '#4d5b70' }}
+                                        onPress={() => {
+                                            setIF_ModalVisible(!modalIFollowVisible);
+                                        }}>
+                                        <Text style={styles.textStyle}>Close</Text>
+                                    </TouchableHighlight>
                                 </View>
                             </View>
                         </Modal>
@@ -467,14 +476,7 @@ export default function Profile({ navigation, user }) {
                             }}>
                             <View style={styles.centeredView}>
                                 <View style={styles.modalView}>
-                                    <Text style={styles.modalText}>followers</Text>
-                                    <TouchableHighlight
-                                        style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                                        onPress={() => {
-                                            setFM_ModalVisible(!modalFollowMeVisible);
-                                        }}>
-                                        <Text style={styles.textStyle}>Close</Text>
-                                    </TouchableHighlight>
+                                    <Text style={styles.modalText}>People who follow you</Text>
                                     <FlatList
                                         data={followMeList}
                                         keyExtractor={(item) => item.Follow_id}
@@ -486,6 +488,13 @@ export default function Profile({ navigation, user }) {
                                                 </View>
                                             </View>
                                         )} />
+                                    <TouchableHighlight
+                                        style={{ ...styles.openButton, backgroundColor: '#4d5b70' }}
+                                        onPress={() => {
+                                            setFM_ModalVisible(!modalFollowMeVisible);
+                                        }}>
+                                        <Text style={styles.textStyle}>Close</Text>
+                                    </TouchableHighlight>
                                 </View>
                             </View>
                         </Modal>
@@ -502,7 +511,8 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 8,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#ffffe5'
     },
     //search holder
     search_holder: {
@@ -520,7 +530,7 @@ const styles = StyleSheet.create({
         margin: 5,
         borderRadius: 8,
         padding: 10,
-        backgroundColor: "#942bed"
+        backgroundColor: "#4d5b70"
     },
     //txt botton normal
     textBtn: {
@@ -547,7 +557,6 @@ const styles = StyleSheet.create({
     //Profile part
     profileHolder: {
         flexWrap: 'wrap',
-        //flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 8,
@@ -582,24 +591,20 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         borderWidth: 2,
         borderRadius: 90,
-        // borderColor: 'orange',
         resizeMode: 'stretch',
-
     },
     addTextHolder: {
-        // justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
     },
     addText: {
         fontSize: 16,
+        fontWeight: 'bold',
     },
     profileFooter: {
-
         alignSelf: 'center',
         textAlign: 'center',
         margin: 5,
-        //justifyContent: 'center',
         alignItems: 'center',
     },
 
@@ -612,7 +617,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 9,
         borderColor: 'grey',
-        backgroundColor: "white",
+        backgroundColor: "#fcfff9",
         color: "black",
     },
 
@@ -626,10 +631,7 @@ const styles = StyleSheet.create({
         textAlign: 'left'
     },
     buttonGroup: {
-        //flex: 3,
         flexDirection: 'row',
-        // justifyContent: 'space-evenly',
-
     },
     buttons: {
         margin: 2,
@@ -722,6 +724,8 @@ const styles = StyleSheet.create({
     modalText: {
         marginBottom: 15,
         textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 20
     },
     ModalUserImg: {
         width: 33,

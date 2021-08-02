@@ -226,11 +226,11 @@ export default function Joke({ navigation, route }) {
                             <View style={styles.modalView}>
                                 <Text style={styles.modalText}>Like list</Text>
                                 <TouchableHighlight
-                                    style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                    style={{ ...styles.openButton, backgroundColor: '#4d5b70' }}
                                     onPress={() => {
                                         setModalVisible(!modalVisible);
                                     }}>
-                                    <Text style={styles.textStyle}>Hide Modal</Text>
+                                    <Text style={styles.textStyle}>Close</Text>
                                 </TouchableHighlight>
                                 <FlatList
                                     data={allLikes}
@@ -275,7 +275,7 @@ export default function Joke({ navigation, route }) {
 
                                 </View>
                                 <TouchableHighlight
-                                    style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                    style={{ ...styles.openButton, backgroundColor: '#4d5b70' }}
                                     onPress={() => {
                                         setCommentModalVisible(!commentModalVisible);
                                     }}>
@@ -287,15 +287,16 @@ export default function Joke({ navigation, route }) {
                 </View>
             ) : null}
         </View>
-
     );
 }
 const styles = StyleSheet.create({
-
     container: {
+        backgroundColor: '#c8cfc8',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        alignSelf: 'auto'
+
     },
     //botton normal
     button_normal: {
@@ -303,7 +304,7 @@ const styles = StyleSheet.create({
         margin: 5,
         borderRadius: 8,
         padding: 10,
-        backgroundColor: "#942bed"
+        backgroundColor: "#4d5b70"
     },
     //txt botton normal
     textBtn: {

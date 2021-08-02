@@ -94,7 +94,6 @@ export default function JokeMap({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.Title}>Search Results</Text>
             <FlatList
                 data={listJokes}
                 keyExtractor={(item) => item.Id_joke}
@@ -136,15 +135,16 @@ export default function JokeMap({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-      //main container
-      container: {
+    //main container
+    container: {
         flex: 1,
         margin: 8,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#c8cfc8',
     },
-    Title:{
-        fontSize:24,
+    Title: {
+        fontSize: 24,
         color: 'orange',
         fontWeight: 'bold',
     },
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 9,
         borderColor: 'grey',
-        backgroundColor: "white",
+        backgroundColor: "#fcfff9",
         color: "black",
     },
     //botton normal
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
         margin: 5,
         borderRadius: 8,
         padding: 10,
-        backgroundColor: "#942bed"
+        backgroundColor: "#4d5b70"
     },
     //txt botton normal
     textBtn: {

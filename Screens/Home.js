@@ -87,66 +87,67 @@ export default function Home({ navigation, user }) {
     }
 
     return (
-        <View style={styles.container}>
-            <View >
-                <View style={styles.buttonGroup}>
-                    <Image source={{
-                        uri: (user.User_img.indexOf(`?asid`) == -1) ? `${user.User_img}?t=${Date.now()}` : `${user.User_img}?t=${Date.now()}`
-                    }} style={styles.UserImg} />
-                    <Text onPress={() => MoveToProfile(user)} style={styles.UserName}>{user.Username}</Text>
-                </View>
-                <TextInput onFocus={onFocus} placeholder="What's on your mind ?" style={styles.go_to_post} />
-            </View>
-            <FlatList
-                data={allJokes}
-                keyExtractor={(item) => item.Id_joke}
-                renderItem={({ item }) => (
-                    <View style={styles.list}>
-                        <View style={styles.buttonGroup}>
-                            <Image source={{ uri: (item.User_img.indexOf(`?asid`) == -1) ? `${item.User_img}?t=${Date.now()}` : item.User_img }} style={styles.UserImg} />
-                            <Text onPress={() => MoveToProfile(item)} style={styles.UserName}>{item.Username}</Text>
-                        </View>
-
-                        <Text style={styles.postTitle}>
-                            {item.Joke_title}
-                        </Text>
-                        <Image source={{ uri: item.Joke_img }} style={styles.JokeImage} />
-
-                        <Text style={styles.Body} onPress={() => MoveToJoke(item)}>
-                            {item.Joke_body}
-                        </Text>
-                        <View style={styles.buttonGroup}>
-                            <View style={styles.buttons}>
-                                <TouchableOpacity onPress={() => AddLike(item)}>
-                                    <View style={styles.button_normal}>
-                                        <Text style={styles.textBtn}>{item.Joke_like + " Like"}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.buttons}>
-                                <TouchableOpacity onPress={() => MoveToJoke(item)}>
-                                    <View style={styles.button_normal}>
-                                        <Text style={styles.textBtn}>{item.Comment_count + " Comment"}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+            <View style={styles.container}>
+                <View >
+                    <View style={styles.buttonGroup}>
+                        <Image source={{
+                            uri: (user.User_img.indexOf(`?asid`) == -1) ? `${user.User_img}?t=${Date.now()}` : `${user.User_img}?t=${Date.now()}`
+                        }} style={styles.UserImg} />
+                        <Text onPress={() => MoveToProfile(user)} style={styles.UserName}>{user.Username}</Text>
                     </View>
-                )} />
-        </View>
+                    <TextInput onFocus={onFocus} placeholder="What's on your mind ?" style={styles.go_to_post} />
+                </View>
+                <FlatList
+                    data={allJokes}
+                    keyExtractor={(item) => item.Id_joke}
+                    renderItem={({ item }) => (
+                        <View style={styles.list}>
+                            <View style={styles.buttonGroup}>
+                                <Image source={{ uri: (item.User_img.indexOf(`?asid`) == -1) ? `${item.User_img}?t=${Date.now()}` : item.User_img }} style={styles.UserImg} />
+                                <Text onPress={() => MoveToProfile(item)} style={styles.UserName}>{item.Username}</Text>
+                            </View>
+
+                            <Text style={styles.postTitle}>
+                                {item.Joke_title}
+                            </Text>
+                            <Image source={{ uri: item.Joke_img }} style={styles.JokeImage} />
+
+                            <Text style={styles.Body} onPress={() => MoveToJoke(item)}>
+                                {item.Joke_body}
+                            </Text>
+                            <View style={styles.buttonGroup}>
+                                <View style={styles.buttons}>
+                                    <TouchableOpacity onPress={() => AddLike(item)}>
+                                        <View style={styles.button_normal}>
+                                            <Text style={styles.textBtn}>{item.Joke_like + " Like"}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={styles.buttons}>
+                                    <TouchableOpacity onPress={() => MoveToJoke(item)}>
+                                        <View style={styles.button_normal}>
+                                            <Text style={styles.textBtn}>{item.Comment_count + " Comment"}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    )} />
+            </View>
     );
 }
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: '#c8cfc8',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 8
+        margin: 8,
     },
     go_to_post: {
         alignSelf: 'center',
         textAlign: 'center',
-        fontSize:20
+        fontSize: 20
     },
     //botton normal
     button_normal: {
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
         margin: 5,
         borderRadius: 8,
         padding: 10,
-        backgroundColor: "#942bed"
+        backgroundColor: "#4d5b70"
     },
     //txt botton normal
     textBtn: {
@@ -171,13 +172,14 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 9,
         borderColor: 'grey',
-        backgroundColor: "white",
+        backgroundColor: "#fcfff9",
         color: "black",
     },
 
     Body: {
         marginBottom: 8,
         fontSize: 16,
+        fontWeight: "bold",
     },
     postTitle: {
         fontSize: 30,
@@ -185,10 +187,7 @@ const styles = StyleSheet.create({
         textAlign: 'left'
     },
     buttonGroup: {
-        //flex: 3,
-        flexDirection: 'row',
-        // justifyContent: 'space-evenly',
-
+        flexDirection: 'row'
     },
     buttons: {
         margin: 2,
