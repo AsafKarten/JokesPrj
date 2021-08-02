@@ -69,7 +69,7 @@ namespace JokesPrj.Controllers
             }
         }
 
-        
+
 
 
         [HttpPost]
@@ -126,11 +126,12 @@ namespace JokesPrj.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest("Invalid data.");
-                }
-                List<Joke> jokes_list = Globals.JokeDAL.GetAllJokes(j);
+                //if (!ModelState.IsValid)
+                //{
+                //    return BadRequest("Invalid data.");
+                //}
+                List<Joke> jokes_list = null;
+                jokes_list = Globals.JokeDAL.SearchByWord(j);
                 Created(new Uri(Request.RequestUri.AbsoluteUri + j), jokes_list);
                 if (jokes_list != null)
                 {

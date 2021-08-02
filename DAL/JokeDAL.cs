@@ -261,6 +261,30 @@ namespace JokesPrj.DAL
             }
         }
 
+        public List<Joke> SearchByWord(Joke J)
+        {
+            try
+            {
+                List<Joke> allJokes = null;
+                List<Joke> sortedList = null;
+                allJokes = GetAllJokes();
+                foreach (Joke joke in allJokes)
+                {
+                    if (joke.Joke_title.Contains(J.Joke_title) || joke.Joke_body.Contains(J.Joke_body))
+                    {
+                        sortedList.Add(joke);
+                    }
+                }
+                return sortedList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+
         public List<Joke> GetAllJokes()
         {
             try

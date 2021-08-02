@@ -283,7 +283,7 @@ namespace JokesPrj.DAL
                     cmd.Parameters.AddWithValue("@username", u.Username);
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
-                        u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["email"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["id_external"]));
+                        u = new User(Convert.ToInt32(reader["id_user"]), Convert.ToString(reader["username"]), Convert.ToString(reader["phash"]), Convert.ToString(reader["email"]), Convert.ToString(reader["user_img"]), Convert.ToInt32(reader["i_follow"]), Convert.ToInt32(reader["follow_me"]), Convert.ToString(reader["salt"]), Convert.ToString(reader["id_external"]));
                     return u;
                 }
             }
