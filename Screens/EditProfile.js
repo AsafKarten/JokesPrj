@@ -49,7 +49,6 @@ export default function EditProfile({ navigation, route }) {
             if (Platform.OS !== 'web') {
                 setShouldShow(true)
             }
-
             let result = await fetch(url + "api/user", {
                 method: 'POST',
                 headers: {
@@ -79,14 +78,20 @@ export default function EditProfile({ navigation, route }) {
 
     const Edit = async () => {
         let emailValid = rjxEmail.test(Email);
-        let passwordValid = rjxPass.test(Pass);
         if (!Pass == '') {
             if (Pass == CPass) {
-                var salt = await bcrypt.genSaltSync(10);
-                var hash = await bcrypt.hashSync(Pass, salt);
-                onChangeHash(hash)
-                onChangeSalt(salt)
-                await clearAsyncStorage()
+                let passwordValid = rjxPass.test(Pass);
+                if (!passwordValid) {
+                    Alert.alert("Invalid password", "Please enter a valid password again (Password length must be at least 6 characters, including uppercase, lowercase and numbers.)");
+                    return;
+                }
+                else {
+                    var salt = await bcrypt.genSaltSync(10);
+                    var hash = await bcrypt.hashSync(Pass, salt);
+                    onChangeHash(hash)
+                    onChangeSalt(salt)
+                    await clearAsyncStorage()
+                }
             }
             else {
                 Alert.alert("Incorrect Password", "Password dose not match confirm password !")
@@ -94,10 +99,6 @@ export default function EditProfile({ navigation, route }) {
         }
         if (!emailValid) {
             Alert.alert("Invalid email address", "Please enter a valid email address.");
-            return;
-        }
-        if (!passwordValid) {
-            Alert.alert("Invalid password", "Please enter a valid password again (Password length must be at least 6 characters, including uppercase, lowercase and numbers.)");
             return;
         }
         try {
