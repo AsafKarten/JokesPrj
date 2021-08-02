@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { Platform, StyleSheet, Alert, Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import React, { useState, } from 'react';
+import { Alert,Platform, StyleSheet, Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
@@ -11,8 +11,6 @@ const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 
 
 export default function Post({ navigation, route }) {
-    let actionSheet = useRef();
-    var optionArray = ['take a photo', 'choose from a gallery', 'Cancel'];
     const [Joke_title, onChangeJokeTitle] = useState("");
     const [Joke_body, onChangeJokeBody] = useState("")
     const [userId, setUserId] = useState(route.params.user.Id_user);
@@ -22,7 +20,7 @@ export default function Post({ navigation, route }) {
 
     const PostJoke = async () => {
         if (Joke_title == "" || Joke_body == "") {
-            alert("Please fill in all details !")
+            Alert.alert("Empty fields","Please fill in all details !")
             return
         }
         else {
@@ -50,8 +48,6 @@ export default function Post({ navigation, route }) {
                 else {
                     imageUpload(id_joke)
                 }
-
-                //navigation.navigate("TabStack", { user: route.params.user });
             } catch (e) {
                 console.error(e);
             }
@@ -59,9 +55,6 @@ export default function Post({ navigation, route }) {
     }
 
     const imageUpload = async (id_joke) => {
-        console.log(image_data);
-        console.log(Joke_title);
-        console.log(id_joke);
         try {
             let res = await fetch(url + "api/uploadjokeimage", {
                 method: 'POST',
@@ -79,7 +72,6 @@ export default function Post({ navigation, route }) {
             let data = await res.json();
             await setPostImg(`${data.path}?t=${Date.now()}`)
             navigation.navigate("TabStack", { user: route.params.user });
-
         } catch (e) {
             console.error(e);
         }
@@ -113,8 +105,6 @@ export default function Post({ navigation, route }) {
         }
     }
 
-
-
     const GalleryPicture = async () => {
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
@@ -132,7 +122,6 @@ export default function Post({ navigation, route }) {
                 else {
                     await setImgData(result.uri)
                 }
-
             }
         } catch (e) {
             console.error(e);
@@ -176,16 +165,14 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        width:260,
+        width: 260,
         margin: 12,
-        borderWidth: 1,
+        borderWidth: 2,
         borderRadius: 8,
         textAlign: 'center',
         fontWeight: "bold"
     },
     imageHolder: {
-        // flexDirection: 'row',
-        // alignItems: 'flex-end'
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 10
@@ -198,21 +185,22 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         borderWidth: 2,
         borderRadius: 50,
-        borderColor: 'orange',
+        borderColor: 'black',
         resizeMode: 'stretch',
     },
     button: {
         marginTop: 20,
-
         borderRadius: 4,
         padding: 10,
-        backgroundColor: "orange"
+        backgroundColor: "#942bed",
     },
     textBtn: {
         color: "white",
-        fontWeight: "normal",
+        fontWeight:'bold',
+        fontSize:22,
     },
     text: {
+        color: '#942bed',
         fontWeight: "bold",
         fontSize: 22
     }

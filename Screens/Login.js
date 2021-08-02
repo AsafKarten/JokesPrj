@@ -76,6 +76,7 @@ export default function Login({ navigation }) {
             if (data.User_img.indexOf("?asid") == -1)
                 data.User_img = `${data.User_img}?t=${Date.now()}`;
             storeData(data);
+            setLoading(false);
             navigation.navigate("TabStack", { user: data,routeTo:"Home" });
         } catch (e) {
             console.error(e);
@@ -226,7 +227,7 @@ export default function Login({ navigation }) {
     const LoginNormal = async (Username, Pass) => {
         try {
             if (Username == null || Username == "" || Pass == null || Pass == "") {
-                Alert.alert("Please fill in all details !")
+                Alert.alert("Empty fields","Please fill in all details !")
                 return
             }
             else {
@@ -252,8 +253,8 @@ export default function Login({ navigation }) {
                     if (data.User_img.indexOf("?asid") == -1)
                         data.User_img = `${data.User_img}?t=${Date.now()}`;
                     storeData(data);
+                    setLoading(false);
                     navigation.navigate("TabStack", { user: data });
-
                 }
             }
 

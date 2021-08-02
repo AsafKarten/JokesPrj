@@ -8,13 +8,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
 
-const defaultImg = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_icon.jpg"
-
 var bcrypt = require('bcryptjs');
 
 var rjxEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
-//var rjxUsername = /^[a-z0-9_-]{3,16}$/
-//var rjxPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,8}$/
+var rjxPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/
 
 
 export default function EditProfile({ navigation, route }) {
@@ -42,7 +39,6 @@ export default function EditProfile({ navigation, route }) {
     const clearAsyncStorage = async () => {
         try {
             await AsyncStorage.clear();
-            console.log('delete old logged user');
         } catch (error) {
             console.log(error);
         }
@@ -70,7 +66,6 @@ export default function EditProfile({ navigation, route }) {
                 Edit()
             }
             if (data.Username == prevDetails.Username && data.Id_user !== prevDetails.Id_user) {
-                console.log("name is taken!")
                 setBadUsername(Username)
                 setModalVisible(true)
             }
@@ -84,20 +79,7 @@ export default function EditProfile({ navigation, route }) {
 
     const Edit = async () => {
         let emailValid = rjxEmail.test(Email);
-        // let usernameValid = rjxUsername.test(Username);
-        // let passwordValid = rjxPass.test(Pass);
-        if (!emailValid) {
-            alert("Invalid address email");
-            return;
-        }
-        // if (!usernameValid) {
-        //     alert("Invalid username");
-        //     return;
-        // }
-        // if (!passwordValid) {
-        //     alert("Invalid password");
-        //     return;
-        // }
+        let passwordValid = rjxPass.test(Pass);
         if (!Pass == '') {
             if (Pass == CPass) {
                 var salt = await bcrypt.genSaltSync(10);
@@ -107,8 +89,16 @@ export default function EditProfile({ navigation, route }) {
                 await clearAsyncStorage()
             }
             else {
-                Alert.alert("password dos not match confirm password!")
+                Alert.alert("Incorrect Password", "Password dose not match confirm password !")
             }
+        }
+        if (!emailValid) {
+            Alert.alert("Invalid email address", "Please enter a valid email address.");
+            return;
+        }
+        if (!passwordValid) {
+            Alert.alert("Invalid password", "Please enter a valid password again (Password length must be at least 6 characters, including uppercase, lowercase and numbers.)");
+            return;
         }
         try {
             let result = await fetch(url + "api/edit/user", {
@@ -205,8 +195,8 @@ export default function EditProfile({ navigation, route }) {
             ) : null}
         </View>
     );
-
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -233,5 +223,5 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 10,
         backgroundColor: "#942bed"
-    },
+    }
 });

@@ -167,7 +167,6 @@ export default function Joke({ navigation, route }) {
 
 
     return (
-
         <View style={styles.container}>
             <View style={styles.list}>
                 <View style={styles.buttonGroup}>
@@ -175,15 +174,12 @@ export default function Joke({ navigation, route }) {
                     <Text onPress={() => MoveToProfile(joke)} style={styles.UserName}>{joke.Username}</Text>
                 </View>
 
-                <Text style={styles.postTitle}>
-                    {joke.Joke_title}
-                </Text>
+                <Text style={styles.postTitle}>{joke.Joke_title}</Text>
 
                 <Image source={{ uri: joke.Joke_img }} style={styles.JokeImage} />
 
-                <Text style={styles.Body}>
-                    {joke.Joke_body}
-                </Text>
+                <Text style={styles.Body}>{joke.Joke_body}</Text>
+
                 <View style={styles.buttonGroup}>
                     <Text style={styles.LikeText} onPress={() => { setModalVisible(true) }}>View likes</Text>
                     <TouchableOpacity onPress={() => AddLike(joke)}>
@@ -194,10 +190,6 @@ export default function Joke({ navigation, route }) {
                     <Text style={styles.input} onPress={() => { setCommentModalVisible(true) }}>
                         comment
                     </Text>
-
-
-
-
                     <TouchableOpacity onPress={() => AddComment()}>
                         <View style={styles.button_normal}>
                             <Text style={styles.textBtn}>Comment</Text>
@@ -215,13 +207,8 @@ export default function Joke({ navigation, route }) {
                             <Image source={{ uri: item.User_img }} style={styles.UserImg} />
                             <Text onPress={() => MoveToProfileFromComment(item)} style={styles.UserName}>{item.Username}</Text>
                         </View>
-                        <Text style={styles.postTitle}>
-                            {item.Comment_body}
-                        </Text>
-
-                        <Text style={styles.Body}>
-                            {item.Comment_date}
-                        </Text>
+                        <Text style={styles.postTitle}>{item.Comment_body}</Text>
+                        <Text style={styles.Body}>{item.Comment_date}</Text>
                     </View>
                 )} />
 

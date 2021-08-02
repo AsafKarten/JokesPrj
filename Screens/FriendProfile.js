@@ -257,14 +257,7 @@ export default function FriendProfile({ navigation, route }) {
                         }}>
                         <View style={styles.centeredView}>
                             <View style={styles.modalView}>
-                                <Text style={styles.modalText}>followers</Text>
-                                <TouchableHighlight
-                                    style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-                                    onPress={() => {
-                                        setFM_ModalVisible(!modalFollowMeVisible);
-                                    }}>
-                                    <Text style={styles.textStyle}>Close</Text>
-                                </TouchableHighlight>
+                                <Text style={styles.modalText}>Followers list</Text>
                                 <FlatList
                                     data={followMeList}
                                     keyExtractor={(item) => item.Follow_id}
@@ -273,11 +266,18 @@ export default function FriendProfile({ navigation, route }) {
                                             <View style={styles.ModalCube}>
                                                 <Image onPress={() => MoveToProfile(item)} source={{ uri: item.User_img }} style={styles.ModalUserImg} />
                                                 <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
-                                               
+
                                             </View>
-                                             <Text onPress={() => MoveToProfile(item)} style={styles.doubleTap}>double tap me</Text>
+                                            <Text onPress={() => MoveToProfile(item)} style={styles.doubleTap}>double tap me</Text>
                                         </View>
                                     )} />
+                                <TouchableHighlight
+                                    style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                    onPress={() => {
+                                        setFM_ModalVisible(!modalFollowMeVisible);
+                                    }}>
+                                    <Text style={styles.textStyle}>Close</Text>
+                                </TouchableHighlight>
                             </View>
                         </View>
                     </Modal>
@@ -496,6 +496,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     modalText: {
+        fontWeight: 'bold',
+        fontSize: 20,
         marginBottom: 15,
         textAlign: 'center',
     },

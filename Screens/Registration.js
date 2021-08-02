@@ -12,8 +12,7 @@ const defaultImg = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_ico
 var bcrypt = require('bcryptjs');
 
 var rjxEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
-//var rjxUsername = /^[a-z0-9_-]{3,16}$/
-//var rjxPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,8}$/
+var rjxPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/
 
 
 export default function RegistrationNewUser({ navigation }) {
@@ -24,27 +23,21 @@ export default function RegistrationNewUser({ navigation }) {
 
     const Register = async () => {
         let emailValid = rjxEmail.test(Email);
-        // let usernameValid = rjxUsername.test(Username);
-        // let passwordValid = rjxPass.test(Pass);
-
-        // if (!usernameValid) {
-        //     alert("Invalid username");
-        //     return;
-        // }
-        // if (!passwordValid) {
-        //     alert("Invalid password");
-        //     return;
-        // }
+        let passwordValid = rjxPass.test(Pass);
         if (Username == null || Username == "" || Pass == null || Pass == "" || Email == "" || Email == null || CPass == "" || CPass == null) {
-            Alert.alert("Please fill in all details !")
+            Alert.alert("Empty fields", "Please fill in all details !")
             return
         }
         if (Pass != CPass) {
-            Alert.alert("Password dose not match confirm password!")
+            Alert.alert("Incorrect Password", "Password dose not match confirm password !")
             return
         }
         if (!emailValid) {
-            Alert.alert("Invalid address email");
+            Alert.alert("Invalid email address", "Please enter a valid email address.");
+            return;
+        }
+        if (!passwordValid) {
+            Alert.alert("Invalid password", "Please enter a valid password again (Password length must be at least 6 characters, including uppercase, lowercase and numbers.)");
             return;
         }
         else {
@@ -78,6 +71,8 @@ export default function RegistrationNewUser({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <Text style={styles.Title}>Sign up!</Text>
+            <Text style={styles.Title}>So we can laugh at you :)</Text>
             <Input
                 style={styles.input}
                 onChangeText={onChangeUsername}
@@ -123,6 +118,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    Title: {
+        marginTop: 10,
+        fontSize: 24,
+        color: 'orange',
+        fontWeight: 'bold',
+    },
     input: {
         height: 40,
         width: 200,
@@ -141,6 +142,6 @@ const styles = StyleSheet.create({
         margin: 15,
         borderRadius: 8,
         padding: 10,
-        backgroundColor: "orange"
+        backgroundColor: "#942bed"
     },
 });

@@ -8,7 +8,7 @@ const default_img = "http://ruppinmobile.tempdomain.co.il/site27/Assets/funny_ic
 
 export default function Home({ navigation, user }) {
     const [allJokes, setList] = useState([
-        { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_like: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
+        //{ Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_like: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
     ]);
 
     useEffect(() => {
