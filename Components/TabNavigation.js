@@ -5,7 +5,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Profile from '../Screens/Profile';
 import Home from '../Screens/Home';
 import Search from '../Screens/Search';
-import Notifications from '../Screens/Notifications.js';
 
 const Tab = createMaterialTopTabNavigator();
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, FlatList, View, Image, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-native';
 
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
 const urlLocal = "http://localhost:52763/"
@@ -94,42 +95,44 @@ export default function JokeMap({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <FlatList
-                data={listJokes}
-                keyExtractor={(item) => item.Id_joke}
-                renderItem={({ item }) => (
-                    <View style={styles.list}>
-                        <View style={styles.buttonGroup}>
-                            <Image source={{ uri: item.User_img }} style={styles.UserImg} />
-                            <Text onPress={() => MoveToProfile(item)} style={styles.UserName}>{item.Username}</Text>
-                        </View>
-                        <Text style={styles.postTitle}>
-                            {item.Joke_title}
-                        </Text>
-
-                        <Image onPress={() => MoveToJoke(item)} source={{ uri: item.Joke_img }} style={styles.JokeImage} />
-
-                        <Text style={styles.Body} onPress={() => MoveToJoke(item)}>
-                            {item.Joke_body}
-                        </Text>
-                        <View style={styles.buttonGroup}>
-                            <View style={styles.buttons}>
-                                <TouchableOpacity onPress={() => AddLike(item)}>
-                                    <View style={styles.button_normal}>
-                                        <Text style={styles.textBtn}>{item.Joke_like + " Like"}</Text>
-                                    </View>
-                                </TouchableOpacity>
+            <ScrollView>
+                <FlatList
+                    data={listJokes}
+                    keyExtractor={(item) => item.Id_joke}
+                    renderItem={({ item }) => (
+                        <View style={styles.list}>
+                            <View style={styles.buttonGroup}>
+                                <Image source={{ uri: item.User_img }} style={styles.UserImg} />
+                                <Text onPress={() => MoveToProfile(item)} style={styles.UserName}>{item.Username}</Text>
                             </View>
-                            <View style={styles.buttons}>
-                                <TouchableOpacity onPress={() => MoveToJoke(item)}>
-                                    <View style={styles.button_normal}>
-                                        <Text style={styles.textBtn}>{item.Comment_count + " Comment"}</Text>
-                                    </View>
-                                </TouchableOpacity>
+                            <Text style={styles.postTitle}>
+                                {item.Joke_title}
+                            </Text>
+
+                            <Image onPress={() => MoveToJoke(item)} source={{ uri: item.Joke_img }} style={styles.JokeImage} />
+
+                            <Text style={styles.Body} onPress={() => MoveToJoke(item)}>
+                                {item.Joke_body}
+                            </Text>
+                            <View style={styles.buttonGroup}>
+                                <View style={styles.buttons}>
+                                    <TouchableOpacity onPress={() => AddLike(item)}>
+                                        <View style={styles.button_normal}>
+                                            <Text style={styles.textBtn}>{item.Joke_like + " Like"}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={styles.buttons}>
+                                    <TouchableOpacity onPress={() => MoveToJoke(item)}>
+                                        <View style={styles.button_normal}>
+                                            <Text style={styles.textBtn}>{item.Comment_count + " Comment"}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                )} />
+                    )} />
+            </ScrollView>
         </View>
     );
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Platform, Modal, TextInput, TouchableHighlight, StyleSheet, Text, FlatList, View, Image, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-native';
 
 const urlLocal = "http://localhost:52763/"
 const url = "http://ruppinmobile.tempdomain.co.il/site27/"
@@ -168,124 +169,126 @@ export default function Joke({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.list}>
-                <View style={styles.buttonGroup}>
-                    <Image onPress={() => MoveToProfile(joke)} source={{ uri: joke.User_img }} style={styles.UserImg} />
-                    <Text onPress={() => MoveToProfile(joke)} style={styles.UserName}>{joke.Username}</Text>
-                </View>
-
-                <Text style={styles.postTitle}>{joke.Joke_title}</Text>
-
-                <Image source={{ uri: joke.Joke_img }} style={styles.JokeImage} />
-
-                <Text style={styles.Body}>{joke.Joke_body}</Text>
-
-                <View style={styles.buttonGroup}>
-                    <Text style={styles.LikeText} onPress={() => { setModalVisible(true) }}>View likes</Text>
-                    <TouchableOpacity onPress={() => AddLike(joke)}>
-                        <View style={styles.button_normal}>
-                            <Text style={styles.textBtn}>{joke.Joke_like + " Like"}</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <Text style={styles.input} onPress={() => { setCommentModalVisible(true) }}>
-                        comment
-                    </Text>
-                    <TouchableOpacity onPress={() => AddComment()}>
-                        <View style={styles.button_normal}>
-                            <Text style={styles.textBtn}>Comment</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-            <FlatList
-                data={allComments}
-                keyExtractor={(item) => item.Comment_id}
-                renderItem={({ item }) => (
-                    <View style={styles.list}>
-                        <View style={styles.buttonGroup}>
-                            <Image source={{ uri: item.User_img }} style={styles.UserImg} />
-                            <Text onPress={() => MoveToProfileFromComment(item)} style={styles.UserName}>{item.Username}</Text>
-                        </View>
-                        <Text style={styles.postTitle}>{item.Comment_body}</Text>
-                        <Text style={styles.Body}>{item.Comment_date}</Text>
+            <ScrollView>
+                <View style={styles.list}>
+                    <View style={styles.buttonGroup}>
+                        <Image onPress={() => MoveToProfile(joke)} source={{ uri: joke.User_img }} style={styles.UserImg} />
+                        <Text onPress={() => MoveToProfile(joke)} style={styles.UserName}>{joke.Username}</Text>
                     </View>
-                )} />
 
-            {shouldShow ? (
-                <View>
+                    <Text style={styles.postTitle}>{joke.Joke_title}</Text>
 
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={modalVisible}
-                        onRequestClose={() => {
-                            Alert.alert('Modal has been closed.');
-                        }}>
-                        <View style={styles.centeredView}>
-                            <View style={styles.modalView}>
-                                <Text style={styles.modalText}>Like list</Text>
-                                <TouchableHighlight
-                                    style={{ ...styles.openButton, backgroundColor: '#4d5b70' }}
-                                    onPress={() => {
-                                        setModalVisible(!modalVisible);
-                                    }}>
-                                    <Text style={styles.textStyle}>Close</Text>
-                                </TouchableHighlight>
-                                <FlatList
-                                    data={allLikes}
-                                    keyExtractor={(item) => item.Like_id}
-                                    renderItem={({ item }) => (
-                                        <View style={styles.list}>
-                                            <View style={styles.LikeCubes}>
-                                                <Image source={{ uri: item.User_img }} style={styles.ModalUserImg} />
-                                                <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
-                                            </View>
-                                        </View>
-                                    )} />
+                    <Image source={{ uri: joke.Joke_img }} style={styles.JokeImage} />
 
+                    <Text style={styles.Body}>{joke.Joke_body}</Text>
+
+                    <View style={styles.buttonGroup}>
+                        <Text style={styles.LikeText} onPress={() => { setModalVisible(true) }}>View likes</Text>
+                        <TouchableOpacity onPress={() => AddLike(joke)}>
+                            <View style={styles.button_normal}>
+                                <Text style={styles.textBtn}>{joke.Joke_like + " Like"}</Text>
                             </View>
+                        </TouchableOpacity>
+                        <Text style={styles.input} onPress={() => { setCommentModalVisible(true) }}>
+                            comment
+                        </Text>
+                        <TouchableOpacity onPress={() => AddComment()}>
+                            <View style={styles.button_normal}>
+                                <Text style={styles.textBtn}>Comment</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <FlatList
+                    data={allComments}
+                    keyExtractor={(item) => item.Comment_id}
+                    renderItem={({ item }) => (
+                        <View style={styles.list}>
+                            <View style={styles.buttonGroup}>
+                                <Image source={{ uri: item.User_img }} style={styles.UserImg} />
+                                <Text onPress={() => MoveToProfileFromComment(item)} style={styles.UserName}>{item.Username}</Text>
+                            </View>
+                            <Text style={styles.postTitle}>{item.Comment_body}</Text>
+                            <Text style={styles.Body}>{item.Comment_date}</Text>
                         </View>
-                    </Modal>
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={commentModalVisible}
-                        onRequestClose={() => {
-                            Alert.alert('Modal has been closed.');
-                        }}>
-                        <View style={styles.centeredView}>
-                            <View style={styles.modalView}>
-                                <Text style={styles.modalText}>Add Comment</Text>
+                    )} />
 
-                                <View>
+                {shouldShow ? (
+                    <View>
 
-                                    <TextInput
-                                        style={styles.inputModal}
-                                        //onFocus={() => { setCommentModalVisible(true) }}
-                                        onChangeText={onChangeComment}
-                                        value={comment}
-                                        placeholder="comment"
-                                    />
-                                    <TouchableOpacity onPress={() => AddComment()}>
-                                        <View style={styles.button_normal}>
-                                            <Text style={styles.textBtn}>Comment</Text>
-                                        </View>
-                                    </TouchableOpacity>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={modalVisible}
+                            onRequestClose={() => {
+                                Alert.alert('Modal has been closed.');
+                            }}>
+                            <View style={styles.centeredView}>
+                                <View style={styles.modalView}>
+                                    <Text style={styles.modalText}>Like list</Text>
+                                    <TouchableHighlight
+                                        style={{ ...styles.openButton, backgroundColor: '#4d5b70' }}
+                                        onPress={() => {
+                                            setModalVisible(!modalVisible);
+                                        }}>
+                                        <Text style={styles.textStyle}>Close</Text>
+                                    </TouchableHighlight>
+                                    <FlatList
+                                        data={allLikes}
+                                        keyExtractor={(item) => item.Like_id}
+                                        renderItem={({ item }) => (
+                                            <View style={styles.list}>
+                                                <View style={styles.LikeCubes}>
+                                                    <Image source={{ uri: item.User_img }} style={styles.ModalUserImg} />
+                                                    <Text onPress={() => MoveToProfile(item)} style={styles.ModalUserName}>{item.Username}</Text>
+                                                </View>
+                                            </View>
+                                        )} />
 
                                 </View>
-                                <TouchableHighlight
-                                    style={{ ...styles.openButton, backgroundColor: '#4d5b70' }}
-                                    onPress={() => {
-                                        setCommentModalVisible(!commentModalVisible);
-                                    }}>
-                                    <Text style={styles.textStyle}>Close</Text>
-                                </TouchableHighlight>
                             </View>
-                        </View>
-                    </Modal>
-                </View>
-            ) : null}
+                        </Modal>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={commentModalVisible}
+                            onRequestClose={() => {
+                                Alert.alert('Modal has been closed.');
+                            }}>
+                            <View style={styles.centeredView}>
+                                <View style={styles.modalView}>
+                                    <Text style={styles.modalText}>Add Comment</Text>
+
+                                    <View>
+
+                                        <TextInput
+                                            style={styles.inputModal}
+                                            //onFocus={() => { setCommentModalVisible(true) }}
+                                            onChangeText={onChangeComment}
+                                            value={comment}
+                                            placeholder="comment"
+                                        />
+                                        <TouchableOpacity onPress={() => AddComment()}>
+                                            <View style={styles.button_normal}>
+                                                <Text style={styles.textBtn}>Comment</Text>
+                                            </View>
+                                        </TouchableOpacity>
+
+                                    </View>
+                                    <TouchableHighlight
+                                        style={{ ...styles.openButton, backgroundColor: '#4d5b70' }}
+                                        onPress={() => {
+                                            setCommentModalVisible(!commentModalVisible);
+                                        }}>
+                                        <Text style={styles.textStyle}>Close</Text>
+                                    </TouchableHighlight>
+                                </View>
+                            </View>
+                        </Modal>
+                    </View>
+                ) : null}
+            </ScrollView>
         </View>
     );
 }
