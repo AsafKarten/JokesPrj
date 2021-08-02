@@ -77,7 +77,6 @@ export default function EditProfile({ navigation, route }) {
     }
 
     const Edit = async () => {
-        let emailValid = await rjxEmail.test(Email);
         if (!Pass == '') {
             if (Pass == CPass) {
                 let passwordValid = await rjxPass.test(Pass);
@@ -90,18 +89,19 @@ export default function EditProfile({ navigation, route }) {
                     var hash = await bcrypt.hashSync(Pass, salt);
                     onChangeHash(hash)
                     onChangeSalt(salt)
-                    await clearAsyncStorage()
                 }
             }
             else {
                 Alert.alert("Incorrect Password", "Password dose not match confirm password !")
             }
         }
+        let emailValid = await rjxEmail.test(Email);
         if (!emailValid) {
             Alert.alert("Invalid email address", "Please enter a valid email address.");
             return;
         }
         try {
+            await clearAsyncStorage()
             let result = await fetch(url + "api/edit/user", {
                 method: 'POST',
                 headers: {
