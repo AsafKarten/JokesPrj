@@ -69,7 +69,7 @@ namespace JokesPrj.DAL
                     cmd.Parameters.AddWithValue("@id_joke", SqlDbType.Int).Value = comment.Id_joke;
                     cmd.Parameters.AddWithValue("@id_user", SqlDbType.Int).Value = comment.Id_user;
                     cmd.Parameters.AddWithValue("@comment_body", SqlDbType.NVarChar).Value = comment.Comment_body;
-                    cmd.Parameters.AddWithValue("@comment_date", SqlDbType.DateTime).Value = comment.Comment_date.ToLocalTime();
+                    cmd.Parameters.AddWithValue("@comment_date", SqlDbType.DateTime).Value = comment.Comment_date;
                     cmd.Parameters.AddWithValue("@user_img", SqlDbType.NVarChar).Value = comment.User_img;
                     cmd.Parameters.AddWithValue("@username", SqlDbType.NVarChar).Value = comment.Username;
                     IncCommentCounter(comment.Id_joke);
