@@ -38,9 +38,6 @@ namespace JokesPrj.DAL
             }
         }
 
-
-
-
         public int SaveNewJokeToDB(Joke j)
         {
             try
@@ -213,46 +210,6 @@ namespace JokesPrj.DAL
                             Convert.ToInt32(reader["comment_count"])
                             );
                     return j;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public List<Joke> GetAllJokes(Joke j)
-        {
-            try
-            {
-                using (SqlConnection con = new SqlConnection(conStr))
-                {
-                    con.Open();
-                    List<Joke> jokeList = new List<Joke>();
-                    string query = $"SELECT * FROM Jokes WHERE joke_title= @joke_title";
-                    SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@joke_title", j.Joke_title);
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    if (reader == null)
-                    {
-                        return jokeList;
-                    }
-                    while (reader.Read())
-                    {
-                        j = new Joke(
-                            Convert.ToInt32(reader["id_joke"]),
-                            Convert.ToInt32(reader["id_user"]),
-                            Convert.ToInt32(reader["joke_like"]),
-                            Convert.ToString(reader["joke_title"]),
-                            Convert.ToString(reader["joke_body"]),
-                            Convert.ToString(reader["joke_img"]),
-                            Convert.ToString(reader["username"]),
-                            Convert.ToString(reader["user_img"]),
-                            Convert.ToInt32(reader["comment_count"])
-                            );
-                        jokeList.Add(j);
-                    }
-                    return jokeList;
                 }
             }
             catch (Exception ex)
