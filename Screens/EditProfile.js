@@ -77,10 +77,10 @@ export default function EditProfile({ navigation, route }) {
     }
 
     const Edit = async () => {
-        let emailValid = rjxEmail.test(Email);
+        let emailValid = await rjxEmail.test(Email);
         if (!Pass == '') {
             if (Pass == CPass) {
-                let passwordValid = rjxPass.test(Pass);
+                let passwordValid = await rjxPass.test(Pass);
                 if (!passwordValid) {
                     Alert.alert("Invalid password", "Please enter a valid password again (Password length must be at least 6 characters, including uppercase, lowercase and numbers.)");
                     return;

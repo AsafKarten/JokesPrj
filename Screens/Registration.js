@@ -22,8 +22,8 @@ export default function RegistrationNewUser({ navigation }) {
     const [CPass, onChangeCPass] = useState();
 
     const Register = async () => {
-        let emailValid = rjxEmail.test(Email);
-        let passwordValid = rjxPass.test(Pass);
+        let emailValid = await rjxEmail.test(Email);
+        let passwordValid = await rjxPass.test(Pass);
         if (Username == null || Username == "" || Pass == null || Pass == "" || Email == "" || Email == null || CPass == "" || CPass == null) {
             Alert.alert("Empty fields", "Please fill in all details !")
             return
