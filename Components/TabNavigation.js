@@ -48,9 +48,8 @@ export default function TabStack({ route }) {
             }}>
             <Tab.Screen
                 name="Home"
-                //component={Home}
                 options={{
-                    //tabBarLabel: 'Home',
+                    tabBarLabel: 'Feed',
                     tabBarIcon: () => (
                         <MaterialCommunityIcons name="home" size={24} color="black" />
                     ),

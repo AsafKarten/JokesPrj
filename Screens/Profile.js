@@ -24,7 +24,7 @@ export default function Profile({ navigation, user }) {
     const [image, setImage] = useState(user.User_img);
     const [search, onChangeSearch] = useState('');
     const [profileJokes, setList] = useState([
-        { Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_likes: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
+        //{ Id_joke: 0, Id_user: 0, Joke_title: '', Joke_body: '', Joke_likes: 0, Joke_img: default_img, Username: '', User_img: default_img, Comment_count: 0 },
     ]);
     const [iFollowList, setIFollowList] = useState();
     const [followMeList, setFollowMeList] = useState();
