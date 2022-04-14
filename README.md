@@ -1,8 +1,8 @@
 # JokesPrj
 
 Jokes app is a social network for jokes and memes.
-i made this project as my finale assignment of React native cours i took doring my studies of full-stuck developer
-the application is builed using the following stuck
+i made this project as my finale assignment of React native course i took doring my studies of full-stack developer
+the application is built using the following stack
 client side - React native (JS)
 API - restfull api
 server side - .Net framework api controller (C#)
